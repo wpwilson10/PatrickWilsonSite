@@ -1,18 +1,19 @@
 package main
 
 import (
+	"contactForm"
 	"fmt"
 	"log"
 	"net/http"
+	"note"
 	"os"
 	"path/filepath"
 	"time"
+	"user"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
-
-	"notes"
 )
 
 // spaHandler (Single Page Application) implements the http.Handler interface, so we can use it
@@ -80,12 +81,14 @@ func main() {
 	router := mux.NewRouter()
 	router.StrictSlash(true)
 
-	router.HandleFunc("/notes", notes.GetNotes).Methods("GET")
-	router.HandleFunc("/notes", notes.SaveNote).Methods("POST")
-	router.HandleFunc("/notes/{id:[0-9]+}", notes.UpdateNote).Methods("PUT")
+	router.HandleFunc("/contactForm", contactForm.SaveContact).Methods("POST")
+	router.HandleFunc("/notes", note.GetNotes).Methods("GET")
+	router.HandleFunc("/notes", note.SaveNote).Methods("POST")
+	router.HandleFunc("/notes/{id:[0-9]+}", note.UpdateNote).Methods("PUT")
+	router.HandleFunc("/api/login", user.Signin).Methods("POST")
 
 	// otherwise, use http.FileServer to serve the static dir
-	clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\goReactTest\\client\\dist"
+	clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\mayorPage\\client\\dist"
 	clientIndexPath := "\\index.html"
 
 	spa := spaHandler{staticPath: clientRootDir, indexPath: clientIndexPath}

@@ -1,22 +1,21 @@
-package notes
+package note
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"mime"
+	"jwt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
 
+	"jsonHandler"
+
 	"github.com/gorilla/mux"
 )
-
-// Notes struct which contains an array of notes
-type Notes struct {
-	Notes []Note `json:"notes"`
-}
 
 // Types used internally in this handler to (de-)serialize the request and
 // response from/to JSON.
@@ -27,14 +26,19 @@ type Note struct {
 	Important bool   `json:"important"`
 }
 
+// Notes struct which contains an array of notes
+type Notes struct {
+	Notes []Note `json:"notes"`
+}
+
 func GetNotes(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Get Notes")
-	renderJSON(w, loadNotes())
+	jsonHandler.RenderJSON(w, loadNotes())
 }
 
 func loadNotes() Notes {
 	// Open our jsonFile
-	jsonFile, err := os.Open("./internal/notes/notes.json")
+	jsonFile, err := os.Open("./internal/note/notes.json")
 	// if we os.Open returns an error then handle it
 	if err != nil {
 		fmt.Println(err)
@@ -46,11 +50,11 @@ func loadNotes() Notes {
 	// read our opened jsonFile as a byte array.
 	byteValue, _ := io.ReadAll(jsonFile)
 
-	// we initialize our Users array
+	// we initialize our Notes array
 	var notes Notes
 
 	// we unmarshal our byteArray which contains our
-	// jsonFile's content into 'users' which we defined above
+	// jsonFile's content into 'notes' which we defined above
 	json.Unmarshal(byteValue, &notes)
 
 	fmt.Println(notes)
@@ -60,23 +64,25 @@ func loadNotes() Notes {
 
 func SaveNote(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Save Note")
-	// Enforce a JSON Content-Type.
-	contentType := req.Header.Get("Content-Type")
-	mediatype, _, err := mime.ParseMediaType(contentType)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
+	var nt Note
+
+	check, err := jwt.Validate(req)
+	if !check {
+		fmt.Println("Failed to validate JWT")
 	}
-	if mediatype != "application/json" {
-		http.Error(w, "expect application/json Content-Type", http.StatusUnsupportedMediaType)
-		return
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	dec := json.NewDecoder(req.Body)
-	dec.DisallowUnknownFields()
-	var nt Note
-	if err := dec.Decode(&nt); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	err = jsonHandler.DecodeJSONBody(w, req, &nt)
+	if err != nil {
+		var mr *jsonHandler.MalformedRequest
+		if errors.As(err, &mr) {
+			http.Error(w, mr.Msg, mr.Status)
+		} else {
+			log.Print(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -91,29 +97,23 @@ func SaveNote(w http.ResponseWriter, req *http.Request) {
 
 	notes.Notes = append(notes.Notes, note)
 	fmt.Println(notes.Notes)
-	saveNotes(notes)
-	renderJSON(w, note)
+	save(notes)
+	jsonHandler.RenderJSON(w, note)
 }
 
 func UpdateNote(w http.ResponseWriter, req *http.Request) {
 	fmt.Println("Update Note")
-	// Enforce a JSON Content-Type.
-	contentType := req.Header.Get("Content-Type")
-	mediatype, _, err := mime.ParseMediaType(contentType)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	if mediatype != "application/json" {
-		http.Error(w, "expect application/json Content-Type", http.StatusUnsupportedMediaType)
-		return
-	}
-
-	dec := json.NewDecoder(req.Body)
-	dec.DisallowUnknownFields()
 	var nt Note
-	if err := dec.Decode(&nt); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+
+	err := jsonHandler.DecodeJSONBody(w, req, &nt)
+	if err != nil {
+		var mr *jsonHandler.MalformedRequest
+		if errors.As(err, &mr) {
+			http.Error(w, mr.Msg, mr.Status)
+		} else {
+			log.Print(err.Error())
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		}
 		return
 	}
 
@@ -150,30 +150,19 @@ func UpdateNote(w http.ResponseWriter, req *http.Request) {
 	notesOut = append(notesOut, note)
 
 	fmt.Println(notesOut)
-	saveNotes(Notes{Notes: notesOut})
-	renderJSON(w, note)
+	save(Notes{Notes: notesOut})
+	jsonHandler.RenderJSON(w, note)
 }
 
-func saveNotes(notes Notes) {
+func save(notes Notes) {
 	fmt.Println("saveNotes")
 	notesJSON, err := json.Marshal(notes)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	err = ioutil.WriteFile("./internal/notes/notes.json", notesJSON, 0644)
+	err = ioutil.WriteFile("./internal/note/notes.json", notesJSON, 0644)
 	if err != nil {
 		fmt.Println(err)
 	}
-}
-
-// renderJSON renders 'v' as JSON and writes it as a response into w.
-func renderJSON(w http.ResponseWriter, v interface{}) {
-	js, err := json.Marshal(v)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
 }

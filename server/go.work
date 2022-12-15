@@ -1,0 +1,11 @@
+go 1.18
+
+use (
+	./
+	./internal/jsonHandler
+	./internal/note
+	./internal/user
+	./internal/jwt
+	./internal/contactForm
+	./internal/setup
+)

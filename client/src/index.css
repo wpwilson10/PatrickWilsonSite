@@ -1,0 +1,24 @@
+.site-container {
+  background-color: ghostwhite;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.content-container {
+  max-width:900px;
+  margin:auto;
+}
+
+.form-container {
+  border-left: 10px solid DodgerBlue;
+  background-color: white;
+  box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
+ }

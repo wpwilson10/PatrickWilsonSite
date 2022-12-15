@@ -8,3 +8,4 @@ server files
 
 TODO 
 - add secure connections: https://eli.thegreenplace.net/2021/go-https-servers-with-tls/
+- move email passwords to env
