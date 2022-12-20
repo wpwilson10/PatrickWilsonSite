@@ -8,6 +8,7 @@ import (
 	"note"
 	"os"
 	"path/filepath"
+	"setup"
 	"time"
 	"user"
 
@@ -59,7 +60,7 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// check whether a file exists at the given path
 	_, err := os.Stat(path)
 	if r.URL.Path == "/" {
-		// rott call, serve index.html
+		// root call, serve index.html
 		http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
 		return
 	} else if os.IsNotExist(err) {
@@ -78,6 +79,7 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	setup.EnvironmentConfig()
 	router := mux.NewRouter()
 	router.StrictSlash(true)
 
@@ -88,8 +90,12 @@ func main() {
 	router.HandleFunc("/api/login", user.Signin).Methods("POST")
 
 	// otherwise, use http.FileServer to serve the static dir
-	clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\mayorPage\\client\\dist"
-	clientIndexPath := "\\index.html"
+	// Windows
+	// clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\mayorPage\\client\\dist"
+	// clientIndexPath := "\\index.html"
+	// Else
+	clientRootDir := "/Users/patrick/Documents/GitHub/PatrickWilsonSite/client/dist"
+	clientIndexPath := "/index.html"
 
 	spa := spaHandler{staticPath: clientRootDir, indexPath: clientIndexPath}
 	router.PathPrefix("/").Handler(spa)

@@ -1,25 +1,38 @@
 package setup
 
 import (
+	"bytes"
+	"fmt"
 	"html/template"
-	"os"
 	"path/filepath"
 )
 
-// get and parse html template file
-func setupTemplate() *template.Template {
-	// get .env filepath
+// ToHTML takes an HTML template configuration file and a corresponding struct of values
+// to insert into the template. Returns a string of HTML.
+// Be careful that the given struct matches the template fields.
+func ToHTML(file string, i any) string {
+	// get .configs filepath
 	absPath, err := filepath.Abs("./configs/")
 	if err != nil {
-		LogCommon(err).Error("Template filepath")
+		LogCommon(err).Error("HTML template filepath")
 	}
-	templatePath := absPath + "/" + os.Getenv("LOG_TEMPLATE_FILE")
+	// point to the given template file
+	templatePath := absPath + "/" + file
+	fmt.Println(templatePath, " ", absPath, " ", file)
 
 	// setup html template
-	t, err := template.ParseFiles(templatePath)
+	tpl, err := template.ParseFiles(templatePath)
 	if err != nil {
-		LogCommon(err).Error("Template parsing")
+		LogCommon(err).Error("HTML template parsing")
 	}
 
-	return t
+	// put struct in to template
+	var byt bytes.Buffer
+	err = tpl.Execute(&byt, i)
+	if err != nil {
+		LogCommon(err).Error("HTML template execute")
+	}
+
+	// return string of html containing struct values
+	return byt.String()
 }

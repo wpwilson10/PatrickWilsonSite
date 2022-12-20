@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"setup"
 
 	"jsonHandler"
@@ -48,8 +49,11 @@ func SaveContact(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(contact)
 	save(contact)
-	setup.SendEmail()
 	jsonHandler.RenderJSON(w, contact)
+
+	// send email response
+	html := setup.ToHTML(os.Getenv("CONTACT_FORM_TEMPLATE"), contact)
+	setup.SendEmail("WPW Contact Form Test", html)
 }
 
 func save(contact ContactForm) {

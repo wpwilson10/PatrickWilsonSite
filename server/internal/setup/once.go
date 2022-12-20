@@ -53,9 +53,9 @@ func CheckOnce(port int) bool {
 	if err != nil {
 		// if we got the expected single connection error, given port is busy
 		// windows
-		if strings.Index(err.Error(), "Only one usage of each socket address") != -1 {
+		if strings.Contains(err.Error(), "Only one usage of each socket address") {
 			return true
-		} else if strings.Index(err.Error(), "address already in use") != -1 {
+		} else if strings.Contains(err.Error(), "address already in use") {
 			// ubuntu
 			return true
 		}

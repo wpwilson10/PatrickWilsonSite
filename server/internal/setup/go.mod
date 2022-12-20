@@ -4,7 +4,10 @@ go 1.19
 
 require github.com/sirupsen/logrus v1.9.0
 
-require github.com/toorop/go-dkim v0.0.0-20201103131630-e1cd1a0a5208 // indirect
+require (
+	github.com/go-test/deep v1.1.0 // indirect
+	github.com/toorop/go-dkim v0.0.0-20201103131630-e1cd1a0a5208 // indirect
+)
 
 require (
 	github.com/joho/godotenv v1.4.0
