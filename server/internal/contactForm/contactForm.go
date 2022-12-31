@@ -16,8 +16,7 @@ import (
 // Types used internally in this handler to (de-)serialize the request and
 // response from/to JSON.
 type ContactForm struct {
-	FirstName   string `json:"firstName"`
-	LastName    string `json:"lastName"`
+	Name        string `json:"name"`
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phoneNumber"`
 	Message     string `json:"message"`
@@ -40,8 +39,7 @@ func SaveContact(w http.ResponseWriter, req *http.Request) {
 	}
 
 	contact := ContactForm{
-		FirstName:   cf.FirstName,
-		LastName:    cf.LastName,
+		Name:        cf.Name,
 		Email:       cf.Email,
 		PhoneNumber: cf.Email,
 		Message:     cf.Message,

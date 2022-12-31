@@ -1,12 +1,12 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import postContactForm from "./contactFormService";
+import { useEffect, useState } from "react";
 
 export interface IContactForm {
-	firstName: string;
-	lastName: string;
+	name: string;
 	email: string;
 	phoneNumber: string;
 	message: string;
@@ -15,8 +15,7 @@ const phoneRegExp =
 	/^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 const schema = yup.object({
-	firstName: yup.string().required("First Name is required"),
-	lastName: yup.string().required("Last Name is required"),
+	name: yup.string().required("Name is required"),
 	message: yup.string().required("Message is required"),
 	email: yup
 		.string()
@@ -29,10 +28,17 @@ const schema = yup.object({
 });
 
 const ContactForm = () => {
+	// track form submission success or error
+	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
+		useState(false);
+	const [isSubmissionError, setIsSubmissionError] = useState(false);
+
 	const {
 		register,
 		handleSubmit,
+		formState,
 		formState: { errors },
+		reset,
 	} = useForm<IContactForm>({
 		resolver: yupResolver(schema),
 	});
@@ -40,11 +46,26 @@ const ContactForm = () => {
 	const onSubmit = async (data: IContactForm) => {
 		try {
 			await postContactForm(data);
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(false);
 			console.log(data);
 		} catch (error) {
+			setIsSubmissionError(true);
+			setIsSuccessfullySubmitted(false);
 			console.log(error);
 		}
 	};
+
+	// Reset form if submission successfull
+	// It's recommended to reset in useEffect as execution order matters
+	// https://react-hook-form.com/api/useform/reset
+	useEffect(() => {
+		if (formState.isSubmitSuccessful && !isSubmissionError) {
+			// isSubmitSuccessful gets wiped on reset, so remember it
+			setIsSuccessfullySubmitted(true);
+			reset();
+		}
+	}, [formState, reset, isSubmissionError]);
 
 	// Standard autocomplete options - https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
 	return (
@@ -53,44 +74,54 @@ const ContactForm = () => {
 				Inner container created padding around form  */}
 			<Container className="p-4">
 				<Form noValidate onSubmit={handleSubmit(onSubmit)}>
-					{/* First name and last name fields which appear on a single row 
-						if using a desktop size view */}
-					<Row className="justify-content-md-center">
-						<Col md={6} className="mb-3">
-							<Form.Control
-								type="text"
-								autoComplete="given-name"
-								placeholder="First Name"
-								{...register("firstName")}
-								isInvalid={!!errors.firstName}
-							/>
-							<Form.Control.Feedback type="invalid">
-								{errors.firstName?.message}
-							</Form.Control.Feedback>
+					{/* Success or error message after submission */}
+					<Row className="justify-content-md-left">
+						<Col md={12} className="mb=3">
+							{/* Feedback for successful form submission */}
+							{isSuccessfullySubmitted && (
+								<Alert variant="success">
+									<p className="mb-0">
+										Success - Thanks for your message!
+									</p>
+								</Alert>
+							)}
+							{/* Feedback for unsuccessful form submission */}
+							{isSubmissionError && (
+								<Alert variant="danger">
+									<p className="mb-0">
+										Error occurred while sending message.
+										Please try again.
+									</p>
+								</Alert>
+							)}
 						</Col>
+					</Row>
 
-						<Col md={6} className="mb-3">
+					{/* Full Name - use full name for better usability as opposed to seperate fields
+						xs=9 md=7 makes fields appropriately sized for different screens
+					*/}
+					<Row className="justify-content-md-left">
+						<Col xs={9} md={7} className="mb-3">
+							<Form.Label>Name</Form.Label>
 							<Form.Control
 								type="text"
-								autoComplete="family-name"
-								placeholder="Last Name"
-								{...register("lastName")}
-								isInvalid={!!errors.lastName}
+								autoComplete="name"
+								{...register("name")}
+								isInvalid={!!errors.name}
 							/>
 							<Form.Control.Feedback type="invalid">
-								{errors.lastName?.message}
+								{errors.name?.message}
 							</Form.Control.Feedback>
 						</Col>
 					</Row>
 
-					{/* Email and phone number fields which appear on a single row 
-						if using a desktop size view */}
-					<Row className="justify-content-md-center">
-						<Col md={6} className="mb-3">
+					{/* Email */}
+					<Row className="justify-content-md-left">
+						<Col xs={9} md={7} className="mb-3">
+							<Form.Label>Email</Form.Label>
 							<Form.Control
 								type="email"
 								autoComplete="email"
-								placeholder="Email Address"
 								{...register("email")}
 								isInvalid={!!errors.email}
 							/>
@@ -98,12 +129,15 @@ const ContactForm = () => {
 								{errors.email?.message}
 							</Form.Control.Feedback>
 						</Col>
+					</Row>
 
-						<Col md={6} className="mb-3">
+					{/* Phone Number*/}
+					<Row className="justify-content-md-left">
+						<Col xs={9} md={7} className="mb-3">
+							<Form.Label>Phone Number (optional)</Form.Label>
 							<Form.Control
 								type="tel"
 								autoComplete="tel"
-								placeholder="Phone Number"
 								{...register("phoneNumber")}
 								isInvalid={!!errors.phoneNumber}
 							/>
@@ -113,13 +147,13 @@ const ContactForm = () => {
 						</Col>
 					</Row>
 
-					{/* Message field which appear on a single row always */}
-					<Row className="justify-content-md-center">
+					{/* Message field - full width*/}
+					<Row className="justify-content-md-left">
 						<Col md={12} className="mb-3">
+							<Form.Label>Message</Form.Label>
 							<Form.Control
 								as="textarea"
 								rows={3}
-								placeholder="Message"
 								{...register("message")}
 								isInvalid={!!errors.message}
 							/>
@@ -130,12 +164,17 @@ const ContactForm = () => {
 					</Row>
 
 					{/* Submit button aligned to the right*/}
-					<Row>
+					<Row className="justify-content-md-center">
 						<Col
 							md={12}
 							className="mb=3 d-flex justify-content-end"
 						>
-							<Button type="submit">Submit</Button>
+							<Button
+								type="submit"
+								disabled={formState.isSubmitting}
+							>
+								Send Message
+							</Button>
 						</Col>
 					</Row>
 				</Form>

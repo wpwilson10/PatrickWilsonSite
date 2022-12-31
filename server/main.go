@@ -91,11 +91,11 @@ func main() {
 
 	// otherwise, use http.FileServer to serve the static dir
 	// Windows
-	// clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\mayorPage\\client\\dist"
-	// clientIndexPath := "\\index.html"
+	clientRootDir := "\\Users\\wpwil\\Documents\\Projects\\Web Dev\\PatrickWilsonSite\\client\\dist"
+	clientIndexPath := "\\index.html"
 	// Else
-	clientRootDir := "/Users/patrick/Documents/GitHub/PatrickWilsonSite/client/dist"
-	clientIndexPath := "/index.html"
+	// clientRootDir := "/Users/patrick/Documents/GitHub/PatrickWilsonSite/client/dist"
+	// clientIndexPath := "/index.html"
 
 	spa := spaHandler{staticPath: clientRootDir, indexPath: clientIndexPath}
 	router.PathPrefix("/").Handler(spa)

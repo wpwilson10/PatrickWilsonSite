@@ -8,7 +8,7 @@ import { Counter } from "./components/Counter/counter";
 import NoteForm from "./components/Note/noteForm";
 import NavBar from "./components/NavBar/navbar";
 import Notes from "./components/Note/note";
-import { Container, Row } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import ContactForm from "./components/ContactForm/contactForm";
 
 const Home = () => (
@@ -45,10 +45,6 @@ const App = () => {
 		<div className="site-container">
 			<NavBar />
 			<Container className="content-container">
-				<Row xs={1} md={1} xl={2}>
-					<ContactForm></ContactForm>
-					<ContactForm></ContactForm>
-				</Row>
 				<ContactForm></ContactForm>
 				<Routes>
 					<Route path="/counter" element={<Counter />} />
