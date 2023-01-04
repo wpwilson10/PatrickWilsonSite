@@ -1,15 +1,17 @@
 import "./App.css";
-import { useEffect } from "react";
 
+import { useEffect } from "react";
 import { useAppDispatch } from "./store";
 import { initializeNotes } from "./components/Note/noteReducer";
 import { Route, Routes } from "react-router-dom";
+
 import { Counter } from "./components/Counter/counter";
 import NoteForm from "./components/Note/noteForm";
 import NavBar from "./components/NavBar/navbar";
 import Notes from "./components/Note/note";
 import { Container } from "react-bootstrap";
 import ContactForm from "./components/ContactForm/contactForm";
+import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
 
 const Home = () => (
 	<div>
@@ -46,6 +48,7 @@ const App = () => {
 			<NavBar />
 			<Container className="content-container">
 				<ContactForm></ContactForm>
+				<ContactFormRecaptcha></ContactFormRecaptcha>
 				<Routes>
 					<Route path="/counter" element={<Counter />} />
 					<Route path="/new" element={<NoteForm />} />

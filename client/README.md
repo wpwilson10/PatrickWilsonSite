@@ -10,8 +10,7 @@ WPW
     -- use "npm run wpw" to build app (currently, need to rename)
 
 -   TODO
-    -- vertical and horizontal lines for graphs, annotations library
-    -- https://www.chartjs.org/chartjs-plugin-annotation/latest/
+    -- Use correct reCAPTCHA key and load from .env file
 
 # Getting Started with Create React App
 

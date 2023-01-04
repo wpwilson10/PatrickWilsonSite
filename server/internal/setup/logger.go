@@ -42,8 +42,8 @@ func LogCommon(err error) *log.Entry {
 // Caller must clost file.
 func LogFile() *os.File {
 	// file path
-	prefix := os.Getenv("LOG_FILEPATH")
-	filepath := prefix + "caterpillar.log"
+	prefix := os.Getenv("LOG_FILE_PATH")
+	filepath := prefix + os.Getenv("LOG_FILE_NAME")
 
 	file, err := os.OpenFile(filepath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
 	if err != nil {

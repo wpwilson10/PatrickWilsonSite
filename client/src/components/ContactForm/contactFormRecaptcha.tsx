@@ -1,15 +1,19 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import postContactForm, { IContactForm, schema } from "./contactFormService";
-import { useEffect, useState } from "react";
 
 // --- React component
-const ContactForm = () => {
+const ContactFormRecaptcha = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
+	// track if recaptcha has been submitted
+	const [isRecaptchaSubmitted, setIsRecapthcaSubmitted] = useState(false);
 
 	// setup react form hook library
 	const {
@@ -18,20 +22,44 @@ const ContactForm = () => {
 		formState,
 		formState: { errors },
 		reset,
+		setValue,
 	} = useForm<IContactForm>({
 		resolver: yupResolver(schema),
 	});
+
+	// setup reCAPTCHA
+	const recaptchaRef = useRef<ReCAPTCHA>(null);
 
 	const onSubmit = async (data: IContactForm) => {
 		try {
 			await postContactForm(data);
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
+
+			// If we have a reCAPTCHA reference, reset it
+			if (recaptchaRef.current) {
+				const recaptchaValue = recaptchaRef.current.getValue();
+				console.log("Captcha value:", recaptchaValue);
+				recaptchaRef.current.reset();
+				setIsRecapthcaSubmitted(false);
+			}
+
 			console.log(data);
 		} catch (error) {
 			setIsSubmissionError(true);
 			setIsSuccessfullySubmitted(false);
+			setIsRecapthcaSubmitted(false);
 			console.log(error);
+		}
+	};
+
+	// Handle reCAPTHCA updates
+	const onChange = () => {
+		if (recaptchaRef.current) {
+			// Track if reCAPTCHA is filled for form validation
+			setIsRecapthcaSubmitted(true);
+			// Add recaptcha value to our form struct
+			setValue("recaptcha", recaptchaRef.current.getValue()!);
 		}
 	};
 
@@ -40,7 +68,7 @@ const ContactForm = () => {
 	// https://react-hook-form.com/api/useform/reset
 	useEffect(() => {
 		if (formState.isSubmitSuccessful && !isSubmissionError) {
-			// isSubmitSuccessful gets wiped on reset, so remember it
+			// isSubmitSuccessful gets wiped on reset, so remember it so we can display a success banner on reload
 			setIsSuccessfullySubmitted(true);
 			reset();
 		}
@@ -142,15 +170,35 @@ const ContactForm = () => {
 						</Col>
 					</Row>
 
+					{/* reCAPTCHA v2 button aligned to the right
+						using test key */}
+					<Row className="justify-content-md-center">
+						<Col
+							md={12}
+							className="mb-3 d-flex justify-content-end"
+						>
+							<ReCAPTCHA
+								sitekey={
+									"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+								}
+								ref={recaptchaRef}
+								onChange={onChange}
+							/>
+						</Col>
+					</Row>
+
 					{/* Submit button aligned to the right*/}
 					<Row className="justify-content-md-center">
 						<Col
 							md={12}
-							className="mb=3 d-flex justify-content-end"
+							className="mb-3 d-flex justify-content-end"
 						>
 							<Button
 								type="submit"
-								disabled={formState.isSubmitting}
+								disabled={
+									formState.isSubmitting ||
+									!isRecaptchaSubmitted
+								}
 							>
 								Send Message
 							</Button>
@@ -162,4 +210,4 @@ const ContactForm = () => {
 	);
 };
 
-export default ContactForm;
+export default ContactFormRecaptcha;

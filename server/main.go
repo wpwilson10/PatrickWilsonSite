@@ -79,7 +79,17 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// setup environment configuration
 	setup.EnvironmentConfig()
+
+	// get a file for logging
+	file := setup.LogFile()
+	defer file.Close()
+
+	// setup logger
+	setup.Logger(file)
+
+	// Setup router
 	router := mux.NewRouter()
 	router.StrictSlash(true)
 
