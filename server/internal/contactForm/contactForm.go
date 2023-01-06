@@ -2,7 +2,6 @@ package contactForm
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -10,9 +9,8 @@ import (
 	"setup"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"gopkg.in/ezzarghili/recaptcha-go.v4"
-
-	"jsonHandler"
 )
 
 // Types used internally in this handler to (de-)serialize the request and
@@ -25,48 +23,38 @@ type ContactForm struct {
 	Recapthca   string `json:"recaptcha"`
 }
 
-func SaveContact(w http.ResponseWriter, req *http.Request) {
+func SaveContact(c *gin.Context) {
 	fmt.Println("Save Contact Forms")
-	var cf ContactForm
+	var contact ContactForm
 
-	err := jsonHandler.DecodeJSONBody(w, req, &cf)
-	if err != nil {
-		var mr *jsonHandler.MalformedRequest
-		if errors.As(err, &mr) {
-			http.Error(w, mr.Msg, mr.Status)
-		} else {
-			setup.LogCommon(err).Error("SaveContact Json Handler")
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-		}
+	// Bind JSON form values to struct
+	if err := c.ShouldBindJSON(&contact); err != nil {
+		setup.LogCommon(err).Error("Contact form bind to JSON")
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
-	}
-
-	contact := ContactForm{
-		Name:        cf.Name,
-		Email:       cf.Email,
-		PhoneNumber: cf.Email,
-		Message:     cf.Message,
-		Recapthca:   cf.Recapthca,
 	}
 
 	fmt.Println(contact)
 
 	// verify this is not a bot using reCAPTCHA
 	recaptcha, _ := recaptcha.NewReCAPTCHA(os.Getenv("RECAPTCHA_SECRET"), recaptcha.V2, 3*time.Second)
-	err = recaptcha.Verify(contact.Recapthca)
+	err := recaptcha.Verify(contact.Recapthca)
 	if err != nil {
 		setup.LogCommon(err).Info("SaveContact reCAPTCHA Verify")
 		// Example check error codes array if they exist: (err.(*recaptcha.Error)).ErrorCodes
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
 	} else {
 		// save contact and send email if reCAPTCHA verify is successful
 		save(contact)
-		jsonHandler.RenderJSON(w, contact)
-
 		// send email response
 		html := setup.ToHTML(os.Getenv("CONTACT_FORM_TEMPLATE"), contact)
 		setup.SendEmail("WPW Contact Form Test", html)
+		// Successful submission
+		c.Status(http.StatusOK)
+		return
 	}
-
+	// Not reachable
 }
 
 func save(contact ContactForm) {

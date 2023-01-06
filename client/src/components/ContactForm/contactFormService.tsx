@@ -2,7 +2,7 @@ import axios from "axios";
 import { object, string } from "yup";
 
 // --- IO
-const baseUrl = "http://localhost:3030/contactForm";
+const baseUrl = "http://localhost:3030/api/contact";
 
 // --- Data structure
 export interface IContactForm {

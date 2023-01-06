@@ -2,7 +2,7 @@
 import axios from "axios";
 import { NoteType } from "./note";
 
-const baseUrl = "http://localhost:3030/notes";
+const baseUrl = "http://localhost:3030/api/notes";
 
 const getAll = async (): Promise<NoteType[]> => {
 	const response = await axios.get(baseUrl);

@@ -14,6 +14,7 @@ import (
 
 	"jsonHandler"
 
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
 )
 
@@ -31,9 +32,9 @@ type Notes struct {
 	Notes []Note `json:"notes"`
 }
 
-func GetNotes(w http.ResponseWriter, req *http.Request) {
+func GetNotes(c *gin.Context) {
 	fmt.Println("Get Notes")
-	jsonHandler.RenderJSON(w, loadNotes())
+	c.JSON(http.StatusOK, loadNotes())
 }
 
 func loadNotes() Notes {
