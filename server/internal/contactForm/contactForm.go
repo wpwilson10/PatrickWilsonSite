@@ -2,7 +2,7 @@ package contactForm
 
 import (
 	"encoding/json"
-	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -13,18 +13,22 @@ import (
 	"gopkg.in/ezzarghili/recaptcha-go.v4"
 )
 
-// Types used internally in this handler to (de-)serialize the request and
-// response from/to JSON.
 type ContactForm struct {
-	Name        string `json:"name"`
-	Email       string `json:"email"`
-	PhoneNumber string `json:"phoneNumber"`
-	Message     string `json:"message"`
-	Recapthca   string `json:"recaptcha"`
+	Name           string `json:"name"`
+	Email          string `json:"email"`
+	PhoneNumber    string `json:"phoneNumber"`
+	Message        string `json:"message"`
+	Recapthca      string `json:"recaptcha"`
+	SubmissionTime time.Time
 }
 
+type ContactForms struct {
+	ContactForms []ContactForm `json:"contacts"`
+}
+
+// SaveContact handles contact form submissions POSTs to the /api/contact route.
+// This will validate the POST passes reCAPTCHA then saves the contact to a file and sends an email.
 func SaveContact(c *gin.Context) {
-	fmt.Println("Save Contact Forms")
 	var contact ContactForm
 
 	// Bind JSON form values to struct
@@ -34,38 +38,82 @@ func SaveContact(c *gin.Context) {
 		return
 	}
 
-	fmt.Println(contact)
-
 	// verify this is not a bot using reCAPTCHA
-	recaptcha, _ := recaptcha.NewReCAPTCHA(os.Getenv("RECAPTCHA_SECRET"), recaptcha.V2, 3*time.Second)
-	err := recaptcha.Verify(contact.Recapthca)
+	if contact.Recapthca == "" {
+		setup.LogCommon(nil).Info("No reCAPTCHA")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing reCAPTCHA token"})
+		return
+	}
+	recaptcha, err := recaptcha.NewReCAPTCHA(os.Getenv("RECAPTCHA_SECRET"), recaptcha.V2, 3*time.Second)
 	if err != nil {
-		setup.LogCommon(err).Info("SaveContact reCAPTCHA Verify")
+		setup.LogCommon(err).Error("Setup NewReCAPTCHA")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	err = recaptcha.Verify(contact.Recapthca)
+	if err != nil {
+		setup.LogCommon(err).Error("SaveContact reCAPTCHA Verify")
 		// Example check error codes array if they exist: (err.(*recaptcha.Error)).ErrorCodes
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
-	} else {
-		// save contact and send email if reCAPTCHA verify is successful
-		save(contact)
-		// send email response
-		html := setup.ToHTML(os.Getenv("CONTACT_FORM_TEMPLATE"), contact)
-		setup.SendEmail("WPW Contact Form Test", html)
-		// Successful submission
-		c.Status(http.StatusOK)
-		return
 	}
-	// Not reachable
+
+	// good to save, add time and remove recaptcha token because we don't care
+	contact.SubmissionTime = time.Now()
+	contact.Recapthca = ""
+	saveContact(contact)
+	// send email response
+	html := setup.ToHTML(os.Getenv("CONTACT_FORM_TEMPLATE"), contact)
+	setup.SendEmail("WPW Contact Form Test", html)
+	// Successful submission
+	c.Status(http.StatusOK)
 }
 
-func save(contact ContactForm) {
-	fmt.Println("save ContactForm")
-	contactJSON, err := json.Marshal(contact)
+// saveContact writes the a ContactForm to a json file of ContactForms
+func saveContact(contact ContactForm) {
+	// get existing contacts
+	contactList := loadContacts()
+	// add new contact
+	contactList.ContactForms = append(contactList.ContactForms, contact)
+
+	// turn back into json
+	contactsJSON, err := json.Marshal(contactList)
 	if err != nil {
-		fmt.Println(err)
+		setup.LogCommon(err).Error("JSON Marshalling")
 	}
 
-	err = ioutil.WriteFile("./internal/contactForm/contacts.json", contactJSON, 0644)
+	// save to file
+	err = ioutil.WriteFile("./internal/contactForm/contacts.json", contactsJSON, 0644)
 	if err != nil {
-		fmt.Println(err)
+		setup.LogCommon(err).Error("Write File")
+	} else {
+		setup.LogCommon(nil).Info("Saved contact form")
 	}
+}
+
+// loadContacts reads a JSON file of contacts to a ContactForms
+func loadContacts() ContactForms {
+	// Open our jsonFile
+	jsonFile, err := os.Open("./internal/contactForm/contacts.json")
+	// if we os.Open returns an error then handle it
+	if err != nil {
+		setup.LogCommon(err).Error("Open File")
+	}
+	// defer the closing of our jsonFile so that we can parse it later on
+	defer jsonFile.Close()
+
+	// read our opened jsonFile as a byte array.
+	byteValue, err := io.ReadAll(jsonFile)
+	if err != nil {
+		setup.LogCommon(err).Error("Read File")
+	}
+
+	var contacts ContactForms
+	// map from bytes to struct
+	err = json.Unmarshal(byteValue, &contacts)
+	if err != nil {
+		setup.LogCommon(err).Error("Unmarshall")
+	}
+
+	return contacts
 }

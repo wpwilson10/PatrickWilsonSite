@@ -2,6 +2,7 @@ package main
 
 import (
 	"contactForm"
+	"net/http"
 	"note"
 	"os"
 	"path/filepath"
@@ -33,12 +34,14 @@ func server() {
 	// https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
 	router.SetTrustedProxies([]string{"127.0.0.1", "localhost"})
 
-	//configuration to SAP applications
+	// configuration to SAP applications
 	// https://github.com/gin-gonic/contrib/issues/90#issuecomment-990237367
 	router.Use(static.Serve("/", static.LocalFile(os.Getenv("CLIENT_FILE_DIRECTORY"), true)))
+	// Default route when accessing site. Serves index.html and javascript file
 	router.NoRoute(func(c *gin.Context) {
 		if !strings.HasPrefix(c.Request.RequestURI, "/api") {
 			c.File(filepath.Join(os.Getenv("CLIENT_FILE_DIRECTORY"), "index.html"))
+			c.Status(http.StatusOK)
 		}
 		//default 404 page not found
 	})
@@ -50,5 +53,5 @@ func server() {
 		api.POST("/contact", contactForm.SaveContact)
 	}
 
-	router.Run(":3030") // listen and serve on 0.0.0.0:8080
+	router.Run("localhost:3030") // listen and serve on 0.0.0.0:8080
 }

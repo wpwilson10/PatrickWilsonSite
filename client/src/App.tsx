@@ -46,7 +46,7 @@ const App = () => {
 	return (
 		<div className="site-container">
 			<NavBar />
-			<Container className="content-container">
+			<Container className="content-container mt-3">
 				<ContactForm></ContactForm>
 				<ContactFormRecaptcha></ContactFormRecaptcha>
 				<Routes>

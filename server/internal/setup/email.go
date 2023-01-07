@@ -1,7 +1,6 @@
 package setup
 
 import (
-	"log"
 	"os"
 	"time"
 
@@ -20,10 +19,8 @@ func SendEmail(subject string, body string) {
 
 	// Variable to keep alive connection
 	server.KeepAlive = false
-
 	// Timeout for connect to SMTP Server
 	server.ConnectTimeout = 10 * time.Second
-
 	// Timeout for send the data and wait respond
 	server.SendTimeout = 10 * time.Second
 
@@ -31,7 +28,7 @@ func SendEmail(subject string, body string) {
 	smtpClient, err := server.Connect()
 
 	if err != nil {
-		log.Fatal(err)
+		LogCommon(err).Error("Email failed during setup")
 	}
 
 	// New email simple html with inline and CC
@@ -51,5 +48,7 @@ func SendEmail(subject string, body string) {
 	err = email.Send(smtpClient)
 	if err != nil {
 		LogCommon(err).Error("Email failed to send")
+	} else {
+		LogCommon(nil).Info("Email sent with subject: " + subject)
 	}
 }
