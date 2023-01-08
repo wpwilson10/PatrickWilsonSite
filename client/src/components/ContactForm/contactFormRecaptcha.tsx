@@ -80,6 +80,7 @@ const ContactFormRecaptcha = () => {
 			{/* Outer container sets up styling using form-container CSS
 				Inner container created padding around form  */}
 			<Container className="p-4">
+				<h2>Send a message</h2>
 				<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 					{/* Success or error message after submission */}
 					<Row className="justify-content-md-left">

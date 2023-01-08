@@ -29,17 +29,19 @@ const NavRight = () => {
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link href="#" as="span">
+			<Nav.Link href="#home">
 				<Link style={linkStyle} to="/">
 					Home
 				</Link>
 			</Nav.Link>
-			<Nav.Link href="#" as="span">
-				<Link style={linkStyle} to="/notes">
-					Notes
+			<Nav.Link href="#about">
+				<Link style={linkStyle} to="/about">
+					About Me
 				</Link>
-				<Link style={linkStyle} to="/new">
-					New Note
+			</Nav.Link>
+			<Nav.Link href="#contact">
+				<Link style={linkStyle} to="/contact">
+					Contact
 				</Link>
 			</Nav.Link>
 		</Nav>
@@ -48,11 +50,7 @@ const NavLeft = () => {
 
 const NavBar = () => {
 	return (
-		<Navbar
-			collapseOnSelect
-			expand="lg"
-			style={{ color: "white", background: "RebeccaPurple" }}
-		>
+		<Navbar collapseOnSelect expand="lg" className="navbar" variant="dark">
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 			<Navbar.Collapse id="responsive-navbar-nav">
 				<NavLeft />

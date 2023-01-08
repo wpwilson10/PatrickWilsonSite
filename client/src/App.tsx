@@ -1,17 +1,10 @@
 import "./App.css";
-
-import { useEffect } from "react";
-import { useAppDispatch } from "./store";
-import { initializeNotes } from "./components/Note/noteReducer";
 import { Route, Routes } from "react-router-dom";
 
-import { Counter } from "./components/Counter/counter";
-import NoteForm from "./components/Note/noteForm";
 import NavBar from "./components/NavBar/navbar";
-import Notes from "./components/Note/note";
 import { Container } from "react-bootstrap";
-import ContactForm from "./components/ContactForm/contactForm";
-import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
+import AboutMe from "./components/AboutMe/aboutme";
+import ContactInfo from "./components/ContactInfo/contactInfo";
 
 const Home = () => (
 	<div>
@@ -31,15 +24,6 @@ const Home = () => (
 );
 
 const App = () => {
-	// useAppDispatch to make typescript happy with thunks
-	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
-	const dispatch = useAppDispatch();
-
-	// get notes
-	useEffect(() => {
-		dispatch(initializeNotes());
-	}, [dispatch]);
-
 	// New routes need to be added to NavBar also
 	// NavBar goes outside container to make it full size
 	// Routes goes inside container so that later calls to components are inside the container
@@ -47,12 +31,9 @@ const App = () => {
 		<div className="site-container">
 			<NavBar />
 			<Container className="content-container mt-3">
-				<ContactForm></ContactForm>
-				<ContactFormRecaptcha></ContactFormRecaptcha>
 				<Routes>
-					<Route path="/counter" element={<Counter />} />
-					<Route path="/new" element={<NoteForm />} />
-					<Route path="/notes" element={<Notes />} />
+					<Route path="/contact" element={<ContactInfo />} />
+					<Route path="/about" element={<AboutMe />} />
 					<Route path="/" element={<Home />} />
 				</Routes>
 			</Container>

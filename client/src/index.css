@@ -22,3 +22,28 @@
   -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
   -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
  }
+
+ .aboutme-container {
+  border-left: 10px solid MediumSlateBlue;
+  background-color: white;
+  box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
+ }
+
+ .contact-container {
+  border-left: 10px solid MediumSlateBlue;
+  background-color: white;
+  box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -webkit-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
+  -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
+ }
+
+ .navbar { 
+  color: white; 
+  background-color: slateblue;
+}
