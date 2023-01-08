@@ -1,5 +1,6 @@
-import { Container } from "react-bootstrap";
+import { Container, Image } from "react-bootstrap";
 // Use import for images so webpack handles it
+import profileImgSrc from "../../images/Bmo_Guitar.jpg";
 
 // --- React component
 const AboutMe = () => {
@@ -8,6 +9,7 @@ const AboutMe = () => {
 			{/* Outer container sets up styling using form-container CSS
 				Inner container created padding around form  */}
 			<Container className="p-4">
+				<Image roundedCircle src={profileImgSrc}></Image>
 				<h2>About me</h2>
 				<p>
 					Lorem Ipsum is simply dummy text of the printing and
