@@ -8,7 +8,7 @@ const ContactInfoInner = () => {
 			{/* Outer container sets up styling using form-container CSS
 				Inner container created padding around form  */}
 			<Container className="p-4">
-				<h2>Contact Information</h2>
+				<h3>Contact Information</h3>
 				<p>Email: person@gmail.com</p>
 				<p>Github: acccount@github.com</p>
 			</Container>

@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMediaQuery } from "react-responsive";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -14,6 +15,8 @@ const ContactFormRecaptcha = () => {
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
 	// track if recaptcha has been submitted
 	const [isRecaptchaSubmitted, setIsRecapthcaSubmitted] = useState(false);
+	// track if mobile screen size to resize reCAPTHCA
+	const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
 	// setup react form hook library
 	const {
@@ -80,11 +83,11 @@ const ContactFormRecaptcha = () => {
 			{/* Outer container sets up styling using form-container CSS
 				Inner container created padding around form  */}
 			<Container className="p-4">
-				<h2>Send a message</h2>
+				<h3>Send a message</h3>
 				<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 					{/* Success or error message after submission */}
 					<Row className="justify-content-md-left">
-						<Col md={12} className="mb=3">
+						<Col md={12} className="mb-3">
 							{/* Feedback for successful form submission */}
 							{isSuccessfullySubmitted && (
 								<Alert variant="success">
@@ -109,7 +112,7 @@ const ContactFormRecaptcha = () => {
 						xs=9 md=7 makes fields appropriately sized for different screens
 					*/}
 					<Row className="justify-content-md-left">
-						<Col xs={9} md={7} className="mb-3">
+						<Col xs={12} md={8} className="mb-3">
 							<Form.Label>Name</Form.Label>
 							<Form.Control
 								type="text"
@@ -125,7 +128,7 @@ const ContactFormRecaptcha = () => {
 
 					{/* Email */}
 					<Row className="justify-content-md-left">
-						<Col xs={9} md={7} className="mb-3">
+						<Col xs={12} md={8} className="mb-3">
 							<Form.Label>Email</Form.Label>
 							<Form.Control
 								type="email"
@@ -141,7 +144,7 @@ const ContactFormRecaptcha = () => {
 
 					{/* Phone Number*/}
 					<Row className="justify-content-md-left">
-						<Col xs={9} md={7} className="mb-3">
+						<Col xs={12} md={8} className="mb-3">
 							<Form.Label>Phone Number (optional)</Form.Label>
 							<Form.Control
 								type="tel"
@@ -161,7 +164,7 @@ const ContactFormRecaptcha = () => {
 							<Form.Label>Message</Form.Label>
 							<Form.Control
 								as="textarea"
-								rows={3}
+								rows={4}
 								{...register("message")}
 								isInvalid={!!errors.message}
 							/>
@@ -172,19 +175,31 @@ const ContactFormRecaptcha = () => {
 					</Row>
 
 					{/* reCAPTCHA v2 button aligned to the right
-						using test key */}
+						Resizes if using a mobile screen to make somewhat responsive*/}
 					<Row className="justify-content-md-center">
 						<Col
 							md={12}
 							className="mb-3 d-flex justify-content-end"
 						>
-							<ReCAPTCHA
-								sitekey={
-									"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-								}
-								ref={recaptchaRef}
-								onChange={onChange}
-							/>
+							{isMobile ? (
+								<ReCAPTCHA
+									sitekey={
+										"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+									}
+									ref={recaptchaRef}
+									onChange={onChange}
+									size="compact"
+								/>
+							) : (
+								<ReCAPTCHA
+									sitekey={
+										"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+									}
+									ref={recaptchaRef}
+									onChange={onChange}
+									size="normal"
+								/>
+							)}
 						</Col>
 					</Row>
 

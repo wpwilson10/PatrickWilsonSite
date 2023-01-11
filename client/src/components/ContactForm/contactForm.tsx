@@ -55,7 +55,7 @@ const ContactForm = () => {
 				<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 					{/* Success or error message after submission */}
 					<Row className="justify-content-md-left">
-						<Col md={12} className="mb=3">
+						<Col md={12} className="mb-3">
 							{/* Feedback for successful form submission */}
 							{isSuccessfullySubmitted && (
 								<Alert variant="success">

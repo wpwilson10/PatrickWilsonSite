@@ -1,11 +1,6 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-const linkStyle = {
-	padding: 5,
-	color: "white",
-};
-
 /**
  * NavRight contains links and forms that will render on the right side a navigation bar
  *
@@ -29,20 +24,14 @@ const NavRight = () => {
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link href="#home">
-				<Link style={linkStyle} to="/">
-					Home
-				</Link>
+			<Nav.Link as={Link} to="/" href="#">
+				Home
 			</Nav.Link>
-			<Nav.Link href="#about">
-				<Link style={linkStyle} to="/about">
-					About Me
-				</Link>
+			<Nav.Link as={Link} to="/about" href="#about">
+				About
 			</Nav.Link>
-			<Nav.Link href="#contact">
-				<Link style={linkStyle} to="/contact">
-					Contact
-				</Link>
+			<Nav.Link as={Link} to="/contact" href="#contact">
+				Contact
 			</Nav.Link>
 		</Nav>
 	);
