@@ -52,3 +52,20 @@
   max-width: 360px;
   width:100%;
 }
+
+.link-no-decoration {
+  text-decoration: none;
+}
+
+.contact-link-container {
+  height: 40px;
+  margin-bottom: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+}
+
+.contact-link-text {
+  margin-left: 5px;
+  text-align: end;
+}
