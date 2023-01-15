@@ -28,9 +28,9 @@ const App = () => {
 	// NavBar goes outside container to make it full size
 	// Routes goes inside container so that later calls to components are inside the container
 	return (
-		<div className="site-container">
+		<div className="body-container">
 			<NavBar />
-			<Container className="content-container mt-3">
+			<Container className="site-container mt-3">
 				<Routes>
 					<Route path="/contact" element={<ContactInfo />} />
 					<Route path="/about" element={<AboutMe />} />

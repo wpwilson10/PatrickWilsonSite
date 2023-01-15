@@ -8,16 +8,16 @@ const AboutMe = () => {
 		<Container className="aboutme-container mb-3">
 			{/* Outer container sets up styling using form-container CSS
 				Inner container created padding around form  */}
-			<Container className="p-4">
-				<Row className="align-items-center">
-					<Col xs={12} md={3}>
+			<Container className="py-4 px-2">
+				<Row className="align-items-center justify-content-center">
+					<Col xs={5} md={3}>
 						<Image
 							roundedCircle
 							className="profile-img"
 							src={profileImgSrc}
 						></Image>
 					</Col>
-					<Col>
+					<Col xs={12} md={9}>
 						<h3>About me</h3>
 						<p>
 							Lorem Ipsum is simply dummy text of the printing and
