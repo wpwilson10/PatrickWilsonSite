@@ -6,9 +6,7 @@ import { MdEmail } from "react-icons/md";
 // --- React component
 const ContactInfoInner = () => {
 	return (
-		<Container className="contact-container mb-3 py-3 px-3">
-			{/* Outer container sets up styling using form-container CSS
-				Inner container created padding around form  */}
+		<Container className="content-container mb-3 py-3 px-3">
 			<h3>Contact Information</h3>
 			<p></p>
 			<p>Email: person@gmail.com</p>

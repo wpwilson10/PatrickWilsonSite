@@ -9,6 +9,18 @@ WPW
     -- https://webpack.js.org/guides/getting-started/ and https://webpack.js.org/guides/typescript/
     -- use "npm run wpw" to build app (currently, need to rename)
 
+Configuration
+
+-   Profile image
+    -- Hard coded to /src/images/profile.jpg
+-   Contact Info
+    -- All of it
+    -- email, github, linkedin, etc
+-   reCAPTCHA site key
+    -- used in contactFormRecaptcha
+-   Contact Form API
+    -- used in contactFormService.tsx
+
 -   TODO
     -- Use correct reCAPTCHA key and load from .env file
 

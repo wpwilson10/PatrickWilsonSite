@@ -8,16 +8,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.content-container {
-  
-}
-
 .site-container {
-  max-width:900px;
+  max-width:1000px;
   margin:auto;
 }
 
-.form-container {
+.content-container {
   border-left: 10px solid MediumSlateBlue;
   background-color: white;
   box-shadow:0 0 10px 0 rgba(0,0,0,.2);
@@ -25,27 +21,7 @@
   -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
   -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
   -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
- }
-
- .aboutme-container {
-  border-left: 10px solid MediumSlateBlue;
-  background-color: white;
-  box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -webkit-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
- }
-
- .contact-container {
-  border-left: 10px solid MediumSlateBlue;
-  background-color: white;
-  box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -webkit-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -moz-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -ms-box-shadow:0 0 10px 0 rgba(0,0,0,.2);
-  -o-box-shadow:0 0 10px 0 rgba(0,0,0,.2)
- }
+}
 
  .navbar { 
   color: white; 
