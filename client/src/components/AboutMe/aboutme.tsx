@@ -5,7 +5,7 @@ import profileImgSrc from "../../images/profile.jpg";
 // --- React component
 const AboutMe = () => {
 	return (
-		<Container className="content-container mb-3 py-3 px-3">
+		<Container id="about" className="content-container mb-3 py-3 px-3">
 			<Row className="align-items-center justify-content-center">
 				<Col xs={5} md={3}>
 					<Image

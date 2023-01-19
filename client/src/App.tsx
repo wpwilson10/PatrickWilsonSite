@@ -4,10 +4,11 @@ import NavBar from "./components/NavBar/navbar";
 import { Container } from "react-bootstrap";
 import AboutMe from "./components/AboutMe/aboutme";
 import ContactInfo from "./components/ContactInfo/contactInfo";
+import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
 
 const Home = () => (
 	<div>
-		<Container className="content-container mb-3 py-3 px-3">
+		<Container id="home" className="content-container mb-3 py-3 px-3">
 			<h2>TKTL notes app</h2>
 			<p>
 				Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -24,6 +25,7 @@ const Home = () => (
 		</Container>
 		<AboutMe></AboutMe>
 		<ContactInfo></ContactInfo>
+		<ContactFormRecaptcha></ContactFormRecaptcha>
 	</div>
 );
 

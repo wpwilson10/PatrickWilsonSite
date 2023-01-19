@@ -1,15 +1,17 @@
 import { Col, Container, Row } from "react-bootstrap";
-import ContactFormRecaptcha from "../ContactForm/contactFormRecaptcha";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
 // --- React component
-const ContactInfoInner = () => {
+const ContactInfo = () => {
 	return (
-		<Container className="content-container mb-3 py-3 px-3">
+		<Container
+			id="contact_info"
+			className="content-container mb-3 py-3 px-3"
+		>
 			<h3>Contact Information</h3>
 			<p></p>
-			<p>Email: person@gmail.com</p>
+			<p>Email: {process.env.EMAIL_ADDRESS}</p>
 			<Row className="justify-content-start">
 				<Col xs={12} md="auto">
 					{/* GitHub Icon and Link 
@@ -55,16 +57,6 @@ const ContactInfoInner = () => {
 				</Col>
 			</Row>
 		</Container>
-	);
-};
-
-// --- React component
-const ContactInfo = () => {
-	return (
-		<div>
-			<ContactInfoInner></ContactInfoInner>
-			<ContactFormRecaptcha></ContactFormRecaptcha>
-		</div>
 	);
 };
 

@@ -79,7 +79,10 @@ const ContactFormRecaptcha = () => {
 
 	// Standard autocomplete options - https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
 	return (
-		<Container className="content-container mb-3 py-3 px-3">
+		<Container
+			id="contact_form"
+			className="content-container mb-3 py-3 px-3"
+		>
 			<h3>Send a message</h3>
 			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 				{/* Success or error message after submission */}
@@ -177,7 +180,7 @@ const ContactFormRecaptcha = () => {
 					<Col md={12} className="mb-3 d-flex justify-content-end">
 						{isMobile ? (
 							<ReCAPTCHA
-								sitekey={process.env.RECAPTCHA_KEY!}
+								sitekey={process.env.RECAPTCHA_SITE_KEY!}
 								ref={recaptchaRef}
 								onChange={onChange}
 								size="compact"
