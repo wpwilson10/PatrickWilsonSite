@@ -15,7 +15,7 @@ const ContactInfoInner = () => {
 					{/* GitHub Icon and Link 
 							Target and Rel options cause the link to open in a new tab */}
 					<a
-						href="http://github.com/wpwilson10"
+						href={process.env.GITHUB_LINK}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="link-no-decoration"
@@ -30,7 +30,7 @@ const ContactInfoInner = () => {
 					{/* LinkedIn Icon and Link
 							Target and Rel options cause the link to open in a new tab */}
 					<a
-						href="https://linkedin.com"
+						href={process.env.LINKEDIN_LINK}
 						target="_blank"
 						rel="noopener noreferrer"
 						className="link-no-decoration"
@@ -44,7 +44,7 @@ const ContactInfoInner = () => {
 				<Col xs={12} md="auto">
 					{/* Opens email */}
 					<a
-						href="mailto:wpwilson10@gmail.com"
+						href={"mailto:" + process.env.EMAIL_ADDRESS}
 						className="link-no-decoration"
 					>
 						<div className="contact-link-container">
