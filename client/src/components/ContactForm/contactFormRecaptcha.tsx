@@ -177,9 +177,7 @@ const ContactFormRecaptcha = () => {
 					<Col md={12} className="mb-3 d-flex justify-content-end">
 						{isMobile ? (
 							<ReCAPTCHA
-								sitekey={
-									"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-								}
+								sitekey={process.env.RECAPTCHA_KEY!}
 								ref={recaptchaRef}
 								onChange={onChange}
 								size="compact"

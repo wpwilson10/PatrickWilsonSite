@@ -18,11 +18,12 @@ Configuration
     -- email, github, linkedin, etc
 -   reCAPTCHA site key
     -- used in contactFormRecaptcha
+    -- configured in .env
 -   Contact Form API
     -- used in contactFormService.tsx
-
--   TODO
-    -- Use correct reCAPTCHA key and load from .env file
+    -- configured in .env
+-   Project name
+    -- webpack.config.js
 
 # Getting Started with Create React App
 

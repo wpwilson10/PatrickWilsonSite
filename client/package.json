@@ -52,6 +52,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-google-recaptcha": "^2.1.5",
     "css-loader": "^6.7.1",
+    "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "2.6.2",
     "style-loader": "^3.3.1",

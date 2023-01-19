@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 module.exports = {
 	mode: "development",
@@ -12,9 +13,10 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: "goReactTest",
+			title: "patrickwilson.site",
 			template: "./public/index.html",
 		}),
+		new Dotenv(),
 	],
 	resolve: {
 		extensions: [".tsx", ".ts", ".js"],

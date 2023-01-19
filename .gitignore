@@ -9,3 +9,4 @@
 # production
 .exe
 server/configs/.env
+*.log

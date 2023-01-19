@@ -1,0 +1,2 @@
+time="2023-01-15T21:46:43-06:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-01-15T21:46:45-06:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail

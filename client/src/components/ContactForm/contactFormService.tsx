@@ -2,7 +2,7 @@ import axios from "axios";
 import { object, string } from "yup";
 
 // --- IO
-const baseUrl = "http://localhost:3030/api/contact";
+const baseUrl = process.env.CONTACT_FORM_API!;
 
 // --- Data structure
 export interface IContactForm {
