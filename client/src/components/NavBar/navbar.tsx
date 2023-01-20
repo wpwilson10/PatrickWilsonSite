@@ -17,7 +17,10 @@ const NavRight = () => {
 };
 
 /**
- * NavLeft contains links and forms that will render on the left side a navigation bar
+ * NavLeft contains links and forms that will render on the left side a navigation bar.
+ * Link offset is -100 for first section and -70 after to compensate for top fixed toolbar.
+ * Duration 200 was considered a fast speed for major screen changes by some study.
+ * eventKey="#"  makes collapseOnSelect work - https://stackoverflow.com/a/56485081
  *
  * @returns a react component for the left side of the NavBar
  */
@@ -25,10 +28,11 @@ const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
 			<Nav.Link
+				eventKey="1"
 				onClick={() =>
 					scroller.scrollTo("home", {
 						smooth: true,
-						offset: -20,
+						offset: -100,
 						duration: 200,
 					})
 				}
@@ -36,10 +40,11 @@ const NavLeft = () => {
 				Home
 			</Nav.Link>
 			<Nav.Link
+				eventKey="2"
 				onClick={() =>
 					scroller.scrollTo("about", {
 						smooth: true,
-						offset: -20,
+						offset: -70,
 						duration: 200,
 					})
 				}
@@ -47,10 +52,11 @@ const NavLeft = () => {
 				About
 			</Nav.Link>
 			<Nav.Link
+				eventKey="3"
 				onClick={() =>
 					scroller.scrollTo("contact_info", {
 						smooth: true,
-						offset: -20,
+						offset: -70,
 						duration: 200,
 					})
 				}
@@ -58,10 +64,11 @@ const NavLeft = () => {
 				Contact Info
 			</Nav.Link>
 			<Nav.Link
+				eventKey="4"
 				onClick={() =>
 					scroller.scrollTo("contact_form", {
 						smooth: true,
-						offset: -20,
+						offset: -70,
 						duration: 200,
 					})
 				}
@@ -74,7 +81,13 @@ const NavLeft = () => {
 
 const NavBar = () => {
 	return (
-		<Navbar collapseOnSelect expand="lg" className="navbar" variant="dark">
+		<Navbar
+			collapseOnSelect={true}
+			expand="lg"
+			className="navbar"
+			variant="dark"
+			fixed="top"
+		>
 			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 			<Navbar.Collapse id="responsive-navbar-nav">
 				<NavLeft />
