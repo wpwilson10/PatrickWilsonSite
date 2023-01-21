@@ -58,7 +58,8 @@ func SaveContact(c *gin.Context) {
 		return
 	}
 
-	// good to save, add time and remove recaptcha token because we don't care
+	// good to save
+	// add time and remove recaptcha token because we don't care
 	contact.SubmissionTime = time.Now()
 	contact.Recapthca = ""
 	saveContact(contact)

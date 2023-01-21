@@ -1,4 +1,4 @@
-go 1.18
+go 1.19
 
 use (
 	./
@@ -7,5 +7,6 @@ use (
 	./internal/user
 	./internal/jwt
 	./internal/contactForm
+	./internal/checkout
 	./internal/setup
 )

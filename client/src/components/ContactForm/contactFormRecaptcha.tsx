@@ -39,14 +39,6 @@ const ContactFormRecaptcha = () => {
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
 
-			// If we have a reCAPTCHA reference, reset it
-			if (recaptchaRef.current) {
-				const recaptchaValue = recaptchaRef.current.getValue();
-				console.log("Captcha value:", recaptchaValue);
-				recaptchaRef.current.reset();
-				setIsRecapthcaSubmitted(false);
-			}
-
 			console.log(data);
 		} catch (error) {
 			setIsSubmissionError(true);

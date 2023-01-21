@@ -1,7 +1,6 @@
 package main
 
 import (
-	"contactForm"
 	"net/http"
 	"note"
 	"os"
@@ -10,7 +9,10 @@ import (
 
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/stripe/stripe-go/v74"
 
+	"checkout"
+	"contactForm"
 	"setup"
 )
 
@@ -23,6 +25,8 @@ func main() {
 	defer file.Close()
 	// setup logger
 	setup.Logger(file)
+	// This is your test secret API key.
+	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
 
 	// run web server
 	server()
@@ -51,7 +55,8 @@ func server() {
 	{
 		api.GET("/notes", note.GetNotes)
 		api.POST("/contact", contactForm.SaveContact)
+		api.POST("/checkout", checkout.HandleCreateCheckoutSession)
 	}
 
-	router.Run("localhost:3030") // listen and serve on 0.0.0.0:8080
+	router.Run(os.Getenv("DOMAIN")) // listen and serve on 0.0.0.0:8080
 }
