@@ -56,6 +56,7 @@ func server() {
 		api.GET("/notes", note.GetNotes)
 		api.POST("/contact", contactForm.SaveContact)
 		api.POST("/checkout", checkout.HandleCreateCheckoutSession)
+		api.GET("/checkout_config", checkout.HandleCheckoutConfig)
 	}
 
 	router.Run(os.Getenv("DOMAIN")) // listen and serve on 0.0.0.0:8080

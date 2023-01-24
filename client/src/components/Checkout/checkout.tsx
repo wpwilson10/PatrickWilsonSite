@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import postCheckoutForm, { ICheckoutForm, schema } from "./checkoutService";
+import { ICheckoutForm, schema } from "./checkoutService";
 
 // Copied and modified from https://github.com/stripe-samples/checkout-one-time-payments
 
@@ -39,27 +39,25 @@ const Checkout = () => {
 
 	useEffect(() => {
 		async function fetchConfig() {
-			/*
 			// Fetch config from our backend.
-			const { unitAmount, currency } = await fetch("/config").then((r) =>
-				r.json()
-			);*/
-			setAmount(0);
-			setCurrency("USD");
+			const { unitAmount, currency } = await fetch(
+				"/api/checkout_config"
+			).then((r) => r.json());
+			setAmount(unitAmount);
+			setCurrency(currency);
 		}
 		fetchConfig();
 	}, []);
 
-	const onSubmit = async (data: ICheckoutForm) => {
+	const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+		e.preventDefault();
 		try {
-			await postCheckoutForm(data);
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
-
-			console.log(data);
 		} catch (error) {
 			setIsSubmissionError(true);
 			setIsSuccessfullySubmitted(false);
+			console.log("Submit error");
 			console.log(error);
 		}
 	};
@@ -84,7 +82,7 @@ const Checkout = () => {
 					{isSuccessfullySubmitted && (
 						<Alert variant="success">
 							<p className="mb-0">
-								Success - Thanks for your message!
+								Success - Thanks for your support!
 							</p>
 						</Alert>
 					)}
@@ -92,7 +90,7 @@ const Checkout = () => {
 					{isSubmissionError && (
 						<Alert variant="danger">
 							<p className="mb-0">
-								Error occurred while sending message. Please try
+								Error occurred during checkout. Please try
 								again.
 							</p>
 						</Alert>
@@ -110,7 +108,15 @@ const Checkout = () => {
 					height="160"
 				/>
 			</div>
-			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
+			{/* Use form method and action instead of ajax onSubmit because reasons*/}
+			<Form
+				noValidate
+				action="/api/checkout"
+				method="POST"
+				onSubmit={handleSubmit((e: React.FormEvent<HTMLFormElement>) =>
+					onSubmit(e)
+				)}
+			>
 				<Row className="justify-content-md-left">
 					<Col xs={12} md={8} className="mb-3">
 						<Form.Label>Name</Form.Label>

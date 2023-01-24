@@ -12,7 +12,7 @@ export interface ICheckoutForm {
 // --- Communications
 const postCheckoutForm = async (
 	newCheckout: ICheckoutForm
-): Promise<ICheckoutForm> => {
+): Promise<string> => {
 	const response = await axios.post(baseUrl, newCheckout);
 
 	return response.data;
