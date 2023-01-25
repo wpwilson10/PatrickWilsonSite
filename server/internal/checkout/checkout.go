@@ -39,7 +39,8 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 		return
 	}
 
-	fmt.Println("Redirect")
+	fmt.Println("Redirect: ", s.URL)
+	c.JSON(http.StatusOK, gin.H{"url": s.URL})
 	c.Redirect(http.StatusSeeOther, s.URL)
 }
 

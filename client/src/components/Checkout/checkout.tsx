@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { ICheckoutForm, schema } from "./checkoutService";
+import postCheckoutForm, { ICheckoutForm, schema } from "./checkoutService";
 
 // Copied and modified from https://github.com/stripe-samples/checkout-one-time-payments
 
@@ -49,19 +49,6 @@ const Checkout = () => {
 		fetchConfig();
 	}, []);
 
-	const onSubmit = (e: React.FormEvent<HTMLInputElement>) => {
-		e.preventDefault();
-		try {
-			setIsSubmissionError(false);
-			setIsSuccessfullySubmitted(false);
-		} catch (error) {
-			setIsSubmissionError(true);
-			setIsSuccessfullySubmitted(false);
-			console.log("Submit error");
-			console.log(error);
-		}
-	};
-
 	// setup react form hook library
 	const {
 		register,
@@ -72,6 +59,20 @@ const Checkout = () => {
 	} = useForm<ICheckoutForm>({
 		resolver: yupResolver(schema),
 	});
+
+	const onSubmit = async (data: ICheckoutForm) => {
+		// react-form-hook handles preventDefault
+		try {
+			const response = await postCheckoutForm(data);
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(false);
+			// redirect to checkout url
+			window.location.href = response.url;
+		} catch (error) {
+			setIsSubmissionError(true);
+			setIsSuccessfullySubmitted(false);
+		}
+	};
 
 	return (
 		<Container id="checkout" className="content-container mb-3 py-3 px-3">
@@ -108,15 +109,7 @@ const Checkout = () => {
 					height="160"
 				/>
 			</div>
-			{/* Use form method and action instead of ajax onSubmit because reasons*/}
-			<Form
-				noValidate
-				action="/api/checkout"
-				method="POST"
-				onSubmit={handleSubmit((e: React.FormEvent<HTMLFormElement>) =>
-					onSubmit(e)
-				)}
-			>
+			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 				<Row className="justify-content-md-left">
 					<Col xs={12} md={8} className="mb-3">
 						<Form.Label>Name</Form.Label>

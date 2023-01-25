@@ -9,12 +9,15 @@ export interface ICheckoutForm {
 	quantity: number;
 }
 
+export interface checkoutRedirect {
+	url: string;
+}
+
 // --- Communications
 const postCheckoutForm = async (
 	newCheckout: ICheckoutForm
-): Promise<string> => {
+): Promise<checkoutRedirect> => {
 	const response = await axios.post(baseUrl, newCheckout);
-
 	return response.data;
 };
 
