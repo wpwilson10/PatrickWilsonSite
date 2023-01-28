@@ -7,6 +7,7 @@ const baseUrl = process.env.CHECKOUT_API!;
 // --- Data structure
 export interface ICheckoutForm {
 	quantity: number;
+	stripePriceID: string;
 }
 
 export interface checkoutRedirect {

@@ -37,28 +37,33 @@ const Checkout = () => {
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
 
-	useEffect(() => {
-		async function fetchConfig() {
-			// Fetch config from our backend.
-			const { unitAmount, currency } = await fetch(
-				"/api/checkout_config"
-			).then((r) => r.json());
-			setAmount(unitAmount);
-			setCurrency(currency);
-		}
-		fetchConfig();
-	}, []);
-
 	// setup react form hook library
 	const {
 		register,
 		handleSubmit,
 		formState,
 		formState: { errors },
-		getValues,
+		watch,
+		setValue,
 	} = useForm<ICheckoutForm>({
 		resolver: yupResolver(schema),
 	});
+
+	useEffect(() => {
+		async function fetchConfig() {
+			// Fetch config from our backend.
+			const { unitAmount, currency, stripePriceID } = await fetch(
+				"/api/checkout_config"
+			).then((r) => r.json());
+			setAmount(unitAmount);
+			setCurrency(currency);
+			setValue("stripePriceID", stripePriceID);
+		}
+		fetchConfig();
+	}, [setValue]);
+
+	// pull quantity value to update price button
+	const watchQuantity = watch("quantity", 0);
 
 	const onSubmit = async (data: ICheckoutForm) => {
 		// react-form-hook handles preventDefault
@@ -130,12 +135,7 @@ const Checkout = () => {
 				<Row className="justify-content-md-center">
 					<Col md={12} className="mb-3 d-flex justify-content-end">
 						<Button type="submit" disabled={formState.isSubmitting}>
-							Buy{" "}
-							{formatPrice(
-								amount,
-								currency,
-								getValues("quantity")
-							)}
+							Buy {formatPrice(amount, currency, watchQuantity)}
 						</Button>
 					</Col>
 				</Row>
