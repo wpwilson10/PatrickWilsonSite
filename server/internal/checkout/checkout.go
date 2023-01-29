@@ -64,6 +64,7 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 }
 
 func HandleCheckoutConfig(c *gin.Context) {
+
 	if c.Request.Method != "GET" {
 		setup.LogCommon(nil).Error("Request method not GET")
 		c.Status(http.StatusMethodNotAllowed)

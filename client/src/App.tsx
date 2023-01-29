@@ -6,6 +6,7 @@ import AboutMe from "./components/AboutMe/aboutme";
 import ContactInfo from "./components/ContactInfo/contactInfo";
 import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
 import Checkout from "./components/Checkout/checkout";
+import { AllProducts } from "./components/Product/product";
 
 const Home = () => (
 	<div>
@@ -28,6 +29,7 @@ const Home = () => (
 		<ContactInfo></ContactInfo>
 		<ContactFormRecaptcha></ContactFormRecaptcha>
 		<Checkout></Checkout>
+		<AllProducts></AllProducts>
 	</div>
 );
 

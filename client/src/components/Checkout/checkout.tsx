@@ -5,8 +5,7 @@ import { useForm } from "react-hook-form";
 import postCheckoutForm, { ICheckoutForm, schema } from "./checkoutService";
 
 // Copied and modified from https://github.com/stripe-samples/checkout-one-time-payments
-
-const formatPrice = (
+export const formatPrice = (
 	amount: number,
 	currency: string,
 	quantity: number
