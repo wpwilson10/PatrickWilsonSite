@@ -51,12 +51,12 @@ const Checkout = () => {
 	useEffect(() => {
 		async function fetchConfig() {
 			// Fetch config from our backend.
-			const { unitAmount, currency, stripePriceID } = await fetch(
+			const { unitAmount, currency } = await fetch(
 				"/api/checkout_config"
 			).then((r) => r.json());
 			setAmount(unitAmount);
 			setCurrency(currency);
-			setValue("stripePriceID", stripePriceID);
+			// setValue("stripePriceID", stripePriceID);
 		}
 		fetchConfig();
 	}, [setValue]);

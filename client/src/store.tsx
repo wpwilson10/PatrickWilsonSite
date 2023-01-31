@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import checkoutReducer from "./components/Checkout/checkoutReducer";
 
 // The only thing you should need to do in this file is add reducers
 // See - https://redux-toolkit.js.org/tutorials/typescript
@@ -8,7 +9,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
  * store contains the centralized state for the application
  */
 export const store = configureStore({
-	reducer: {},
+	reducer: { checkout: checkoutReducer },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

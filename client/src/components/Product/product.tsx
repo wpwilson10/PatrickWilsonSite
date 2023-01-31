@@ -2,10 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import postCheckoutForm, {
-	ICheckoutForm,
-	schema,
-} from "../Checkout/checkoutService";
+import { useAppDispatch } from "../../store";
+import { addCheckout } from "../Checkout/checkoutReducer";
+import { ICheckoutForm, schema } from "../Checkout/checkoutService";
 import { formatPrice, getAll, IProduct, IProductList } from "./productService";
 
 const initialList: IProductList = {
@@ -47,6 +46,10 @@ export const AllProducts = () => {
 };
 
 export const Product = ({ product }: { product: IProduct }) => {
+	// useAppDispatch to make typescript happy with thunks
+	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
+	const dispatch = useAppDispatch();
+
 	// setup react form hook library
 	const {
 		register,
@@ -62,14 +65,15 @@ export const Product = ({ product }: { product: IProduct }) => {
 	// pull quantity value to update price button
 	const watchQuantity = watch("quantity", 0);
 	// send product info to checkout
-	setValue("stripePriceID", product.stripePriceID);
+	setValue("product", product);
 
 	const onSubmit = async (data: ICheckoutForm) => {
 		// react-form-hook handles preventDefault
 		try {
-			const response = await postCheckoutForm(data);
+			dispatch(addCheckout(data));
+			// const response = await postCheckoutForm(data);
 			// redirect to checkout url
-			window.location.href = response.url;
+			// window.location.href = response.url;
 		} catch (error) {
 			console.log(error);
 		}

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { object, number } from "yup";
+import { IProduct } from "../Product/productService";
 
 // --- IO
 const baseUrl = process.env.CHECKOUT_API!;
@@ -7,7 +8,7 @@ const baseUrl = process.env.CHECKOUT_API!;
 // --- Data structure
 export interface ICheckoutForm {
 	quantity: number;
-	stripePriceID: string;
+	product: IProduct;
 }
 
 export interface checkoutRedirect {

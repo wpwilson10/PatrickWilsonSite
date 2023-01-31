@@ -5,7 +5,6 @@ import { Container } from "react-bootstrap";
 import AboutMe from "./components/AboutMe/aboutme";
 import ContactInfo from "./components/ContactInfo/contactInfo";
 import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
-import Checkout from "./components/Checkout/checkout";
 import { AllProducts } from "./components/Product/product";
 
 const Home = () => (
@@ -28,7 +27,6 @@ const Home = () => (
 		<AboutMe></AboutMe>
 		<ContactInfo></ContactInfo>
 		<ContactFormRecaptcha></ContactFormRecaptcha>
-		<Checkout></Checkout>
 		<AllProducts></AllProducts>
 	</div>
 );
