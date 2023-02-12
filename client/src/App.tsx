@@ -6,6 +6,7 @@ import AboutMe from "./components/AboutMe/aboutme";
 import ContactInfo from "./components/ContactInfo/contactInfo";
 import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
 import { AllProducts } from "./components/Product/product";
+import ShoppingCart from "./components/ShoppingCart/shoppingCart";
 
 const Home = () => (
 	<div>
@@ -27,6 +28,7 @@ const Home = () => (
 		<AboutMe></AboutMe>
 		<ContactInfo></ContactInfo>
 		<ContactFormRecaptcha></ContactFormRecaptcha>
+		<ShoppingCart></ShoppingCart>
 		<AllProducts></AllProducts>
 	</div>
 );

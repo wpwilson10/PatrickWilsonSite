@@ -19,6 +19,7 @@ type Product struct {
 	StripePriceID string   `json:"stripePriceID"`
 	UnitAmount    int64    `json:"unitAmount"`
 	Currency      string   `json:"currency"`
+	Quantity      int64    `json:"quantity"`
 }
 
 type Products struct {

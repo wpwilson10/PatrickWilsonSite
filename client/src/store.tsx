@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import checkoutReducer from "./components/Checkout/checkoutReducer";
+import shoppingCartReducer from "./components/ShoppingCart/shoppingCartReducer";
 
 // The only thing you should need to do in this file is add reducers
 // See - https://redux-toolkit.js.org/tutorials/typescript
@@ -9,7 +9,7 @@ import checkoutReducer from "./components/Checkout/checkoutReducer";
  * store contains the centralized state for the application
  */
 export const store = configureStore({
-	reducer: { checkout: checkoutReducer },
+	reducer: { shoppingCart: shoppingCartReducer },
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -12,11 +12,6 @@ import (
 	"github.com/stripe/stripe-go/v74/price"
 )
 
-type CheckoutForm struct {
-	Quantity      int64  `json:"quantity"`
-	StripePriceID string `json:"stripePriceID"`
-}
-
 type CheckoutConfig struct {
 	PublicKey     string `json:"publicKey"`
 	UnitAmount    int64  `json:"unitAmount"`
@@ -31,11 +26,20 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 	domainURL := "https://" + os.Getenv("DOMAIN")
 
 	// Bind JSON form values to struct
-	var checkout CheckoutForm
-	if err := c.ShouldBindJSON(&checkout); err != nil {
+	var cart []Product
+	if err := c.ShouldBindJSON(&cart); err != nil {
 		setup.LogCommon(err).Error("Checkout form bind to JSON")
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
+	}
+
+	var lineItems []*stripe.CheckoutSessionLineItemParams
+	for _, p := range cart {
+		item := stripe.CheckoutSessionLineItemParams{
+			Quantity: stripe.Int64(p.Quantity),
+			Price:    stripe.String(p.StripePriceID),
+		}
+		lineItems = append(lineItems, &item)
 	}
 
 	// Create new Checkout Session for the order
@@ -44,12 +48,7 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 		SuccessURL: stripe.String(domainURL + "?success=true"),
 		CancelURL:  stripe.String(domainURL + "?canceled=true"),
 		Mode:       stripe.String(string(stripe.CheckoutSessionModePayment)),
-		LineItems: []*stripe.CheckoutSessionLineItemParams{
-			{
-				Quantity: stripe.Int64(checkout.Quantity),
-				Price:    stripe.String(checkout.StripePriceID),
-			},
-		},
+		LineItems:  lineItems,
 		// AutomaticTax: &stripe.CheckoutSessionAutomaticTaxParams{Enabled: stripe.Bool(true)},
 	}
 	s, err := session.New(params)

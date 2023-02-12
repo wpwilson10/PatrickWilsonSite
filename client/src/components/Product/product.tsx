@@ -3,12 +3,26 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../store";
-import { addCheckout } from "../Checkout/checkoutReducer";
-import { ICheckoutForm, schema } from "../Checkout/checkoutService";
+import { addToCart } from "../ShoppingCart/shoppingCartReducer";
+import { ICartProduct, schema } from "../ShoppingCart/shoppingCartService";
 import { formatPrice, getAll, IProduct, IProductList } from "./productService";
 
 const initialList: IProductList = {
 	products: [],
+};
+
+const renderProducts = (product: IProduct) => {
+	// convert product to cart product to make easier to handle later
+	const cartProduct: ICartProduct = {
+		...product,
+		quantity: 0,
+	};
+	return (
+		<Product
+			key={cartProduct.stripeProductID}
+			product={cartProduct}
+		></Product>
+	);
 };
 
 export const AllProducts = () => {
@@ -33,19 +47,13 @@ export const AllProducts = () => {
 
 	// don't render anything until we have products to display
 	if (products.products.length > 0) {
-		return (
-			<div>
-				{products.products.map((p) => (
-					<Product key={p.stripeProductID} product={p}></Product>
-				))}
-			</div>
-		);
+		return <div>{products.products.map(renderProducts)}</div>;
 	} else {
 		return <div></div>;
 	}
 };
 
-export const Product = ({ product }: { product: IProduct }) => {
+export const Product = ({ product }: { product: ICartProduct }) => {
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
@@ -57,20 +65,18 @@ export const Product = ({ product }: { product: IProduct }) => {
 		formState,
 		formState: { errors },
 		watch,
-		setValue,
-	} = useForm<ICheckoutForm>({
+	} = useForm<ICartProduct>({
 		resolver: yupResolver(schema),
+		defaultValues: product,
 	});
 
 	// pull quantity value to update price button
 	const watchQuantity = watch("quantity", 0);
-	// send product info to checkout
-	setValue("product", product);
 
-	const onSubmit = async (data: ICheckoutForm) => {
+	const onSubmit = async (data: ICartProduct) => {
 		// react-form-hook handles preventDefault
 		try {
-			dispatch(addCheckout(data));
+			dispatch(addToCart(data));
 			// const response = await postCheckoutForm(data);
 			// redirect to checkout url
 			// window.location.href = response.url;
