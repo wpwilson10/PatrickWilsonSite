@@ -1,15 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
+import { formatPrice } from "../Product/productService";
 import { ICartProduct } from "./shoppingCartService";
 
 // Typescript + Redux wants an explicit state type and initialization for correct type inferrence
 // https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
 type ShoppingCartState = {
 	cart: ICartProduct[];
+	totalAmount: number;
+	totalQuantity: number;
 };
 
 const initialState: ShoppingCartState = {
 	cart: [],
+	totalAmount: 0,
+	totalQuantity: 0,
 };
 
 const shoppingCartSlice = createSlice({
@@ -27,26 +32,11 @@ const shoppingCartSlice = createSlice({
 			} else {
 				state.cart.push({ ...action.payload });
 			}
-		},
-		incrementQuantity: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) => item.stripeProductID === action.payload
-			);
-			if (itemInCart) {
-				itemInCart.quantity++;
-			}
-		},
-		decrementQuantity: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) => item.stripeProductID === action.payload
-			);
-			if (itemInCart) {
-				if (itemInCart.quantity === 1) {
-					itemInCart.quantity = 1;
-				} else {
-					itemInCart.quantity--;
-				}
-			}
+
+			// running totals
+			state.totalAmount +=
+				action.payload.quantity * action.payload.unitAmount;
+			state.totalQuantity += action.payload.quantity;
 		},
 		removeItem: (state, action) => {
 			const filteredCart = state.cart.filter(
@@ -61,7 +51,11 @@ export const selectCart = (state: RootState) => {
 	return state.shoppingCart.cart;
 };
 
+// Returns the cart total as a displayable string
+export const selectCartTotal = (state: RootState) => {
+	return formatPrice(state.shoppingCart.totalAmount, "USD", 1);
+};
+
 export default shoppingCartSlice.reducer;
 
-export const { addToCart, incrementQuantity, decrementQuantity, removeItem } =
-	shoppingCartSlice.actions;
+export const { addToCart, removeItem } = shoppingCartSlice.actions;

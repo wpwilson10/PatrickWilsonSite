@@ -23,7 +23,8 @@ type CheckoutConfig struct {
 // and https://stripe.com/docs/checkout/quickstart?lang=go
 func HandleCreateCheckoutSession(c *gin.Context) {
 	fmt.Println("Checkout")
-	domainURL := "https://" + os.Getenv("DOMAIN")
+	// Make this secure
+	domainURL := "http://" + os.Getenv("DOMAIN")
 
 	// Bind JSON form values to struct
 	var cart []Product
@@ -34,12 +35,20 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 	}
 
 	var lineItems []*stripe.CheckoutSessionLineItemParams
-	for _, p := range cart {
-		item := stripe.CheckoutSessionLineItemParams{
-			Quantity: stripe.Int64(p.Quantity),
-			Price:    stripe.String(p.StripePriceID),
+
+	// shouldn't send to stripe if nothing received from client
+	if len(cart) > 0 {
+		for _, p := range cart {
+			item := stripe.CheckoutSessionLineItemParams{
+				Quantity: stripe.Int64(p.Quantity),
+				Price:    stripe.String(p.StripePriceID),
+			}
+			lineItems = append(lineItems, &item)
 		}
-		lineItems = append(lineItems, &item)
+	} else {
+		setup.LogCommon(nil).Warning("Attempted send empty cart to Stipe")
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Received empty cart from client"})
+		return
 	}
 
 	// Create new Checkout Session for the order

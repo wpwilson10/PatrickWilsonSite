@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { selectCart } from "./shoppingCartReducer";
+import { selectCart, selectCartTotal } from "./shoppingCartReducer";
 import postCartCheckout from "./shoppingCartService";
 
 const ShoppingCart = () => {
@@ -10,9 +10,14 @@ const ShoppingCart = () => {
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
 	const cart = useSelector(selectCart);
+	const total = useSelector(selectCartTotal);
 
 	const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
+
+		// TODO - Prevent sending empty cart which leads to error.
+		// Maybe add back react-hook-form to validate total > 0
+
 		try {
 			const response = await postCartCheckout(cart);
 			setIsSubmissionError(false);
@@ -24,6 +29,21 @@ const ShoppingCart = () => {
 			setIsSuccessfullySubmitted(false);
 		}
 	};
+
+	useEffect(() => {
+		// Check to see if this is a redirect back from Checkout
+		const query = new URLSearchParams(window.location.search);
+
+		if (query.get("success")) {
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(true);
+		}
+
+		if (query.get("canceled")) {
+			setIsSubmissionError(true);
+			setIsSuccessfullySubmitted(false);
+		}
+	}, []);
 
 	return (
 		<Container
@@ -52,6 +72,8 @@ const ShoppingCart = () => {
 					)}
 				</Col>
 			</Row>
+
+			<div>Total: {total}</div>
 
 			<Form noValidate onSubmit={onSubmit}>
 				{/* Submit button aligned to the right*/}

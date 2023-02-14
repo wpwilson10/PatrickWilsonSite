@@ -17,7 +17,6 @@ export interface checkoutRedirect {
 const postCartCheckout = async (
 	shoppingCart: ICartProduct[]
 ): Promise<checkoutRedirect> => {
-	console.log(shoppingCart);
 	const response = await axios.post(baseUrl, shoppingCart);
 	return response.data;
 };
