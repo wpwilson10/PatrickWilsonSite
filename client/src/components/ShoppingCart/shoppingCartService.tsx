@@ -1,5 +1,4 @@
 import axios from "axios";
-import { object, number } from "yup";
 import { IProduct } from "../Product/productService";
 
 // --- IO
@@ -20,11 +19,5 @@ const postCartCheckout = async (
 	const response = await axios.post(baseUrl, shoppingCart);
 	return response.data;
 };
-
-// --- Input validation
-// Yup library provides input validation
-export const schema = object({
-	quantity: number().required().positive().integer(),
-});
 
 export default postCartCheckout;

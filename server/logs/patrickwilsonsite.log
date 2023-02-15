@@ -11,3 +11,5 @@ time="2023-02-12T20:22:36-06:00" level=error msg="New Session" application= erro
 time="2023-02-12T20:31:12-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
 time="2023-02-12T20:48:08-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
 time="2023-02-12T20:49:47-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
+time="2023-02-13T21:28:59-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
+time="2023-02-13T21:31:12-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession

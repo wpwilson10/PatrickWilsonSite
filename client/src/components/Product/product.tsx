@@ -2,9 +2,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { number, object } from "yup";
 import { useAppDispatch } from "../../store";
 import { addToCart } from "../ShoppingCart/shoppingCartReducer";
-import { ICartProduct, schema } from "../ShoppingCart/shoppingCartService";
+import { ICartProduct } from "../ShoppingCart/shoppingCartService";
 import { formatPrice, getAll, IProduct, IProductList } from "./productService";
 
 const initialList: IProductList = {
@@ -58,6 +59,11 @@ export const Product = ({ product }: { product: ICartProduct }) => {
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
 
+	// Yup library provides input validation
+	const schema = object({
+		quantity: number().required().positive().integer(),
+	});
+
 	// setup react form hook library
 	const {
 		register,
@@ -100,7 +106,7 @@ export const Product = ({ product }: { product: ICartProduct }) => {
 			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 				<Row className="justify-content-md-left">
 					<Col xs={12} md={8} className="mb-3">
-						<Form.Label>Name</Form.Label>
+						<Form.Label>Quantity</Form.Label>
 						<Form.Control
 							type="number"
 							{...register("quantity")}

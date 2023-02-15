@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { selectCart, selectCartTotal } from "./shoppingCartReducer";
+import {
+	selectCart,
+	selectCartTotalAmount,
+	selectCartTotalQuantity,
+} from "./shoppingCartReducer";
 import postCartCheckout from "./shoppingCartService";
 
 const ShoppingCart = () => {
@@ -9,24 +13,32 @@ const ShoppingCart = () => {
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
+	const [isEmpty, setIsEmpty] = useState(false);
 	const cart = useSelector(selectCart);
-	const total = useSelector(selectCartTotal);
+	const amount = useSelector(selectCartTotalAmount);
+	const quantity = useSelector(selectCartTotalQuantity);
 
 	const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		// TODO - Prevent sending empty cart which leads to error.
-		// Maybe add back react-hook-form to validate total > 0
+		if (quantity <= 0) {
+			// don't submit to server if there is nothing
+			setIsEmpty(true);
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(false);
+			return;
+		} else {
+			setIsEmpty(false);
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(false);
+		}
 
 		try {
 			const response = await postCartCheckout(cart);
-			setIsSubmissionError(false);
-			setIsSuccessfullySubmitted(false);
 			// redirect to checkout url
 			window.location.href = response.url;
 		} catch (error) {
 			setIsSubmissionError(true);
-			setIsSuccessfullySubmitted(false);
 		}
 	};
 
@@ -70,10 +82,16 @@ const ShoppingCart = () => {
 							</p>
 						</Alert>
 					)}
+					{/* Feedback for empty submission */}
+					{isEmpty && (
+						<Alert variant="warning">
+							<p className="mb-0">No items in cart.</p>
+						</Alert>
+					)}
 				</Col>
 			</Row>
 
-			<div>Total: {total}</div>
+			<div>Total: {amount}</div>
 
 			<Form noValidate onSubmit={onSubmit}>
 				{/* Submit button aligned to the right*/}

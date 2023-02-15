@@ -52,7 +52,12 @@ export const selectCart = (state: RootState) => {
 };
 
 // Returns the cart total as a displayable string
-export const selectCartTotal = (state: RootState) => {
+export const selectCartTotalQuantity = (state: RootState) => {
+	return state.shoppingCart.totalQuantity;
+};
+
+// Returns the cart total as a displayable string
+export const selectCartTotalAmount = (state: RootState) => {
 	return formatPrice(state.shoppingCart.totalAmount, "USD", 1);
 };
 
