@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { formatPrice } from "../Product/productService";
-import { ICartProduct } from "./shoppingCartService";
+import { formatPrice, IProduct } from "../Product/productService";
 
 // Typescript + Redux wants an explicit state type and initialization for correct type inferrence
 // https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
 type ShoppingCartState = {
-	cart: ICartProduct[];
+	cart: IProduct[];
 	totalAmount: number;
 	totalQuantity: number;
 };
@@ -44,6 +43,9 @@ const shoppingCartSlice = createSlice({
 			);
 			state.cart = filteredCart;
 		},
+		setCart: (state, action) => {
+			state.cart = action.payload;
+		},
 	},
 });
 
@@ -63,4 +65,4 @@ export const selectCartTotalAmount = (state: RootState) => {
 
 export default shoppingCartSlice.reducer;
 
-export const { addToCart, removeItem } = shoppingCartSlice.actions;
+export const { addToCart, removeItem, setCart } = shoppingCartSlice.actions;

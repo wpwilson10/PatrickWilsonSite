@@ -20,7 +20,7 @@ const NavRight = () => {
  * NavLeft contains links and forms that will render on the left side a navigation bar.
  * Link offset is -100 for first section and -70 after to compensate for top fixed toolbar.
  * Duration 200 was considered a fast speed for major screen changes by some study.
- * eventKey="#"  makes collapseOnSelect work - https://stackoverflow.com/a/56485081
+ * eventKey="#" makes collapseOnSelect work - https://stackoverflow.com/a/56485081
  *
  * @returns a react component for the left side of the NavBar
  */
@@ -75,6 +75,7 @@ const NavLeft = () => {
 			>
 				Send Message
 			</Nav.Link>
+			<Nav.Link href="/shop">Shop</Nav.Link>
 		</Nav>
 	);
 };

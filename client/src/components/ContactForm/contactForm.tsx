@@ -141,7 +141,7 @@ const ContactForm = () => {
 
 				{/* Submit button aligned to the right*/}
 				<Row className="justify-content-md-center">
-					<Col md={12} className="mb=3 d-flex justify-content-end">
+					<Col md={12} className="mb-3 d-flex justify-content-end">
 						<Button type="submit" disabled={formState.isSubmitting}>
 							Send Message
 						</Button>

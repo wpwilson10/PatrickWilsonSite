@@ -60,43 +60,53 @@ const ShoppingCart = () => {
 	return (
 		<Container
 			id="shoppingCart"
-			className="content-container mb-3 py-3 px-3"
+			className="content-container mb-3 py-2 px-2"
 		>
 			{/* Success or error message after submission */}
-			<Row className="justify-content-md-left">
-				<Col md={12} className="mb-3">
-					{/* Feedback for successful form submission */}
-					{isSuccessfullySubmitted && (
-						<Alert variant="success">
-							<p className="mb-0">
-								Success - Thanks for your support!
-							</p>
-						</Alert>
-					)}
-					{/* Feedback for unsuccessful form submission */}
-					{isSubmissionError && (
-						<Alert variant="danger">
-							<p className="mb-0">
-								Error occurred during checkout. Please try
-								again.
-							</p>
-						</Alert>
-					)}
-					{/* Feedback for empty submission */}
-					{isEmpty && (
-						<Alert variant="warning">
-							<p className="mb-0">No items in cart.</p>
-						</Alert>
-					)}
-				</Col>
-			</Row>
-
-			<div>Total: {amount}</div>
+			{isSuccessfullySubmitted || isSubmissionError || isEmpty ? (
+				<Row className="justify-content-md-left mt-2">
+					<Col md={12}>
+						{/* Feedback for successful form submission */}
+						{isSuccessfullySubmitted && (
+							<Alert variant="success">
+								<p className="mb-0">
+									Success - Thanks for your support!
+								</p>
+							</Alert>
+						)}
+						{/* Feedback for unsuccessful form submission */}
+						{isSubmissionError && (
+							<Alert variant="danger">
+								<p className="mb-0">
+									Error occurred during checkout. Please try
+									again.
+								</p>
+							</Alert>
+						)}
+						{/* Feedback for empty submission */}
+						{isEmpty && (
+							<Alert variant="warning">
+								<p className="mb-0">No items in cart.</p>
+							</Alert>
+						)}
+					</Col>
+				</Row>
+			) : null}
 
 			<Form noValidate onSubmit={onSubmit}>
-				{/* Submit button aligned to the right*/}
-				<Row className="justify-content-md-center">
-					<Col md={12} className="mb-3 d-flex justify-content-end">
+				{/* Total with submit button aligned to the right*/}
+				<Row className="justify-content-md-left align-items-center mb-2 mt-2">
+					<Col xs={6} md={4}>
+						<h4>Items in Cart: {quantity}</h4>
+					</Col>
+					<Col xs={6} md={4}>
+						<h4>Total: {amount}</h4>
+					</Col>
+					<Col
+						xs={12}
+						md={4}
+						className="d-flex justify-content-end mt-2"
+					>
 						<Button type="submit">Checkout</Button>
 					</Col>
 				</Row>

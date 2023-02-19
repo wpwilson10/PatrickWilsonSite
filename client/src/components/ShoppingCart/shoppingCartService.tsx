@@ -4,19 +4,18 @@ import { IProduct } from "../Product/productService";
 // --- IO
 const baseUrl = process.env.CHECKOUT_API!;
 
-export interface ICartProduct extends IProduct {
-	quantity: number;
-}
-
 export interface checkoutRedirect {
 	url: string;
 }
 
 // --- Communications
 const postCartCheckout = async (
-	shoppingCart: ICartProduct[]
+	shoppingCart: IProduct[]
 ): Promise<checkoutRedirect> => {
-	const response = await axios.post(baseUrl, shoppingCart);
+	// filter out products with quantity zero
+	const nonZeroProducts = shoppingCart.filter((value) => value.quantity > 0);
+	// send to server
+	const response = await axios.post(baseUrl, nonZeroProducts);
 	return response.data;
 };
 

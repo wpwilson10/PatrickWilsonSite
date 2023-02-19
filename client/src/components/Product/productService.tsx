@@ -1,5 +1,3 @@
-import axios from "axios";
-
 // --- Data structure
 // - why did I have to build this. Seems like it should exist in some library
 // - https://stripe.com/docs/api/products/object
@@ -11,20 +9,12 @@ export interface IProduct {
 	stripePriceID: string;
 	unitAmount: number;
 	currency: string;
+	quantity: number;
 }
 
 export interface IProductList {
 	products: IProduct[];
 }
-
-// --- IO
-const baseUrl = process.env.PRODUCT_API!;
-
-export const getAll = async (): Promise<IProductList> => {
-	const response = await axios.get(baseUrl);
-	// do better data validation
-	return response.data;
-};
 
 // Copied and modified from https://github.com/stripe-samples/checkout-one-time-payments
 export const formatPrice = (

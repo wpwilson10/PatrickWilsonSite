@@ -1,60 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { number, object } from "yup";
 import { useAppDispatch } from "../../store";
 import { addToCart } from "../ShoppingCart/shoppingCartReducer";
-import { ICartProduct } from "../ShoppingCart/shoppingCartService";
-import { formatPrice, getAll, IProduct, IProductList } from "./productService";
+import { formatPrice, IProduct } from "./productService";
 
-const initialList: IProductList = {
-	products: [],
-};
-
-const renderProducts = (product: IProduct) => {
-	// convert product to cart product to make easier to handle later
-	const cartProduct: ICartProduct = {
-		...product,
-		quantity: 0,
-	};
-	return (
-		<Product
-			key={cartProduct.stripeProductID}
-			product={cartProduct}
-		></Product>
-	);
-};
-
-export const AllProducts = () => {
-	const [products, setProducts] = useState(initialList);
-	// track loading success or error
-	const [, setIsError] = useState(false);
-
-	useEffect(() => {
-		// setup based on https://www.robinwieruch.de/react-hooks-fetch-data/
-		const getProducts = async () => {
-			setIsError(false);
-			try {
-				const ps = await getAll();
-				setProducts(ps);
-			} catch (error) {
-				console.log(error);
-				setIsError(true);
-			}
-		};
-		getProducts();
-	}, []);
-
-	// don't render anything until we have products to display
-	if (products.products.length > 0) {
-		return <div>{products.products.map(renderProducts)}</div>;
-	} else {
-		return <div></div>;
-	}
-};
-
-export const Product = ({ product }: { product: ICartProduct }) => {
+export const Product = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
@@ -71,7 +23,7 @@ export const Product = ({ product }: { product: ICartProduct }) => {
 		formState,
 		formState: { errors },
 		watch,
-	} = useForm<ICartProduct>({
+	} = useForm<IProduct>({
 		resolver: yupResolver(schema),
 		defaultValues: product,
 	});
@@ -79,7 +31,7 @@ export const Product = ({ product }: { product: ICartProduct }) => {
 	// pull quantity value to update price button
 	const watchQuantity = watch("quantity", 0);
 
-	const onSubmit = async (data: ICartProduct) => {
+	const onSubmit = async (data: IProduct) => {
 		// react-form-hook handles preventDefault
 		try {
 			dispatch(addToCart(data));

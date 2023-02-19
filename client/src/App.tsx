@@ -5,8 +5,7 @@ import { Container } from "react-bootstrap";
 import AboutMe from "./components/AboutMe/aboutme";
 import ContactInfo from "./components/ContactInfo/contactInfo";
 import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha";
-import { AllProducts } from "./components/Product/product";
-import ShoppingCart from "./components/ShoppingCart/shoppingCart";
+import Shop from "./components/Shop/shop";
 
 const Home = () => (
 	<div>
@@ -28,8 +27,6 @@ const Home = () => (
 		<AboutMe></AboutMe>
 		<ContactInfo></ContactInfo>
 		<ContactFormRecaptcha></ContactFormRecaptcha>
-		<ShoppingCart></ShoppingCart>
-		<AllProducts></AllProducts>
 	</div>
 );
 
@@ -44,6 +41,7 @@ const App = () => {
 				<Routes>
 					<Route path="/contact" element={<ContactInfo />} />
 					<Route path="/about" element={<AboutMe />} />
+					<Route path="/shop" element={<Shop />} />
 					<Route path="/" element={<Home />} />
 				</Routes>
 			</Container>
