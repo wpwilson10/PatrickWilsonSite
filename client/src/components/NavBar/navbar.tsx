@@ -1,5 +1,4 @@
-import { Nav, Navbar } from "react-bootstrap";
-import { scroller } from "react-scroll";
+import { Container, Nav, Navbar } from "react-bootstrap";
 
 /**
  * NavRight contains links and forms that will render on the right side a navigation bar
@@ -27,52 +26,16 @@ const NavRight = () => {
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link
-				eventKey="1"
-				onClick={() =>
-					scroller.scrollTo("home", {
-						smooth: true,
-						offset: -100,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="1" href="/#home">
 				Home
 			</Nav.Link>
-			<Nav.Link
-				eventKey="2"
-				onClick={() =>
-					scroller.scrollTo("about", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="2" href="/#about">
 				About
 			</Nav.Link>
-			<Nav.Link
-				eventKey="3"
-				onClick={() =>
-					scroller.scrollTo("contact_info", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="3" href="/#contact_info">
 				Contact Info
 			</Nav.Link>
-			<Nav.Link
-				eventKey="4"
-				onClick={() =>
-					scroller.scrollTo("contact_form", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="4" href="/contact">
 				Send Message
 			</Nav.Link>
 			<Nav.Link href="/shop">Shop</Nav.Link>
@@ -89,11 +52,14 @@ const NavBar = () => {
 			variant="dark"
 			fixed="top"
 		>
-			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-			<Navbar.Collapse id="responsive-navbar-nav">
-				<NavLeft />
-				<NavRight />
-			</Navbar.Collapse>
+			<Container>
+				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Collapse id="responsive-navbar-nav">
+					<NavLeft />
+					<NavRight />
+				</Navbar.Collapse>
+			</Container>
+			s
 		</Navbar>
 	);
 };
