@@ -52,14 +52,13 @@ const NavBar = () => {
 			variant="dark"
 			fixed="top"
 		>
-			<Container>
+			<Container fluid>
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<NavLeft />
 					<NavRight />
 				</Navbar.Collapse>
 			</Container>
-			s
 		</Navbar>
 	);
 };

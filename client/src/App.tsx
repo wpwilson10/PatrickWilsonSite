@@ -58,16 +58,16 @@ const App = () => {
 	// NavBar goes outside container to make it full size
 	// Routes goes inside container so that later calls to components are inside the container
 	return (
-		<div className="body-container">
+		<Container fluid className="px-1 py-3 body-container">
 			<NavBar />
-			<Container className="site-container mt-3">
+			<Container className="px-1 site-container">
 				<Routes>
 					<Route path="/contact" element={<ContactPage />} />
 					<Route path="/shop" element={<Shop />} />
 					<Route path="/" element={<Home />} />
 				</Routes>
 			</Container>
-		</div>
+		</Container>
 	);
 };
 
