@@ -50,3 +50,15 @@
   margin-left: 5px;
   text-align: end;
 }
+
+.quantity-selector-input {
+  background-color: white;
+  border-color: black;
+  font-size: 1.5em;
+}
+
+.quantity-selector-text {
+  background-color: white;
+  border-color: black;
+  font-size: 1em;
+}

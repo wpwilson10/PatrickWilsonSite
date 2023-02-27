@@ -1,4 +1,7 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Badge, Container, Nav, Navbar } from "react-bootstrap";
+import { FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { selectCartTotalQuantity } from "../ShoppingCart/shoppingCartReducer";
 
 /**
  * NavRight contains links and forms that will render on the right side a navigation bar
@@ -6,10 +9,13 @@ import { Container, Nav, Navbar } from "react-bootstrap";
  * @returns a react component for the right side of the NavBar
  */
 const NavRight = () => {
+	const quantity = useSelector(selectCartTotalQuantity);
+
 	return (
 		<Nav className="ms-auto">
-			<Nav.Link href="#" as="span">
-				<em>WPW NavRight</em>
+			<Nav.Link href="#" eventKey="cart" as="span">
+				<FaShoppingCart size="1.5em" />{" "}
+				<Badge bg="secondary">{quantity}</Badge>
 			</Nav.Link>
 		</Nav>
 	);
@@ -26,19 +32,18 @@ const NavRight = () => {
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link eventKey="1" href="/#home">
+			<Nav.Link eventKey="home" href="/#home">
 				Home
 			</Nav.Link>
-			<Nav.Link eventKey="2" href="/#about">
+			<Nav.Link eventKey="about" href="/#about">
 				About
 			</Nav.Link>
-			<Nav.Link eventKey="3" href="/#contact_info">
-				Contact Info
+			<Nav.Link eventKey="contact" href="/contact">
+				Contact
 			</Nav.Link>
-			<Nav.Link eventKey="4" href="/contact">
-				Send Message
+			<Nav.Link eventKey="shop" href="/shop">
+				Shop
 			</Nav.Link>
-			<Nav.Link href="/shop">Shop</Nav.Link>
 		</Nav>
 	);
 };
