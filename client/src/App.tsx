@@ -26,7 +26,7 @@ const Home = () => {
 	return (
 		<div>
 			<Container id="home" className="content-container mb-3 py-3 px-3">
-				<h2>TKTL notes app</h2>
+				<h2>WPW App</h2>
 				<p>
 					Lorem Ipsum is simply dummy text of the printing and
 					typesetting industry. Lorem Ipsum has been the industry's
