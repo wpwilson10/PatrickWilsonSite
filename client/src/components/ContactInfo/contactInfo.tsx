@@ -2,7 +2,15 @@ import { Col, Container, Row } from "react-bootstrap";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 
-// --- React component
+/**
+ * A React functional component that displays the contact information section, which includes the following information:
+ *
+ * - The contact information section header
+ * - An email address, which is retrieved from the environment variables
+ * - Links to the user's GitHub and LinkedIn profiles, which are also retrieved from environment variables
+ *
+ * @returns {JSX.Element} The contact information section as a JSX element.
+ */
 const ContactInfo = () => {
 	return (
 		<Container

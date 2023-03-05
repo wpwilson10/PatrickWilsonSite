@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 import { selectCartTotalQuantity } from "../ShoppingCart/shoppingCartReducer";
 
 /**
- * NavRight contains links and forms that will render on the right side a navigation bar
+ * NavRight displays a shopping cart icon with the number of items in the cart
+ * which will render on the right side a navigation bar
  *
- * @returns a react component for the right side of the NavBar
+ * @returns {JSX.Element} a react component for the right side of the NavBar
  */
 const NavRight = () => {
 	const quantity = useSelector(selectCartTotalQuantity);
@@ -22,12 +23,10 @@ const NavRight = () => {
 };
 
 /**
- * NavLeft contains links and forms that will render on the left side a navigation bar.
- * Link offset is -100 for first section and -70 after to compensate for top fixed toolbar.
- * Duration 200 was considered a fast speed for major screen changes by some study.
+ * NavLeft contains links that will render on the left side a navigation bar.
  * eventKey="#" makes collapseOnSelect work - https://stackoverflow.com/a/56485081
  *
- * @returns a react component for the left side of the NavBar
+ * @returns {JSX.Element} a react component for the left side of the NavBar
  */
 const NavLeft = () => {
 	return (
@@ -48,6 +47,14 @@ const NavLeft = () => {
 	);
 };
 
+/**
+ * NavBar is the main navigation bar component for the website and
+ * contains two components for the left and right side of the navigation bar.
+ * It also has properties for collapsing on select, expanding to large viewports,
+ * using a dark variant, and being fixed to the top of the viewport.
+ *
+ * @returns {JSX.Element} a react component for the NavBar
+ */
 const NavBar = () => {
 	return (
 		<Navbar

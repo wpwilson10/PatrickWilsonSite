@@ -9,8 +9,20 @@ import Shop from "./components/Shop/shop";
 import { useEffect } from "react";
 import { scroller } from "react-scroll";
 
+/**
+ * The Home component that renders the main content of the home page.
+ * @function
+ * @returns {JSX.Element} The rendered home page content.
+ *
+ * @description
+ * This component displays the main content of the home page, including a title,
+ * a brief description, and some additional sections with information about the
+ * developer (AboutMe) and contact information (ContactInfo). The component also
+ * includes code to enable smooth scrolling to a specific section of the page based
+ * on the URL hash value. The smooth scrolling code is based on the solution provided
+ * in this Stack Overflow post: https://stackoverflow.com/questions/61779236/how-to-navigate-to-another-page-with-a-smooth-scroll-on-a-specific-id-with-react.
+ */
 const Home = () => {
-	// scrolling based on https://stackoverflow.com/questions/61779236/how-to-navigate-to-another-page-with-a-smooth-scroll-on-a-specific-id-with-react
 	const location = useLocation();
 
 	useEffect(() => {
@@ -53,10 +65,19 @@ const ContactPage = () => (
 	</div>
 );
 
+/**
+ * The main application component that renders the navigation bar and routes.
+ * @function
+ * @returns {JSX.Element} The rendered application component.
+ *
+ * @description
+ * This component renders a container with a navigation bar (NavBar) and a set of routes.
+ * The NavBar component should be updated to include any new routes added to the application.
+ * The NavBar component goes outside the container to make it full size, while the Routes
+ * component goes inside the container to ensure that later calls to components are also
+ * inside the container.
+ */
 const App = () => {
-	// New routes need to be added to NavBar also
-	// NavBar goes outside container to make it full size
-	// Routes goes inside container so that later calls to components are inside the container
 	return (
 		<Container fluid className="px-1 py-3 body-container">
 			<NavBar />

@@ -7,7 +7,17 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import postContactForm, { IContactForm, schema } from "./contactFormService";
 
-// --- React component
+/*
+ * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
+ *
+ * This component displays a form with fields for the user's name, email, phone number, and a message.
+ * The form also includes reCAPTCHA for added security against bots. Once the user submits the form,
+ * the message is sent to the website owner's email address using a specified email server.
+ * After submitting the form, the component will display a success or error message depending on
+ * the result of the submission.
+ *
+ * @returns {JSX.Element} The ContactFormRecaptcha component.
+ */
 const ContactFormRecaptcha = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
@@ -101,7 +111,7 @@ const ContactFormRecaptcha = () => {
 				</Row>
 
 				{/* Full Name - use full name for better usability as opposed to seperate fields
-						xs=9 md=7 makes fields appropriately sized for different screens
+					xs=9 md=7 makes fields appropriately sized for different screens
 					*/}
 				<Row className="justify-content-md-left">
 					<Col xs={12} md={8} className="mb-3">
@@ -167,7 +177,7 @@ const ContactFormRecaptcha = () => {
 				</Row>
 
 				{/* reCAPTCHA v2 button aligned to the right
-						Resizes if using a mobile screen to make somewhat responsive*/}
+					Resizes if using a mobile screen to make somewhat responsive*/}
 				<Row className="justify-content-md-center">
 					<Col md={12} className="mb-3 d-flex justify-content-end">
 						{isMobile ? (

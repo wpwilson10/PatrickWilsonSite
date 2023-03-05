@@ -3,10 +3,16 @@ import { Alert, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store";
 import Product from "../Product/product";
+import { IProduct } from "../Product/productService";
 import ShoppingCart from "../ShoppingCart/shoppingCart";
 import { selectCart, setCart } from "../ShoppingCart/shoppingCartReducer";
 import { getAll } from "./shopService";
 
+/**
+ * Renders the Shop page which displays all products and the shopping cart.
+ *
+ * @returns {JSX.Element} The Shop page component.
+ */
 const Shop = () => {
 	const [isError, setIsError] = useState(false);
 
@@ -59,7 +65,7 @@ const Shop = () => {
 			// return store with shopping cart and each product
 			<div>
 				<ShoppingCart></ShoppingCart>
-				{cart.map((each) => {
+				{cart.map((each: IProduct) => {
 					return (
 						<Product
 							key={each.stripeProductID}

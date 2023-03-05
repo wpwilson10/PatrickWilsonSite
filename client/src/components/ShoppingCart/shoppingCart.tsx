@@ -8,6 +8,12 @@ import {
 } from "./shoppingCartReducer";
 import postCartCheckout from "./shoppingCartService";
 
+/**
+ * A React component that displays the total quantity and price amount of items
+ * in the user's shopping cart and allows them to checkout.
+ *
+ * @returns JSX element for the shopping cart page.
+ */
 const ShoppingCart = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =

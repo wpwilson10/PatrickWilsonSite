@@ -1,4 +1,4 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, Store } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./components/ShoppingCart/shoppingCartReducer";
 
@@ -6,9 +6,12 @@ import shoppingCartReducer from "./components/ShoppingCart/shoppingCartReducer";
 // See - https://redux-toolkit.js.org/tutorials/typescript
 
 /**
- * store contains the centralized state for the application
+ * The centralized redux store object that holds the entire state tree of the application.
+ *
+ * @typedef {import('@reduxjs/toolkit').EnhancedStore} Store
+ * @type {Store}
  */
-export const store = configureStore({
+export const store: Store = configureStore({
 	reducer: { shoppingCart: shoppingCartReducer },
 });
 

@@ -1,12 +1,4 @@
-import {
-	Button,
-	Col,
-	Container,
-	Form,
-	Row,
-	Image,
-	InputGroup,
-} from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Image } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useAppDispatch } from "../../store";
 import { addToCart } from "../ShoppingCart/shoppingCartReducer";
@@ -18,10 +10,7 @@ export const Product = ({ product }: { product: IProduct }) => {
 	const dispatch = useAppDispatch();
 
 	// setup react form hook library
-	const {
-		register,
-		formState: { errors },
-	const { handleSubmit, setValue, watch } = useForm<IProduct>({
+	const { handleSubmit, watch } = useForm<IProduct>({
 		defaultValues: product,
 	});
 
@@ -35,6 +24,9 @@ export const Product = ({ product }: { product: IProduct }) => {
 			console.log(error);
 		}
 	};
+
+	// TODO - Fix this
+	console.log(watchQuantity);
 
 	return (
 		<Container id="product" className="content-container mb-3 py-3 px-3">
@@ -57,39 +49,14 @@ export const Product = ({ product }: { product: IProduct }) => {
 			</Row>
 
 			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
-				<Row className="justify-content-end pb-3">
-					<Col xs={6} md={3}>
-						<Form.Label>Quantity</Form.Label>
-						<InputGroup className="mb-3">
-							<Button
-								variant="outline-secondary"
-								className="quantity-selector-input"
-								onClick={() => {
-									if (watchQuantity > 0) {
-										setValue("quantity", watchQuantity - 1);
-									}
-								}}
-							>
-								-
-							</Button>
-							<InputGroup.Text className="quantity-selector-text">
-								{watchQuantity}
-							</InputGroup.Text>
-							<Button
-								variant="outline-secondary"
-								className="quantity-selector-input"
-								onClick={() => {
-									setValue("quantity", watchQuantity + 1);
-								}}
-							>
-								+
-							</Button>{" "}
-						</InputGroup>
+				<Row className="justify-content-md-center">
+					<Col md={12} className="mb-3 d-flex justify-content-end">
+						{/* Add a good quantity input */}
 					</Col>
 				</Row>
 				<Row className="justify-content-md-center">
 					{/* Submit button aligned to the right*/}
-					<Col className="mb-3 d-flex justify-content-end">
+					<Col md={12} className="mb-3 d-flex justify-content-end">
 						<Button type="submit">Add to Cart</Button>
 					</Col>
 				</Row>
