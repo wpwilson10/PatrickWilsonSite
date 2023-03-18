@@ -1,7 +1,11 @@
 import { Badge, Container, Nav, Navbar } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { selectCartTotalQuantity } from "../ShoppingCart/shoppingCartReducer";
+import { useAppDispatch } from "../../store";
+import {
+	selectCartTotalQuantity,
+	setIsOpen,
+} from "../ShoppingCart/shoppingCartReducer";
 
 /**
  * NavRight displays a shopping cart icon with the number of items in the cart
@@ -11,10 +15,17 @@ import { selectCartTotalQuantity } from "../ShoppingCart/shoppingCartReducer";
  */
 const NavRight = () => {
 	const quantity = useSelector(selectCartTotalQuantity);
+	// useAppDispatch to make typescript happy with thunks
+	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
+	const dispatch = useAppDispatch();
+
+	const openCart = () => {
+		dispatch(setIsOpen(true));
+	};
 
 	if (quantity > 0) {
 		return (
-			<Nav className="ms-auto">
+			<Nav className="ms-auto" onSelect={openCart}>
 				<Nav.Link href="#" eventKey="cart" as="span">
 					<FaShoppingCart size="1.5em" />{" "}
 					<Badge bg="primary">{quantity}</Badge>

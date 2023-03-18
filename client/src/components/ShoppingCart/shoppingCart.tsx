@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import {
-	selectCart,
+	selectCartProducts,
 	selectCartTotalAmount,
 	selectCartTotalQuantity,
 } from "./shoppingCartReducer";
@@ -20,7 +20,7 @@ const ShoppingCart = () => {
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
 	const [isEmpty, setIsEmpty] = useState(false);
-	const cart = useSelector(selectCart);
+	const cart = useSelector(selectCartProducts);
 	const amount = useSelector(selectCartTotalAmount);
 	const quantity = useSelector(selectCartTotalQuantity);
 

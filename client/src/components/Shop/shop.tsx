@@ -5,7 +5,11 @@ import { useAppDispatch } from "../../store";
 import Product from "../Product/product";
 import { IProduct } from "../Product/productService";
 import ShoppingCart from "../ShoppingCart/shoppingCart";
-import { selectCart, setCart } from "../ShoppingCart/shoppingCartReducer";
+import {
+	selectCartProducts,
+	setCart,
+} from "../ShoppingCart/shoppingCartReducer";
+import { ShoppingCartSide } from "../ShoppingCart/shoppingCartSide";
 import { getAll } from "./shopService";
 
 /**
@@ -20,7 +24,7 @@ const Shop = () => {
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
 	// Reference to shopping cart
-	const cart = useSelector(selectCart);
+	const cart = useSelector(selectCartProducts);
 
 	// get all products and add to cart
 	useEffect(() => {
@@ -73,7 +77,7 @@ const Shop = () => {
 						></Product>
 					);
 				})}
-				;
+				<ShoppingCartSide></ShoppingCartSide>
 			</div>
 		);
 	}

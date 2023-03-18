@@ -9,6 +9,7 @@ import { formatPrice, IProduct } from "../Product/productService";
  * @property {IProduct[]} cart - The array of products in the shopping cart.
  * @property {number} totalAmount - The sum total price of products in the shopping cart.
  * @property {number} totalQuantity - The total quantity of products in the shopping cart.
+ * @property {boolean} isOpen - True is the shopping cort sidebar is open, false otherwise.
  *
  * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
  *  https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
@@ -17,6 +18,7 @@ type ShoppingCartState = {
 	cart: IProduct[];
 	totalAmount: number;
 	totalQuantity: number;
+	isOpen: boolean;
 };
 
 /**
@@ -28,6 +30,7 @@ const initialState: ShoppingCartState = {
 	cart: [],
 	totalAmount: 0,
 	totalQuantity: 0,
+	isOpen: false,
 };
 
 /**
@@ -40,6 +43,7 @@ const initialState: ShoppingCartState = {
  * @property {Function} reducers.addToCart - A reducer function that adds a product to the shopping cart or increases the quantity if the product is already in the cart
  * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
  * @property {Function} reducers.setCart - A reducer function that sets the entire shopping cart state
+ * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
  */
 const shoppingCartSlice = createSlice({
 	name: "shoppingCart",
@@ -71,6 +75,9 @@ const shoppingCartSlice = createSlice({
 		setCart: (state, action) => {
 			state.cart = action.payload;
 		},
+		setIsOpen: (state, action) => {
+			state.isOpen = action.payload;
+		},
 	},
 });
 
@@ -81,7 +88,7 @@ const shoppingCartSlice = createSlice({
  * @param {RootState} state - The root redux state of the application.
  * @returns {IProduct[]} The shopping cart array of products from the shopping cart state.
  */
-export const selectCart = (state: RootState) => {
+export const selectCartProducts = (state: RootState) => {
 	return state.shoppingCart.cart;
 };
 
@@ -108,6 +115,17 @@ export const selectCartTotalAmount = (state: RootState) => {
 };
 
 /**
+ * Returns the status of the shopping cart sidebar.
+ *
+ * @function
+ * @param {RootState} state - The Redux store root state.
+ * @returns {boolean} The status of the shopping cart sidebar.
+ */
+export const selectIsOpen = (state: RootState) => {
+	return state.shoppingCart.isOpen;
+};
+
+/**
  * This statement exports the reducer function as the default export of the module,
  * so it can be imported by other parts of the codebase. In this specific case,
  * it is used by the Redux store to manage the state of the shopping cart.
@@ -119,4 +137,5 @@ export default shoppingCartSlice.reducer;
     constants. These constants can be used to dispatch these actions from
     components or other parts of the Redux store.
     */
-export const { addToCart, removeItem, setCart } = shoppingCartSlice.actions;
+export const { addToCart, removeItem, setCart, setIsOpen } =
+	shoppingCartSlice.actions;
