@@ -12,14 +12,24 @@ import { selectCartTotalQuantity } from "../ShoppingCart/shoppingCartReducer";
 const NavRight = () => {
 	const quantity = useSelector(selectCartTotalQuantity);
 
-	return (
-		<Nav className="ms-auto">
-			<Nav.Link href="#" eventKey="cart" as="span">
-				<FaShoppingCart size="1.5em" />{" "}
-				<Badge bg="secondary">{quantity}</Badge>
-			</Nav.Link>
-		</Nav>
-	);
+	if (quantity > 0) {
+		return (
+			<Nav className="ms-auto">
+				<Nav.Link href="#" eventKey="cart" as="span">
+					<FaShoppingCart size="1.5em" />{" "}
+					<Badge bg="primary">{quantity}</Badge>
+				</Nav.Link>
+			</Nav>
+		);
+	} else {
+		return (
+			<Nav className="ms-auto">
+				<Nav.Link href="#" eventKey="cart" as="span">
+					<FaShoppingCart size="1.5em" />{" "}
+				</Nav.Link>
+			</Nav>
+		);
+	}
 };
 
 /**
@@ -68,8 +78,8 @@ const NavBar = () => {
 				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
 				<Navbar.Collapse id="responsive-navbar-nav">
 					<NavLeft />
-					<NavRight />
 				</Navbar.Collapse>
+				<NavRight />
 			</Container>
 		</Navbar>
 	);
