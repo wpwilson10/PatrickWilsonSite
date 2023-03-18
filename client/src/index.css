@@ -52,14 +52,14 @@
 }
 
 .quantity-selector-input {
-  background-color: whitesmoke;
-  border-color: black;
   display: flex;
   align-items: center;
+  font-size: 1.5em;
+  font-weight: bold;
 }
 
 .quantity-selector-text {
-  background-color: white;
-  border-color: black;
+  display: flex;
+  align-items: center;
   font-size: 1.25em;
 }

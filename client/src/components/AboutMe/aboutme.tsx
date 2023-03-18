@@ -4,6 +4,7 @@ import profileImgSrc from "../../images/profile.jpg";
 
 /**
  * The AboutMe component that renders information about the developer.
+ *
  * @function
  * @returns {JSX.Element} The rendered section with the developer's profile image and description.
  *

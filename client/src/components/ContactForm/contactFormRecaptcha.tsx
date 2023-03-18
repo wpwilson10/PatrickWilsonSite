@@ -7,7 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 import postContactForm, { IContactForm, schema } from "./contactFormService";
 
-/*
+/**
  * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
  *
  * This component displays a form with fields for the user's name, email, phone number, and a message.
