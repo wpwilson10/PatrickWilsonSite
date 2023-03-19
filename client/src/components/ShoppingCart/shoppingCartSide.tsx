@@ -1,6 +1,7 @@
 import { Button, Offcanvas, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store";
+import CartProduct from "../Product/cartProduct";
 import { IProduct } from "../Product/productService";
 import {
 	selectCartProducts,
@@ -26,6 +27,7 @@ export const ShoppingCartSide = () => {
 	const onSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 
+		// implement better error handling like in the other shopping cart reducer
 		try {
 			const response = await postCartCheckout(cart);
 			// redirect to checkout url
@@ -35,6 +37,9 @@ export const ShoppingCartSide = () => {
 		}
 	};
 
+	// only show items in cart that  have nonzero quantity
+	const cartItems = cart.filter((product: IProduct) => product.quantity > 0);
+
 	return (
 		<Offcanvas show={isOpen} onHide={closeCart} placement="end">
 			<Offcanvas.Header closeButton>
@@ -42,8 +47,11 @@ export const ShoppingCartSide = () => {
 			</Offcanvas.Header>
 			<Offcanvas.Body>
 				<Stack gap={3}>
-					{cart.map((item: IProduct) => (
-						<div>{item.name}</div>
+					{cartItems.map((item: IProduct) => (
+						<CartProduct
+							key={item.stripeProductID}
+							product={item}
+						></CartProduct>
 					))}
 					<div className="ms-auto fw-bold fs-5">Total: {amount}</div>
 				</Stack>

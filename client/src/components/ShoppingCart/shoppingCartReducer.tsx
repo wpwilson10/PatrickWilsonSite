@@ -1,6 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { formatPrice, IProduct } from "../Product/productService";
+import { productQuantity } from "./shoppingCartService";
 
 /**
  * Represents the shopping cart state in Redux.
@@ -62,9 +63,7 @@ const shoppingCartSlice = createSlice({
 			}
 
 			// running totals
-			state.totalAmount +=
-				action.payload.quantity * action.payload.unitAmount;
-			state.totalQuantity += action.payload.quantity;
+			recalculateTotal(state);
 		},
 		removeItem: (state, action) => {
 			const filteredCart = state.cart.filter(
@@ -77,6 +76,18 @@ const shoppingCartSlice = createSlice({
 		},
 		setIsOpen: (state, action) => {
 			state.isOpen = action.payload;
+		},
+		setProductQuantity: (state, action: PayloadAction<productQuantity>) => {
+			const itemInCart = state.cart.find(
+				(item) => item.stripeProductID === action.payload.productID
+			);
+			// update quantity
+			if (itemInCart) {
+				itemInCart.quantity = action.payload.quantity;
+			}
+
+			// running totals
+			recalculateTotal(state);
 		},
 	},
 });
@@ -126,6 +137,35 @@ export const selectIsOpen = (state: RootState) => {
 };
 
 /**
+ * Returns a given product from the shopping cart.
+ *
+ * @function
+ * @param {RootState} state - The Redux store root state.
+ * @param {string} productID - The stripe product ID for the target product
+ * @returns {IProduct} The product in the shopping cart matching the given product ID
+ */
+export const selectProduct = (state: RootState, productID: string) => {
+	const selectedProduct = state.shoppingCart.filter(
+		(item: IProduct) => item.stripeProductID !== productID
+	);
+
+	return selectedProduct;
+};
+
+const recalculateTotal = (state: ShoppingCartState) => {
+	let runningTotal = 0;
+	let runningQuanity = 0;
+
+	state.cart.forEach((item: IProduct) => {
+		runningQuanity += item.quantity;
+		runningTotal += item.quantity * item.unitAmount;
+	});
+
+	state.totalAmount = runningTotal;
+	state.totalQuantity = runningQuanity;
+};
+
+/**
  * This statement exports the reducer function as the default export of the module,
  * so it can be imported by other parts of the codebase. In this specific case,
  * it is used by the Redux store to manage the state of the shopping cart.
@@ -137,5 +177,5 @@ export default shoppingCartSlice.reducer;
     constants. These constants can be used to dispatch these actions from
     components or other parts of the Redux store.
     */
-export const { addToCart, removeItem, setCart, setIsOpen } =
+export const { addToCart, removeItem, setCart, setIsOpen, setProductQuantity } =
 	shoppingCartSlice.actions;
