@@ -45,6 +45,7 @@ const initialState: ShoppingCartState = {
  * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
  * @property {Function} reducers.setCart - A reducer function that sets the entire shopping cart state
  * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
+ * @property {Function} reducers.setProductQuantity - A reducer function that sets the quantity for a given product
  */
 const shoppingCartSlice = createSlice({
 	name: "shoppingCart",
@@ -57,8 +58,9 @@ const shoppingCartSlice = createSlice({
 			);
 
 			if (itemInCart) {
-				itemInCart.quantity += action.payload.quantity;
+				itemInCart.quantity += itemInCart.quantity;
 			} else {
+				action.payload.quantity = 1;
 				state.cart.push({ ...action.payload });
 			}
 
@@ -70,6 +72,8 @@ const shoppingCartSlice = createSlice({
 				(item) => item.stripeProductID !== action.payload
 			);
 			state.cart = filteredCart;
+			// running totals
+			recalculateTotal(state);
 		},
 		setCart: (state, action) => {
 			state.cart = action.payload;

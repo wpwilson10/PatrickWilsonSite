@@ -1,7 +1,10 @@
-import { Button, Col, Container, Form, Row, Image } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { useAppDispatch } from "../../store";
-import { addToCart } from "../ShoppingCart/shoppingCartReducer";
+import {
+	setIsOpen,
+	setProductQuantity,
+} from "../ShoppingCart/shoppingCartReducer";
+import { productQuantity } from "../ShoppingCart/shoppingCartService";
 import { formatPrice, IProduct } from "./productService";
 
 export const Product = ({ product }: { product: IProduct }) => {
@@ -9,28 +12,13 @@ export const Product = ({ product }: { product: IProduct }) => {
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
 
-	// setup react form hook library
-	const { handleSubmit, watch, setValue } = useForm<IProduct>({
-		defaultValues: product,
-	});
-
-	const watchQuantity = watch("quantity");
-	const decrementQuantity = () => {
-		if (watchQuantity > 0) {
-			setValue("quantity", watchQuantity - 1);
-		}
-	};
-	const incrementQuantiy = () => {
-		setValue("quantity", watchQuantity + 1);
-	};
-
-	const onSubmit = async (data: IProduct) => {
-		// react-form-hook handles preventDefault
-		try {
-			dispatch(addToCart(data));
-		} catch (error) {
-			console.log(error);
-		}
+	const addProduct = () => {
+		const updateQuantity: productQuantity = {
+			productID: product.stripeProductID,
+			quantity: product.quantity + 1,
+		};
+		dispatch(setProductQuantity(updateQuantity));
+		dispatch(setIsOpen(true));
 	};
 
 	return (
@@ -55,38 +43,15 @@ export const Product = ({ product }: { product: IProduct }) => {
 					</Row>
 				</Col>
 			</Row>
-			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
-				<Row>
-					<Col
-						md={12}
-						className="mb-3 d-flex justify-content-end align-items-center"
-					>
-						<Button
-							className="quantity-selector-input py-0"
-							onClick={decrementQuantity}
-						>
-							-
-						</Button>
-						<div className="quantity-selector-text mx-2">
-							{watchQuantity}
-						</div>
-						<Button
-							className="quantity-selector-input py-0"
-							onClick={incrementQuantiy}
-						>
-							+
-						</Button>
-					</Col>
-				</Row>
-				<Row className="justify-content-md-center">
-					{/* Submit button aligned to the right*/}
-					<Col md={12} className="mb-3 d-flex justify-content-end">
-						<Button type="submit" disabled={watchQuantity < 1}>
-							Add to Cart
-						</Button>
-					</Col>
-				</Row>
-			</Form>
+
+			<Row className="justify-content-md-center">
+				{/* Submit button aligned to the right*/}
+				<Col md={12} className="mb-3 d-flex justify-content-end">
+					<Button type="submit" onClick={addProduct}>
+						Add to Cart
+					</Button>
+				</Col>
+			</Row>
 		</Container>
 	);
 };
