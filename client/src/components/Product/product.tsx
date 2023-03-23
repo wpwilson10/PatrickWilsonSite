@@ -24,14 +24,14 @@ export const Product = ({ product }: { product: IProduct }) => {
 	return (
 		<Container id="product" className="content-container mb-3 py-3 px-3">
 			<Row className="justify-content-center">
-				<Col xs={9} md={4} className="mb-3">
+				<Col xs={9} md={3} className="mb-3">
 					<Image
 						rounded
 						className="profile-img"
 						src={product.images[0]}
 					></Image>
 				</Col>
-				<Col xs={12} md={8}>
+				<Col xs={12} md={9}>
 					<Row>
 						<h3>{product.name}</h3>
 					</Row>

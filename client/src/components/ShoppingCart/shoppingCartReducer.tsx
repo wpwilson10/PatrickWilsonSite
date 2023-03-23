@@ -52,14 +52,15 @@ const shoppingCartSlice = createSlice({
 	initialState: initialState,
 	reducers: {
 		addToCart: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) =>
-					item.stripeProductID === action.payload.stripeProductID
+			let productInCart = findInCart(
+				state,
+				action.payload.stripeProductID
 			);
 
-			if (itemInCart) {
-				itemInCart.quantity += itemInCart.quantity;
+			if (productInCart) {
+				productInCart.quantity++;
 			} else {
+				// shouldn't actually happen
 				action.payload.quantity = 1;
 				state.cart.push({ ...action.payload });
 			}
@@ -68,10 +69,14 @@ const shoppingCartSlice = createSlice({
 			recalculateTotal(state);
 		},
 		removeItem: (state, action) => {
-			const filteredCart = state.cart.filter(
-				(item) => item.stripeProductID !== action.payload
+			let productInCart = findInCart(
+				state,
+				action.payload.stripeProductID
 			);
-			state.cart = filteredCart;
+			// products get filtered out of cart when quantity = 0
+			if (productInCart) {
+				productInCart.quantity = 0;
+			}
 			// running totals
 			recalculateTotal(state);
 		},
@@ -82,12 +87,11 @@ const shoppingCartSlice = createSlice({
 			state.isOpen = action.payload;
 		},
 		setProductQuantity: (state, action: PayloadAction<productQuantity>) => {
-			const itemInCart = state.cart.find(
-				(item) => item.stripeProductID === action.payload.productID
-			);
+			let productInCart = findInCart(state, action.payload.productID);
+
 			// update quantity
-			if (itemInCart) {
-				itemInCart.quantity = action.payload.quantity;
+			if (productInCart) {
+				productInCart.quantity = action.payload.quantity;
 			}
 
 			// running totals
@@ -95,6 +99,23 @@ const shoppingCartSlice = createSlice({
 		},
 	},
 });
+
+const findInCart = (state: ShoppingCartState, productID: string) => {
+	return state.cart.find((item) => item.stripeProductID === productID);
+};
+
+const recalculateTotal = (state: ShoppingCartState) => {
+	let runningTotal = 0;
+	let runningQuanity = 0;
+
+	state.cart.forEach((item: IProduct) => {
+		runningQuanity += item.quantity;
+		runningTotal += item.quantity * item.unitAmount;
+	});
+
+	state.totalAmount = runningTotal;
+	state.totalQuantity = runningQuanity;
+};
 
 /**
  * Selects the cart product array from the shopping cart Redux state.
@@ -154,19 +175,6 @@ export const selectProduct = (state: RootState, productID: string) => {
 	);
 
 	return selectedProduct;
-};
-
-const recalculateTotal = (state: ShoppingCartState) => {
-	let runningTotal = 0;
-	let runningQuanity = 0;
-
-	state.cart.forEach((item: IProduct) => {
-		runningQuanity += item.quantity;
-		runningTotal += item.quantity * item.unitAmount;
-	});
-
-	state.totalAmount = runningTotal;
-	state.totalQuantity = runningQuanity;
 };
 
 /**

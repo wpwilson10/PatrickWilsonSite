@@ -32,28 +32,33 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 	};
 
 	const removeProduct = () => {
-		dispatch(removeItem(product.stripeProductID));
+		dispatch(removeItem(product));
 	};
 
 	return (
-		<Container id="product" className="content-container py-3 px-3">
+		<Container id="product" className="cart-product-container px-0 py-1">
 			<Row className="mb-3">
-				<Col xs={8}>
-					<Stack gap={1}>
-						<h4>{product.name}</h4>
-						<h5>${formatPrice(product.unitAmount, "USD", 1)}</h5>
-					</Stack>
-				</Col>
-				<Col xs={4} className="justify-content-end">
+				<Col xs={3} className="d-flex justify-content-start">
 					<Image
 						rounded
 						className="profile-img"
 						src={product.images[0]}
 					></Image>
 				</Col>
+				<Col xs={9} className="d-flex justify-content-end">
+					<Stack gap={1}>
+						<h5>{product.name}</h5>
+						<h6>${formatPrice(product.unitAmount, "USD", 1)}</h6>
+					</Stack>
+				</Col>
 			</Row>
 			<Row className="mb-3">
-				<Col className="d-flex flex-row justify-content-start align-items-center">
+				<Col className="d-flex justify-content-start align-items-center">
+					<Button variant="outline-danger" onClick={removeProduct}>
+						&times;
+					</Button>
+				</Col>
+				<Col className="d-flex flex-row justify-content-end align-items-center">
 					<Button
 						className="quantity-selector-input py-0"
 						onClick={decrementQuantity}
@@ -68,11 +73,6 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 						onClick={incrementQuantiy}
 					>
 						+
-					</Button>
-				</Col>
-				<Col className="d-flex justify-content-end align-items-center">
-					<Button variant="danger" onClick={removeProduct}>
-						Remove
 					</Button>
 				</Col>
 			</Row>
