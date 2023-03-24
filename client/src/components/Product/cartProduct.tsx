@@ -1,10 +1,10 @@
 import { Button, Col, Container, Row, Image, Stack } from "react-bootstrap";
 import { useAppDispatch } from "../../store";
 import {
+	decrementQuantity,
+	incrementQuantity,
 	removeItem,
-	setProductQuantity,
 } from "../ShoppingCart/shoppingCartReducer";
-import { productQuantity } from "../ShoppingCart/shoppingCartService";
 import { formatPrice, IProduct } from "./productService";
 
 export const CartProduct = ({ product }: { product: IProduct }) => {
@@ -12,27 +12,30 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
 
-	const decrementQuantity = () => {
-		// don't allow less than one in cart
+	const decrement = () => {
 		// Use remove button instead of decrementing to 0
 		if (product.quantity > 1) {
-			const updateQuantity: productQuantity = {
-				productID: product.stripeProductID,
-				quantity: product.quantity - 1,
-			};
-			dispatch(setProductQuantity(updateQuantity));
+			dispatch(
+				decrementQuantity({
+					productID: product.stripeProductID,
+				})
+			);
 		}
 	};
-	const incrementQuantiy = () => {
-		const updateQuantity: productQuantity = {
-			productID: product.stripeProductID,
-			quantity: product.quantity + 1,
-		};
-		dispatch(setProductQuantity(updateQuantity));
+	const increment = () => {
+		dispatch(
+			incrementQuantity({
+				productID: product.stripeProductID,
+			})
+		);
 	};
 
 	const removeProduct = () => {
-		dispatch(removeItem(product));
+		dispatch(
+			removeItem({
+				productID: product.stripeProductID,
+			})
+		);
 	};
 
 	return (
@@ -61,7 +64,7 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 				<Col className="d-flex flex-row justify-content-end align-items-center">
 					<Button
 						className="quantity-selector-input py-0"
-						onClick={decrementQuantity}
+						onClick={decrement}
 					>
 						-
 					</Button>
@@ -70,7 +73,7 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 					</div>
 					<Button
 						className="quantity-selector-input py-0"
-						onClick={incrementQuantiy}
+						onClick={increment}
 					>
 						+
 					</Button>

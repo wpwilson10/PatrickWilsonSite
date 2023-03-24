@@ -33,7 +33,11 @@ const Shop = () => {
 			setIsError(false);
 			try {
 				const productList = await getAll();
-				dispatch(setCart(productList.products));
+				dispatch(
+					setCart({
+						products: productList.products,
+					})
+				);
 			} catch (error) {
 				console.log(error);
 				setIsError(true);

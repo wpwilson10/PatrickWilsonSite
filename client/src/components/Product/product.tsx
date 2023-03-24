@@ -1,10 +1,9 @@
 import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { useAppDispatch } from "../../store";
 import {
+	incrementQuantity,
 	setIsOpen,
-	setProductQuantity,
 } from "../ShoppingCart/shoppingCartReducer";
-import { productQuantity } from "../ShoppingCart/shoppingCartService";
 import { formatPrice, IProduct } from "./productService";
 
 export const Product = ({ product }: { product: IProduct }) => {
@@ -13,11 +12,11 @@ export const Product = ({ product }: { product: IProduct }) => {
 	const dispatch = useAppDispatch();
 
 	const addProduct = () => {
-		const updateQuantity: productQuantity = {
-			productID: product.stripeProductID,
-			quantity: product.quantity + 1,
-		};
-		dispatch(setProductQuantity(updateQuantity));
+		dispatch(
+			incrementQuantity({
+				productID: product.stripeProductID,
+			})
+		);
 		dispatch(setIsOpen(true));
 	};
 

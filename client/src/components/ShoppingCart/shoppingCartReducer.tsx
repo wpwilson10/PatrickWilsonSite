@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { formatPrice, IProduct } from "../Product/productService";
-import { productQuantity } from "./shoppingCartService";
+import { formatPrice, IProduct, IProductList } from "../Product/productService";
 
 /**
  * Represents the shopping cart state in Redux.
@@ -35,75 +34,105 @@ const initialState: ShoppingCartState = {
 };
 
 /**
+ * Interface for updating products values in the shopping cart redux store. Uses just the product
+ * and not the whole product to force lookup on the current product in the store as opposed to
+ * some nebulous product object.
+ *
+ * @interface cartProduct
+ * @property {string} productID - The product's stripe ID
+ */
+export interface cartProduct {
+	productID: string;
+}
+
+/**
  * A Redux slice for managing the shopping cart state
  *
  * @typedef {Object} ShoppingCartSlice
  * @property {string} name - The slice name, "shoppingCart"
  * @property {ShoppingCartState} initialState - The initial empty state of the shopping cart slice
  * @property {Object} reducers - An object containing the reducer functions for updating the shopping cart state
- * @property {Function} reducers.addToCart - A reducer function that adds a product to the shopping cart or increases the quantity if the product is already in the cart
- * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
  * @property {Function} reducers.setCart - A reducer function that sets the entire shopping cart state
  * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
- * @property {Function} reducers.setProductQuantity - A reducer function that sets the quantity for a given product
+ * @property {Function} reducers.addToCart - A reducer function that adds a product to the shopping cart or increases the quantity if the product is already in the cart
+ * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
+ * @property {Function} reducers.incrementQuantity - A reducer function that decrements the quantity for a given product
+ * @property {Function} reducers.incrementQuantity - A reducer function that increments the quantity for a given product
  */
 const shoppingCartSlice = createSlice({
 	name: "shoppingCart",
 	initialState: initialState,
 	reducers: {
-		addToCart: (state, action) => {
-			let productInCart = findInCart(
-				state,
-				action.payload.stripeProductID
-			);
+		setCart: (state, action: PayloadAction<IProductList>) => {
+			state.cart = action.payload.products;
+		},
+		setIsOpen: (state, action: PayloadAction<boolean>) => {
+			state.isOpen = action.payload;
+		},
+		addToCart: (state, action: PayloadAction<cartProduct>) => {
+			let productInCart = findInCart(state, action.payload.productID);
 
 			if (productInCart) {
 				productInCart.quantity++;
+				// running totals
+				recalculateTotal(state);
 			} else {
-				// shouldn't actually happen
-				action.payload.quantity = 1;
-				state.cart.push({ ...action.payload });
+				// shouldn't happend
+				console.log("Tried to add product that doesn't exist");
 			}
-
-			// running totals
-			recalculateTotal(state);
 		},
-		removeItem: (state, action) => {
-			let productInCart = findInCart(
-				state,
-				action.payload.stripeProductID
-			);
+		removeItem: (state, action: PayloadAction<cartProduct>) => {
+			let productInCart = findInCart(state, action.payload.productID);
 			// products get filtered out of cart when quantity = 0
 			if (productInCart) {
 				productInCart.quantity = 0;
+				// running totals
+				recalculateTotal(state);
 			}
-			// running totals
-			recalculateTotal(state);
 		},
-		setCart: (state, action) => {
-			state.cart = action.payload;
-		},
-		setIsOpen: (state, action) => {
-			state.isOpen = action.payload;
-		},
-		setProductQuantity: (state, action: PayloadAction<productQuantity>) => {
+		decrementQuantity: (state, action: PayloadAction<cartProduct>) => {
 			let productInCart = findInCart(state, action.payload.productID);
 
-			// update quantity
 			if (productInCart) {
-				productInCart.quantity = action.payload.quantity;
+				// update quantity if there is more than one
+				if (productInCart.quantity > 1) {
+					productInCart.quantity--;
+					// running totals
+					recalculateTotal(state);
+				}
 			}
+		},
+		incrementQuantity: (state, action: PayloadAction<cartProduct>) => {
+			let productInCart = findInCart(state, action.payload.productID);
 
-			// running totals
-			recalculateTotal(state);
+			if (productInCart) {
+				// update quantity
+				productInCart.quantity++;
+				// running totals
+				recalculateTotal(state);
+			}
 		},
 	},
 });
 
+/**
+ * Finds the product from the shopping cart Redux state with a given product ID.
+ *
+ * @function
+ * @param {RootState} state - The root redux state of the application.
+ * @param {RootState} productID - The string ID of the product to look up.
+ * @returns {IProduct} The product object from the shopping cart state.
+ */
 const findInCart = (state: ShoppingCartState, productID: string) => {
 	return state.cart.find((item) => item.stripeProductID === productID);
 };
 
+/**
+ * Recalculates the total quantity and prices of all products in the cart.
+ *
+ * @function
+ * @param {RootState} state - The root redux state of the application.
+ */
 const recalculateTotal = (state: ShoppingCartState) => {
 	let runningTotal = 0;
 	let runningQuanity = 0;
@@ -189,5 +218,11 @@ export default shoppingCartSlice.reducer;
     constants. These constants can be used to dispatch these actions from
     components or other parts of the Redux store.
     */
-export const { addToCart, removeItem, setCart, setIsOpen, setProductQuantity } =
-	shoppingCartSlice.actions;
+export const {
+	addToCart,
+	removeItem,
+	setCart,
+	setIsOpen,
+	incrementQuantity,
+	decrementQuantity,
+} = shoppingCartSlice.actions;

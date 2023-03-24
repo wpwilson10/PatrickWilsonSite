@@ -18,18 +18,6 @@ export interface checkoutRedirect {
 }
 
 /**
- * Interface for updating product quanities in the shopping cart redux store.
- *
- * @interface productQuantity
- * @property {string} productID - The product's stripe ID
- * @property {number} quantity - The number to change the quantity to
- */
-export interface productQuantity {
-	productID: string;
-	quantity: number;
-}
-
-/**
  * Sends the products from the shopping cart to the server checkout API endpoint and returns a redirect URL
  *
  * @async
