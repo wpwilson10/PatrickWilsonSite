@@ -4,7 +4,13 @@ import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import postContactForm, { IContactForm, schema } from "./contactFormService";
 import { useEffect, useState } from "react";
 
-// --- React component
+/**
+ * The `ContactForm` component displays a form that allows users to send a message to the website owner.
+ * It includes fields for the user's name, email address, and message content. Once the user submits the form,
+ * the message is sent to the website owner's email address using a specified email server.
+ *
+ * @returns {JSX.Element} The ContactForm component
+ */
 const ContactForm = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
@@ -141,7 +147,7 @@ const ContactForm = () => {
 
 				{/* Submit button aligned to the right*/}
 				<Row className="justify-content-md-center">
-					<Col md={12} className="mb=3 d-flex justify-content-end">
+					<Col md={12} className="mb-3 d-flex justify-content-end">
 						<Button type="submit" disabled={formState.isSubmitting}>
 							Send Message
 						</Button>

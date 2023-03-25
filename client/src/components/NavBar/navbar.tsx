@@ -1,84 +1,81 @@
-import { Nav, Navbar } from "react-bootstrap";
-import { scroller } from "react-scroll";
+import { Badge, Container, Nav, Navbar } from "react-bootstrap";
+import { FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { useAppDispatch } from "../../store";
+import {
+	selectCartTotalQuantity,
+	setIsOpen,
+} from "../ShoppingCart/shoppingCartReducer";
 
 /**
- * NavRight contains links and forms that will render on the right side a navigation bar
+ * NavRight displays a shopping cart icon with the number of items in the cart
+ * which will render on the right side a navigation bar
  *
- * @returns a react component for the right side of the NavBar
+ * @returns {JSX.Element} a react component for the right side of the NavBar
  */
 const NavRight = () => {
-	return (
-		<Nav className="ms-auto">
-			<Nav.Link href="#" as="span">
-				<em>WPW NavRight</em>
-			</Nav.Link>
-		</Nav>
-	);
+	const quantity = useSelector(selectCartTotalQuantity);
+	// useAppDispatch to make typescript happy with thunks
+	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
+	const dispatch = useAppDispatch();
+
+	const openCart = () => {
+		dispatch(setIsOpen(true));
+	};
+
+	if (quantity > 0) {
+		return (
+			<Nav className="ms-auto" onSelect={openCart}>
+				<Nav.Link href="#" eventKey="cart" as="span">
+					<FaShoppingCart size="1.5em" />{" "}
+					<Badge bg="primary">{quantity}</Badge>
+				</Nav.Link>
+			</Nav>
+		);
+	} else {
+		return (
+			<Nav className="ms-auto">
+				<Nav.Link href="#" eventKey="cart" as="span">
+					<FaShoppingCart size="1.5em" />{" "}
+				</Nav.Link>
+			</Nav>
+		);
+	}
 };
 
 /**
- * NavLeft contains links and forms that will render on the left side a navigation bar.
- * Link offset is -100 for first section and -70 after to compensate for top fixed toolbar.
- * Duration 200 was considered a fast speed for major screen changes by some study.
- * eventKey="#"  makes collapseOnSelect work - https://stackoverflow.com/a/56485081
+ * NavLeft contains links that will render on the left side a navigation bar.
+ * eventKey="#" makes collapseOnSelect work - https://stackoverflow.com/a/56485081
  *
- * @returns a react component for the left side of the NavBar
+ * @returns {JSX.Element} a react component for the left side of the NavBar
  */
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link
-				eventKey="1"
-				onClick={() =>
-					scroller.scrollTo("home", {
-						smooth: true,
-						offset: -100,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="home" href="/#home">
 				Home
 			</Nav.Link>
-			<Nav.Link
-				eventKey="2"
-				onClick={() =>
-					scroller.scrollTo("about", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
+			<Nav.Link eventKey="about" href="/#about">
 				About
 			</Nav.Link>
-			<Nav.Link
-				eventKey="3"
-				onClick={() =>
-					scroller.scrollTo("contact_info", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
-				Contact Info
+			<Nav.Link eventKey="contact" href="/contact">
+				Contact
 			</Nav.Link>
-			<Nav.Link
-				eventKey="4"
-				onClick={() =>
-					scroller.scrollTo("contact_form", {
-						smooth: true,
-						offset: -70,
-						duration: 200,
-					})
-				}
-			>
-				Send Message
+			<Nav.Link eventKey="shop" href="/shop">
+				Shop
 			</Nav.Link>
 		</Nav>
 	);
 };
 
+/**
+ * NavBar is the main navigation bar component for the website and
+ * contains two components for the left and right side of the navigation bar.
+ * It also has properties for collapsing on select, expanding to large viewports,
+ * using a dark variant, and being fixed to the top of the viewport.
+ *
+ * @returns {JSX.Element} a react component for the NavBar
+ */
 const NavBar = () => {
 	return (
 		<Navbar
@@ -88,11 +85,13 @@ const NavBar = () => {
 			variant="dark"
 			fixed="top"
 		>
-			<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-			<Navbar.Collapse id="responsive-navbar-nav">
-				<NavLeft />
+			<Container fluid>
+				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Collapse id="responsive-navbar-nav">
+					<NavLeft />
+				</Navbar.Collapse>
 				<NavRight />
-			</Navbar.Collapse>
+			</Container>
 		</Navbar>
 	);
 };
