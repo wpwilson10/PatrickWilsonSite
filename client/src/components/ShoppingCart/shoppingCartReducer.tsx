@@ -1,6 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+	AnyAction,
+	createSlice,
+	PayloadAction,
+	ThunkAction,
+} from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { formatPrice, IProduct, IProductList } from "../Product/productService";
+import { getAll } from "../Shop/shopService";
 
 /**
  * Represents the shopping cart state in Redux. The cart with its array of products should
@@ -15,6 +21,7 @@ import { formatPrice, IProduct, IProductList } from "../Product/productService";
  * @property {boolean} isOpen - True if the shopping cort sidebar is open, false otherwise.
  * @property {number} isCheckoutError - True if there was an error during checkout, false otherwise.
  * @property {boolean} isCheckoutSuccess - True if checkout completed successfully, false otherwise.
+ * @property {boolean} isSetupError - True if store setup encountered an errors, false otherwise.
  *
  * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
  *  https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
@@ -26,6 +33,7 @@ type ShoppingCartState = {
 	isOpen: boolean;
 	isCheckoutError: boolean;
 	isCheckoutSuccess: boolean;
+	isSetupError: boolean;
 };
 
 /**
@@ -40,6 +48,7 @@ const initialState: ShoppingCartState = {
 	isOpen: false,
 	isCheckoutError: false,
 	isCheckoutSuccess: false,
+	isSetupError: false,
 };
 
 /**
@@ -65,6 +74,7 @@ export interface cartProduct {
  * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
  * @property {Function} reducers.setIsCheckoutError - A reducer function that sets the checkout error flag.
  * @property {Function} reducers.setIsCheckoutSuccess - A reducer function that sets the checkout success flag.
+ * @property {Function} reducers.setIsSetupError - A reducer function that sets the setup error flag.
  * @property {Function} reducers.addToCart - A reducer function that adds a product to the shopping cart or increases the quantity if the product is already in the cart
  * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
  * @property {Function} reducers.decrementQuantity - A reducer function that decrements the quantity for a given product
@@ -85,6 +95,9 @@ const shoppingCartSlice = createSlice({
 		},
 		setIsCheckoutSuccess: (state, action: PayloadAction<boolean>) => {
 			state.isCheckoutSuccess = action.payload;
+		},
+		setIsSetupError: (state, action: PayloadAction<boolean>) => {
+			state.isSetupError = action.payload;
 		},
 		addToCart: (state, action: PayloadAction<cartProduct>) => {
 			let productInCart = findInCart(state, action.payload.productID);
@@ -230,6 +243,39 @@ export const selectIsCheckoutSuccess = (state: RootState): boolean => {
 };
 
 /**
+ * Returns whether there was an error during store setup
+ *
+ * @function
+ * @param {RootState} state - The Redux store root state.
+ * @returns {boolean} True if there was an error during store setup. False otherwise.
+ */
+export const selectIsSetupError = (state: RootState): boolean => {
+	return state.shoppingCart.isSetupError;
+};
+
+// https://redux.js.org/usage/usage-with-typescript#type-checking-redux-thunks
+export const initializeStore = (): ThunkAction<
+	void,
+	RootState,
+	unknown,
+	AnyAction
+> => {
+	return async (dispatch) => {
+		try {
+			const products = await getAll();
+			dispatch(
+				setCart({
+					products: products.products,
+				})
+			);
+		} catch (error) {
+			dispatch(setIsSetupError(true));
+			console.log(error);
+		}
+	};
+};
+
+/**
  * This statement exports the reducer function as the default export of the module,
  * so it can be imported by other parts of the codebase. In this specific case,
  * it is used by the Redux store to manage the state of the shopping cart.
@@ -248,6 +294,7 @@ export const {
 	setIsOpen,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
+	setIsSetupError,
 	incrementQuantity,
 	decrementQuantity,
 } = shoppingCartSlice.actions;

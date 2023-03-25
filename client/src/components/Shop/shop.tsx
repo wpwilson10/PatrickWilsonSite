@@ -1,19 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store";
 import Product from "../Product/product";
 import { IProduct } from "../Product/productService";
 import {
+	initializeStore,
 	selectCartProducts,
 	selectIsCheckoutError,
 	selectIsCheckoutSuccess,
-	setCart,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
 } from "../ShoppingCart/shoppingCartReducer";
 import { ShoppingCart } from "../ShoppingCart/shoppingCart";
-import { getAll } from "./shopService";
 
 /**
  * Renders the Shop page which displays all products and the shopping cart.
@@ -21,39 +20,24 @@ import { getAll } from "./shopService";
  * @returns {JSX.Element} The Shop page component.
  */
 const Shop = () => {
-	// use context here because the shop setup error is localized to just this component
-	const [isError, setIsError] = useState(false);
-
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
 	const dispatch = useAppDispatch();
 	// Reference to shopping cart
 	const cart = useSelector(selectCartProducts);
 
-	// track checkout error or success to show feedback notifications
+	// track checkout error or success and setup error to show feedback notifications
 	const isCheckoutError = useSelector(selectIsCheckoutError);
 	const isCheckoutSuccess = useSelector(selectIsCheckoutSuccess);
+	const isSetupError = useSelector(selectIsCheckoutSuccess);
 
 	// initialization - get all products and add to cart
 	useEffect(() => {
 		// only do setup if there is nothing in shop
 		if (cart === undefined || cart.length === 0) {
-			// setup based on https://www.robinwieruch.de/react-hooks-fetch-data/
-			const getProducts = async () => {
-				setIsError(false);
-				try {
-					const productList = await getAll();
-					dispatch(
-						setCart({
-							products: productList.products,
-						})
-					);
-				} catch (error) {
-					console.log(error);
-					setIsError(true);
-				}
-			};
-			getProducts();
+			console.log("Doing setup");
+			console.log(cart);
+			dispatch(initializeStore());
 		}
 	}, [cart, dispatch]);
 
@@ -72,17 +56,15 @@ const Shop = () => {
 		}
 	}, [dispatch]);
 
-	if (isError) {
+	if (isSetupError) {
 		// Feedback notifcation if there was an error during shop setup
 		return (
 			<Container id="shop" className="content-container mb-3 py-3 px-3">
-				{isError && (
-					<Alert variant="danger">
-						<p className="mb-0">
-							Error occurred during setup. Please try again.
-						</p>
-					</Alert>
-				)}
+				<Alert variant="danger">
+					<p className="mb-0">
+						Error occurred during setup. Please try again.
+					</p>
+				</Alert>
 			</Container>
 		);
 	} else if (cart.length <= 0) {
