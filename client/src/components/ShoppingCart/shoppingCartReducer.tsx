@@ -3,13 +3,18 @@ import { RootState } from "../../store";
 import { formatPrice, IProduct, IProductList } from "../Product/productService";
 
 /**
- * Represents the shopping cart state in Redux.
+ * Represents the shopping cart state in Redux. The cart with its array of products should
+ * be initialized by loading the list from the server. Products are then "added" by incrementing
+ * the quantity to be greater than zero. The shop component then references this list of products
+ * and shows everything despite the quantity listed.
  *
  * @typedef {Object} ShoppingCartState
  * @property {IProduct[]} cart - The array of products in the shopping cart.
  * @property {number} totalAmount - The sum total price of products in the shopping cart.
  * @property {number} totalQuantity - The total quantity of products in the shopping cart.
- * @property {boolean} isOpen - True is the shopping cort sidebar is open, false otherwise.
+ * @property {boolean} isOpen - True if the shopping cort sidebar is open, false otherwise.
+ * @property {number} isCheckoutError - True if there was an error during checkout, false otherwise.
+ * @property {boolean} isCheckoutSuccess - True if checkout completed successfully, false otherwise.
  *
  * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
  *  https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
@@ -19,6 +24,8 @@ type ShoppingCartState = {
 	totalAmount: number;
 	totalQuantity: number;
 	isOpen: boolean;
+	isCheckoutError: boolean;
+	isCheckoutSuccess: boolean;
 };
 
 /**
@@ -31,6 +38,8 @@ const initialState: ShoppingCartState = {
 	totalAmount: 0,
 	totalQuantity: 0,
 	isOpen: false,
+	isCheckoutError: false,
+	isCheckoutSuccess: false,
 };
 
 /**
@@ -54,9 +63,11 @@ export interface cartProduct {
  * @property {Object} reducers - An object containing the reducer functions for updating the shopping cart state
  * @property {Function} reducers.setCart - A reducer function that sets the entire shopping cart state
  * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
+ * @property {Function} reducers.setIsCheckoutError - A reducer function that sets the checkout error flag.
+ * @property {Function} reducers.setIsCheckoutSuccess - A reducer function that sets the checkout success flag.
  * @property {Function} reducers.addToCart - A reducer function that adds a product to the shopping cart or increases the quantity if the product is already in the cart
  * @property {Function} reducers.removeItem - A reducer function that removes a product from the shopping cart
- * @property {Function} reducers.incrementQuantity - A reducer function that decrements the quantity for a given product
+ * @property {Function} reducers.decrementQuantity - A reducer function that decrements the quantity for a given product
  * @property {Function} reducers.incrementQuantity - A reducer function that increments the quantity for a given product
  */
 const shoppingCartSlice = createSlice({
@@ -68,6 +79,12 @@ const shoppingCartSlice = createSlice({
 		},
 		setIsOpen: (state, action: PayloadAction<boolean>) => {
 			state.isOpen = action.payload;
+		},
+		setIsCheckoutError: (state, action: PayloadAction<boolean>) => {
+			state.isCheckoutError = action.payload;
+		},
+		setIsCheckoutSuccess: (state, action: PayloadAction<boolean>) => {
+			state.isCheckoutSuccess = action.payload;
 		},
 		addToCart: (state, action: PayloadAction<cartProduct>) => {
 			let productInCart = findInCart(state, action.payload.productID);
@@ -153,7 +170,7 @@ const recalculateTotal = (state: ShoppingCartState) => {
  * @param {RootState} state - The root redux state of the application.
  * @returns {IProduct[]} The shopping cart array of products from the shopping cart state.
  */
-export const selectCartProducts = (state: RootState) => {
+export const selectCartProducts = (state: RootState): IProduct[] => {
 	return state.shoppingCart.cart;
 };
 
@@ -164,7 +181,7 @@ export const selectCartProducts = (state: RootState) => {
  * @param {RootState} state - The current state of the Redux store.
  * @returns {number} - The total quantity of items in the shopping cart.
  */
-export const selectCartTotalQuantity = (state: RootState) => {
+export const selectCartTotalQuantity = (state: RootState): number => {
 	return state.shoppingCart.totalQuantity;
 };
 
@@ -175,35 +192,41 @@ export const selectCartTotalQuantity = (state: RootState) => {
  * @param {RootState} state - The Redux store root state.
  * @returns {string} The total price amount of all items in the cart as a formatted string.
  */
-export const selectCartTotalAmount = (state: RootState) => {
+export const selectCartTotalAmount = (state: RootState): string => {
 	return formatPrice(state.shoppingCart.totalAmount, "USD", 1);
 };
 
 /**
- * Returns the status of the shopping cart sidebar.
+ * Returns the open (visibility) status of the shopping cart sidebar.
  *
  * @function
  * @param {RootState} state - The Redux store root state.
- * @returns {boolean} The status of the shopping cart sidebar.
+ * @returns {boolean} True if the cart sidebar is open and thus visible. False if not open.
  */
-export const selectIsOpen = (state: RootState) => {
+export const selectIsOpen = (state: RootState): boolean => {
 	return state.shoppingCart.isOpen;
 };
 
 /**
- * Returns a given product from the shopping cart.
+ * Returns whether there was an error during checkout.
  *
  * @function
  * @param {RootState} state - The Redux store root state.
- * @param {string} productID - The stripe product ID for the target product
- * @returns {IProduct} The product in the shopping cart matching the given product ID
+ * @returns {boolean} True if there was an error during checkout. False otherwise.
  */
-export const selectProduct = (state: RootState, productID: string) => {
-	const selectedProduct = state.shoppingCart.filter(
-		(item: IProduct) => item.stripeProductID !== productID
-	);
+export const selectIsCheckoutError = (state: RootState): boolean => {
+	return state.shoppingCart.isCheckoutError;
+};
 
-	return selectedProduct;
+/**
+ * Returns whether there was a successfully completed checkout.
+ *
+ * @function
+ * @param {RootState} state - The Redux store root state.
+ * @returns {boolean} True if there was an successfully completed checkout. False otherwise.
+ */
+export const selectIsCheckoutSuccess = (state: RootState): boolean => {
+	return state.shoppingCart.isCheckoutSuccess;
 };
 
 /**
@@ -223,6 +246,8 @@ export const {
 	removeItem,
 	setCart,
 	setIsOpen,
+	setIsCheckoutError,
+	setIsCheckoutSuccess,
 	incrementQuantity,
 	decrementQuantity,
 } = shoppingCartSlice.actions;
