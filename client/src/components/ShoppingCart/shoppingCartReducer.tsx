@@ -22,6 +22,7 @@ import { getAll } from "../Shop/shopService";
  * @property {number} isCheckoutError - True if there was an error during checkout, false otherwise.
  * @property {boolean} isCheckoutSuccess - True if checkout completed successfully, false otherwise.
  * @property {boolean} isSetupError - True if store setup encountered an errors, false otherwise.
+ * @property {Date} timeStamp - Time of last update to the cart. Used to expire cart after some duration.
  *
  * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
  *  https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
@@ -34,6 +35,7 @@ type ShoppingCartState = {
 	isCheckoutError: boolean;
 	isCheckoutSuccess: boolean;
 	isSetupError: boolean;
+	timeStamp: number;
 };
 
 /**
@@ -49,6 +51,7 @@ const initialState: ShoppingCartState = {
 	isCheckoutError: false,
 	isCheckoutSuccess: false,
 	isSetupError: false,
+	timeStamp: Date.now(),
 };
 
 /**
@@ -70,7 +73,8 @@ export interface cartProduct {
  * @property {string} name - The slice name, "shoppingCart"
  * @property {ShoppingCartState} initialState - The initial empty state of the shopping cart slice
  * @property {Object} reducers - An object containing the reducer functions for updating the shopping cart state
- * @property {Function} reducers.setCart - A reducer function that sets the entire shopping cart state
+ * @property {Function} reducers.resetShop - A reducer function that reinitializes the shop
+ * @property {Function} reducers.setCart - A reducer function that sets the products in the shop
  * @property {Function} reducers.setIsOpen - A reducer function that sets the shopping cart sidebar to open or close
  * @property {Function} reducers.setIsCheckoutError - A reducer function that sets the checkout error flag.
  * @property {Function} reducers.setIsCheckoutSuccess - A reducer function that sets the checkout success flag.
@@ -84,8 +88,12 @@ const shoppingCartSlice = createSlice({
 	name: "shoppingCart",
 	initialState: initialState,
 	reducers: {
+		resetShop: () => initialState,
 		setCart: (state, action: PayloadAction<IProductList>) => {
 			state.cart = action.payload.products;
+			// running totals
+			recalculateTotal(state);
+			state.timeStamp = Date.now();
 		},
 		setIsOpen: (state, action: PayloadAction<boolean>) => {
 			state.isOpen = action.payload;
@@ -106,6 +114,7 @@ const shoppingCartSlice = createSlice({
 				productInCart.quantity++;
 				// running totals
 				recalculateTotal(state);
+				state.timeStamp = Date.now();
 			} else {
 				// shouldn't happend
 				console.log("Tried to add product that doesn't exist");
@@ -118,6 +127,7 @@ const shoppingCartSlice = createSlice({
 				productInCart.quantity = 0;
 				// running totals
 				recalculateTotal(state);
+				state.timeStamp = Date.now();
 			}
 		},
 		decrementQuantity: (state, action: PayloadAction<cartProduct>) => {
@@ -129,6 +139,7 @@ const shoppingCartSlice = createSlice({
 					productInCart.quantity--;
 					// running totals
 					recalculateTotal(state);
+					state.timeStamp = Date.now();
 				}
 			}
 		},
@@ -140,6 +151,7 @@ const shoppingCartSlice = createSlice({
 				productInCart.quantity++;
 				// running totals
 				recalculateTotal(state);
+				state.timeStamp = Date.now();
 			}
 		},
 	},
@@ -262,6 +274,8 @@ export const initializeStore = (): ThunkAction<
 > => {
 	return async (dispatch) => {
 		try {
+			// reset before doing async
+			dispatch(resetShop);
 			const products = await getAll();
 			dispatch(
 				setCart({
@@ -291,6 +305,7 @@ export const {
 	addToCart,
 	removeItem,
 	setCart,
+	resetShop,
 	setIsOpen,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,

@@ -9,8 +9,10 @@ import {
 	selectCartProducts,
 	selectIsCheckoutError,
 	selectIsCheckoutSuccess,
+	selectIsSetupError,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
+	setIsOpen,
 } from "../ShoppingCart/shoppingCartReducer";
 import { ShoppingCart } from "../ShoppingCart/shoppingCart";
 
@@ -29,14 +31,12 @@ const Shop = () => {
 	// track checkout error or success and setup error to show feedback notifications
 	const isCheckoutError = useSelector(selectIsCheckoutError);
 	const isCheckoutSuccess = useSelector(selectIsCheckoutSuccess);
-	const isSetupError = useSelector(selectIsCheckoutSuccess);
+	const isSetupError = useSelector(selectIsSetupError);
 
 	// initialization - get all products and add to cart
 	useEffect(() => {
-		// only do setup if there is nothing in shop
+		// do setup if there is nothing in shop
 		if (cart === undefined || cart.length === 0) {
-			console.log("Doing setup");
-			console.log(cart);
 			dispatch(initializeStore());
 		}
 	}, [cart, dispatch]);
@@ -44,14 +44,19 @@ const Shop = () => {
 	// Check to see if this is a redirect back from Checkout
 	useEffect(() => {
 		const query = new URLSearchParams(window.location.search);
+		// always close shopping cart sidebar when loading shop
+		dispatch(setIsOpen(false));
 
 		if (query.get("success")) {
-			dispatch(setIsCheckoutError(false));
+			// reset store and show success message
+			dispatch(initializeStore());
 			dispatch(setIsCheckoutSuccess(true));
-		}
-
-		if (query.get("canceled")) {
+		} else if (query.get("canceled")) {
 			dispatch(setIsCheckoutError(true));
+			dispatch(setIsCheckoutSuccess(false));
+		} else {
+			// clear checkout messages on new visit/reload
+			dispatch(setIsCheckoutError(false));
 			dispatch(setIsCheckoutSuccess(false));
 		}
 	}, [dispatch]);
