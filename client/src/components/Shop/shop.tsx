@@ -12,9 +12,7 @@ import {
 	selectIsSetupError,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
-	setIsOpen,
 } from "../ShoppingCart/shoppingCartReducer";
-import { ShoppingCart } from "../ShoppingCart/shoppingCart";
 
 /**
  * Renders the Shop page which displays all products and the shopping cart.
@@ -44,8 +42,6 @@ const Shop = () => {
 	// Check to see if this is a redirect back from Checkout
 	useEffect(() => {
 		const query = new URLSearchParams(window.location.search);
-		// always close shopping cart sidebar when loading shop
-		dispatch(setIsOpen(false));
 
 		if (query.get("success")) {
 			// reset store and show success message
@@ -105,8 +101,6 @@ const Shop = () => {
 						></Product>
 					);
 				})}
-				{/* Shopping Cart that shows selected products in sidebar when populated */}
-				<ShoppingCart></ShoppingCart>
 			</div>
 		);
 	}

@@ -48,7 +48,12 @@ export const ShoppingCart = () => {
 	const cartItems = cart.filter((product: IProduct) => product.quantity > 0);
 
 	return (
-		<Offcanvas show={isOpen} onHide={closeCart} placement="end">
+		<Offcanvas
+			id="shoppingCart"
+			show={isOpen}
+			onHide={closeCart}
+			placement="end"
+		>
 			<Offcanvas.Header closeButton>
 				<Offcanvas.Title>Cart</Offcanvas.Title>
 			</Offcanvas.Header>

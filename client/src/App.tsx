@@ -8,6 +8,9 @@ import ContactFormRecaptcha from "./components/ContactForm/contactFormRecaptcha"
 import Shop from "./components/Shop/shop";
 import { useEffect } from "react";
 import { scroller } from "react-scroll";
+import { ShoppingCart } from "./components/ShoppingCart/shoppingCart";
+import { useAppDispatch } from "./store";
+import { setIsOpen } from "./components/ShoppingCart/shoppingCartReducer";
 
 /**
  * The Home component that renders the main content of the home page.
@@ -78,6 +81,14 @@ const ContactPage = () => (
  * inside the container.
  */
 const App = () => {
+	// useAppDispatch to make typescript happy with thunks
+	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type
+	const dispatch = useAppDispatch();
+	// always close shopping cart sidebar when loading site
+	useEffect(() => {
+		dispatch(setIsOpen(false));
+	}, [dispatch]);
+
 	return (
 		<Container fluid className="px-1 py-3 body-container">
 			<NavBar />
@@ -88,6 +99,8 @@ const App = () => {
 					<Route path="/" element={<Home />} />
 				</Routes>
 			</Container>
+			{/* Shopping Cart that shows selected products in sidebar */}
+			<ShoppingCart></ShoppingCart>
 		</Container>
 	);
 };

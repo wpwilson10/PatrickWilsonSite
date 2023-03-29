@@ -23,24 +23,14 @@ const NavRight = () => {
 		dispatch(setIsOpen(true));
 	};
 
-	if (quantity > 0) {
-		return (
-			<Nav className="ms-auto" onSelect={openCart}>
-				<Nav.Link href="#" eventKey="cart" as="span">
-					<FaShoppingCart size="1.5em" />{" "}
-					<Badge bg="primary">{quantity}</Badge>
-				</Nav.Link>
-			</Nav>
-		);
-	} else {
-		return (
-			<Nav className="ms-auto">
-				<Nav.Link href="#" eventKey="cart" as="span">
-					<FaShoppingCart size="1.5em" />{" "}
-				</Nav.Link>
-			</Nav>
-		);
-	}
+	return (
+		<Nav className="ms-auto" onSelect={openCart}>
+			<Nav.Link href="#" eventKey="cart" as="span">
+				<FaShoppingCart size="1.5em" />{" "}
+				<Badge bg="primary">{quantity}</Badge>
+			</Nav.Link>
+		</Nav>
+	);
 };
 
 /**
