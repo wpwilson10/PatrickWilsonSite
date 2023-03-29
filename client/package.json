@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "patrickwilson.site",
   "version": "0.1.0",
   "main": "index.js",
   "private": true,
@@ -27,11 +27,8 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "wpw": "webpack"
+    "dev": "webpack --config webpack.dev.js",
+    "prd": "webpack --config webpack.prd.js"
   },
   "eslintConfig": {
     "extends": [
@@ -56,13 +53,14 @@
     "@types/react-google-recaptcha": "^2.1.5",
     "@types/react-scroll": "^1.8.6",
     "css-loader": "^6.7.1",
+    "css-minimizer-webpack-plugin": "^5.0.0",
     "dotenv-webpack": "^8.0.1",
     "html-webpack-plugin": "^5.5.0",
     "prettier": "2.6.2",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.2.9",
     "typescript": "^4.6.4",
-    "webpack": "^5.72.0",
+    "webpack": "^5.76.3",
     "webpack-cli": "^4.9.2"
   }
 }
