@@ -72,7 +72,7 @@ const ContactForm = () => {
 							<Alert variant="danger">
 								<p className="mb-0">
 									Error occurred while sending message. Please
-									try again.
+									try again later.
 								</p>
 							</Alert>
 						)}

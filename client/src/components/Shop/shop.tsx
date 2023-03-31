@@ -12,6 +12,7 @@ import {
 	selectIsSetupError,
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
+	setIsSetupError,
 } from "../ShoppingCart/shoppingCartReducer";
 
 /**
@@ -33,7 +34,7 @@ const Shop = () => {
 
 	// initialization - get all products and add to cart
 	useEffect(() => {
-		// do setup if there is nothing in shop
+		// do setup if there is nothing in shop or previous error
 		if (cart === undefined || cart.length === 0) {
 			dispatch(initializeStore());
 		}
@@ -54,6 +55,7 @@ const Shop = () => {
 			// clear checkout messages on new visit/reload
 			dispatch(setIsCheckoutError(false));
 			dispatch(setIsCheckoutSuccess(false));
+			dispatch(setIsSetupError(false));
 		}
 	}, [dispatch]);
 

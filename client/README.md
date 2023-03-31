@@ -1,5 +1,10 @@
 WPW
 
+How to setup
+
+-   use "npm run dev" to build app in development mode and "npm run prd" to run in production mode.
+-   use server to hand files to client
+
 -   client folder created using npx create-react-app name-of-app --template typescript
     -- https://react-typescript-cheatsheet.netlify.app/docs/basic/setup
 

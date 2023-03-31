@@ -1,27 +1,37 @@
 package setup
 
 import (
+	"flag"
 	"os"
-	"path/filepath"
 	"strconv"
 
 	"github.com/joho/godotenv"
 )
 
 // EnvironmentConfig loads the .env file for the whole program.
+// Differentiates between development vs production modes based on presence of -prd flag or not.
 // Use os.Getenv("LABEL_NAME") to access.
 func EnvironmentConfig() {
-	// get .env filepath
-	absPath, err := filepath.Abs("./configs/.env")
-	if err != nil {
-		LogCommon(err).Fatal("Config filepath")
+	isPrd := flag.Bool("prd", false, "run app using production settings")
+	flag.Parse()
+
+	// get different .env file depending on presence of prd flag
+	if *isPrd {
+		// get .env variables
+		err := godotenv.Load("prd.env")
+		if err != nil {
+			LogCommon(err).Fatal("Loading .env file")
+		}
+
+		return
 	}
 
-	// get .env variables
-	err = godotenv.Load(absPath)
+	// get .env variables for development mode
+	err := godotenv.Load("dev.env")
 	if err != nil {
 		LogCommon(err).Fatal("Loading .env file")
 	}
+
 }
 
 // EnvToInt converts the given .env variable into an integer.
