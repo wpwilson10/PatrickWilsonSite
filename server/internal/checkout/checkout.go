@@ -25,7 +25,7 @@ func HandleCreateCheckoutSession(c *gin.Context) {
 	fmt.Println("Checkout")
 	// Make this secure
 	// redirect to the shop page and not home
-	domainURL := "http://" + os.Getenv("DOMAIN") + "/shop"
+	domainURL := "http://" + os.Getenv("WEB_DOMAIN") + "/shop"
 
 	// Bind JSON form values to struct
 	var cart []Product

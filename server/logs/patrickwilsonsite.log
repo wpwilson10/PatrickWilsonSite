@@ -20,3 +20,4 @@ time="2023-03-21T21:03:13-05:00" level=warning msg="Attempted send empty cart to
 time="2023-03-21T21:04:19-05:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
 time="2023-03-28T22:02:05-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
 time="2023-03-28T22:02:07-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-02T20:35:49-05:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession

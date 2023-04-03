@@ -1,10 +1,12 @@
-module github.com/wpwilson10/mayorPage
+module github.com/wpwilson10/PatrickWilsonSite
 
-go 1.19
+go 1.20
 
 require (
+	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-contrib/static v0.0.1
 	github.com/gin-gonic/gin v1.8.2
+	github.com/stripe/stripe-go/v74 v74.14.0
 )
 
 require (
@@ -19,7 +21,6 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
-	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/ugorji/go/codec v1.2.8 // indirect
 	golang.org/x/crypto v0.4.0 // indirect
 	golang.org/x/net v0.4.0 // indirect

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"note"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v74"
@@ -38,7 +40,10 @@ func server() {
 	// https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
 	router.SetTrustedProxies([]string{"127.0.0.1", "localhost"})
 
-	// configuration to SAP applications
+	// Default CORS setup
+	router.Use(cors.Default())
+
+	// configuration to SPA applications
 	// https://github.com/gin-gonic/contrib/issues/90#issuecomment-990237367
 	router.Use(static.Serve("/", static.LocalFile(os.Getenv("CLIENT_FILE_DIRECTORY"), true)))
 	// Default route when accessing site. Serves index.html and javascript file
@@ -60,5 +65,6 @@ func server() {
 		api.GET("/products", checkout.HandleProducts)
 	}
 
-	router.Run(os.Getenv("DOMAIN")) // listen and serve on 0.0.0.0:8080
+	// listen and serve on 0.0.0.0:3030
+	log.Fatal(router.Run(os.Getenv("LOCAL_DOMAIN")))
 }

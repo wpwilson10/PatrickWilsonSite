@@ -11,3 +11,6 @@
 server/configs/.env
 *.log
 *.env
+*.tar
+*.key
+*.pem
