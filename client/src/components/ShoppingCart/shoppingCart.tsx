@@ -14,7 +14,7 @@ import {
 } from "./shoppingCartReducer";
 import postCartCheckout from "./shoppingCartService";
 
-export const ShoppingCart = () => {
+const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);
 	const amount = useSelector(selectCartTotalAmount);
 	const quantity = useSelector(selectCartTotalQuantity);
@@ -81,3 +81,5 @@ export const ShoppingCart = () => {
 		</Offcanvas>
 	);
 };
+
+export default ShoppingCart;

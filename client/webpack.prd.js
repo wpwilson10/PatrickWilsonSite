@@ -3,6 +3,7 @@
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
 const Dotenv = require("dotenv-webpack");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = merge(common, {
 	mode: "production",
@@ -11,5 +12,6 @@ module.exports = merge(common, {
 		new Dotenv({
 			path: "./prd.env",
 		}),
+		new CompressionPlugin(),
 	],
 });

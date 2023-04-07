@@ -28,7 +28,7 @@ export interface IContactForm {
 /**
  * postContactForm is an asynchronous function that sends a POST request to the specified URL with the data from a contact form.
  *
- *  @async
+ * @async
  * @function
  * @param {IContactForm} newContact - The contact form data object containing a name, email, phone number, message, and recaptcha token.
  * @returns {Promise<IContactForm>} Returns a Promise that resolves to an IContactForm object representing the response data from the server.

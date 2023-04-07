@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/stripe/stripe-go/v74"
@@ -38,10 +39,18 @@ func server() {
 	// Initialize
 	router := gin.Default()
 	// https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies
-	router.SetTrustedProxies([]string{"127.0.0.1", "localhost"})
+	// https://github.com/gin-gonic/gin/issues/2809
+	router.SetTrustedProxies(nil)
 
-	// Default CORS setup
-	router.Use(cors.Default())
+	// CORS setup
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"https://patrickwilson.site", "https://patrickwilsonsite.com"}
+	router.Use(cors.New(corsConfig))
+
+	// Default GZIP compression
+	// Recommended by pingdom site performance test
+	// https://blog.hubspot.com/website/gzip-compression
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	// configuration to SPA applications
 	// https://github.com/gin-gonic/contrib/issues/90#issuecomment-990237367

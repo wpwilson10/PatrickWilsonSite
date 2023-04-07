@@ -6,9 +6,9 @@
 .env.test.local
 .env.production.local
 
-# production
 .exe
-server/configs/.env
+server/web/*
+
 *.log
 *.env
 *.tar

@@ -1,6 +1,14 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
+import ContactFormRecaptcha from "../ContactForm/contactFormRecaptcha";
+
+const ContactPage = () => (
+	<div>
+		<ContactInfo />
+		<ContactFormRecaptcha />
+	</div>
+);
 
 /**
  * A React functional component that displays the contact information section, which includes the following information:
@@ -11,7 +19,7 @@ import { MdEmail } from "react-icons/md";
  *
  * @returns {JSX.Element} The contact information section as a JSX element.
  */
-const ContactInfo = () => {
+export const ContactInfo = () => {
 	return (
 		<Container
 			id="contact_info"
@@ -68,4 +76,4 @@ const ContactInfo = () => {
 	);
 };
 
-export default ContactInfo;
+export default ContactPage;
