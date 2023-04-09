@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store";
-import Product from "../Product/product";
 import { IProduct } from "../Product/productService";
 import {
 	initializeStore,
@@ -14,6 +13,9 @@ import {
 	setIsCheckoutSuccess,
 	setIsSetupError,
 } from "../ShoppingCart/shoppingCartReducer";
+import LoadingSpinner from "../LoadingSpinner/spinner";
+
+const Product = lazy(() => import("../Product/product"));
 
 /**
  * Renders the Shop page which displays all products and the shopping cart.
@@ -71,8 +73,8 @@ const Shop = () => {
 			</Container>
 		);
 	} else if (cart.length <= 0) {
-		// don't render anything until we have products to display
-		return <div></div>;
+		// placeholder until we have information to load
+		return <LoadingSpinner />;
 	} else {
 		return (
 			// Display feedback notifications followed by store with each product.
@@ -97,10 +99,12 @@ const Shop = () => {
 				{/* List each product in its own component container */}
 				{cart.map((each: IProduct) => {
 					return (
-						<Product
-							key={each.stripeProductID}
-							product={each}
-						></Product>
+						<Suspense fallback={<LoadingSpinner />}>
+							<Product
+								key={each.stripeProductID}
+								product={each}
+							></Product>
+						</Suspense>
 					);
 				})}
 			</div>

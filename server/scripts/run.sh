@@ -5,11 +5,11 @@
 # sudo chmod u+x run.sh
 
 # go to file location
-PRJ_FILE="/home/patrick/Documents/Projects/Caterpillar/"
+PRJ_FILE="/home/patrick/Documents/Projects/PatrickWilsonSite/"
 cd $PRJ_FILE
 
 # recompile if needed
-go build -o ./bin/caterpillar ./cmd
+go build -o ./bin/patrickwilsonsite ./
 
 # run data crawler with given flag
-./bin/caterpillar $1
+./bin/patrickwilsonsite -prd

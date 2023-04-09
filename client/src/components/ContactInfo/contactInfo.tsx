@@ -1,12 +1,17 @@
+import { Suspense, lazy } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import ContactFormRecaptcha from "../ContactForm/contactFormRecaptcha";
+import LoadingSpinner from "../LoadingSpinner/spinner";
+
+const ContactFormRecaptcha = lazy(() => import("../ContactForm/contactForm"));
 
 const ContactPage = () => (
 	<div>
 		<ContactInfo />
-		<ContactFormRecaptcha />
+		<Suspense fallback={<LoadingSpinner />}>
+			<ContactFormRecaptcha />
+		</Suspense>
 	</div>
 );
 

@@ -1,5 +1,24 @@
 # WPW
- 
+
+Client
+- see README file in /client for updating client files using npm
+- Move created files to from /client/dist to /server/web for production.
+
+Server
+- see README file in /server for updating server files using npm
+
+Caddy
+- point request from host server to web server application
+- handles TLS and http redirection
+-- https://caddyserver.com/docs/caddyfile/patterns#reverse-proxy
+- TLS Certs come from cloudflare
+- sudo systemctl reload caddy
+-- to load updates
+- sudo vim /etc/caddy/Caddyfile
+-- to update config
+
+------ Not currently using docker setup below -------
+
 How to make docker
 - https://stackoverflow.com/questions/23935141/how-to-copy-docker-images-from-one-host-to-another-without-using-a-repository
 - https://devopscube.com/build-docker-image/
@@ -24,12 +43,3 @@ Clean up docker
 - sudo docker image prune
 -- remove images from that container
 
-Caddy
-- point request from host server to web server application
-- handles TLS and http redirection
--- https://caddyserver.com/docs/caddyfile/patterns#reverse-proxy
-- TLS Certs come from cloudflare
-- sudo systemctl reload caddy
--- to load updates
-- sudo vim /etc/caddy/Caddyfile
--- to update config

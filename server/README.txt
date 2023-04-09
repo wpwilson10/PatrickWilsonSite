@@ -3,6 +3,11 @@ How to run
 -- uses dev.env
 - "go build main.go -prd" for production
 -- uses prd.env
+- /scripts/run.sh for running from crontab
+
+Access to client files
+- In prd mode, serves the files listed in /server/web
+- In dev mode, looks to /client/dist
 
 Project structure
 - based on: https://github.com/golang-standards/project-layout

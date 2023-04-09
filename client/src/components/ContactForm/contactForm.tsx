@@ -1,21 +1,32 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useMediaQuery } from "react-responsive";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+
 import postContactForm, { IContactForm, schema } from "./contactFormService";
-import { useEffect, useState } from "react";
 
 /**
- * The `ContactForm` component displays a form that allows users to send a message to the website owner.
- * It includes fields for the user's name, email address, and message content. Once the user submits the form,
- * the message is sent to the website owner's email address using a specified email server.
+ * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
  *
- * @returns {JSX.Element} The ContactForm component
+ * This component displays a form with fields for the user's name, email, phone number, and a message.
+ * The form also includes reCAPTCHA for added security against bots. Once the user submits the form,
+ * the message is sent to the website owner's email address using a specified email server.
+ * After submitting the form, the component will display a success or error message depending on
+ * the result of the submission.
+ *
+ * @returns {JSX.Element} The ContactFormRecaptcha component.
  */
-const ContactForm = () => {
+const ContactFormRecaptcha = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
 		useState(false);
 	const [isSubmissionError, setIsSubmissionError] = useState(false);
+	// track if recaptcha has been submitted
+	const [isRecaptchaSubmitted, setIsRecapthcaSubmitted] = useState(false);
+	// track if mobile screen size to resize reCAPTHCA
+	const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
 	// setup react form hook library
 	const {
@@ -24,20 +35,36 @@ const ContactForm = () => {
 		formState,
 		formState: { errors },
 		reset,
+		setValue,
 	} = useForm<IContactForm>({
 		resolver: yupResolver(schema),
 	});
+
+	// setup reCAPTCHA
+	const recaptchaRef = useRef<ReCAPTCHA>(null);
 
 	const onSubmit = async (data: IContactForm) => {
 		try {
 			await postContactForm(data);
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
+
 			console.log(data);
 		} catch (error) {
 			setIsSubmissionError(true);
 			setIsSuccessfullySubmitted(false);
+			setIsRecapthcaSubmitted(false);
 			console.log(error);
+		}
+	};
+
+	// Handle reCAPTHCA updates
+	const onChange = () => {
+		if (recaptchaRef.current) {
+			// Track if reCAPTCHA is filled for form validation
+			setIsRecapthcaSubmitted(true);
+			// Add recaptcha value to our form struct
+			setValue("recaptcha", recaptchaRef.current.getValue()!);
 		}
 	};
 
@@ -46,7 +73,7 @@ const ContactForm = () => {
 	// https://react-hook-form.com/api/useform/reset
 	useEffect(() => {
 		if (formState.isSubmitSuccessful && !isSubmissionError) {
-			// isSubmitSuccessful gets wiped on reset, so remember it
+			// isSubmitSuccessful gets wiped on reset, so remember it so we can display a success banner on reload
 			setIsSuccessfullySubmitted(true);
 			reset();
 		}
@@ -54,7 +81,11 @@ const ContactForm = () => {
 
 	// Standard autocomplete options - https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/autocomplete
 	return (
-		<Container className="content-container mb-3 py-3 px-3">
+		<Container
+			id="contact_form"
+			className="content-container mb-3 py-3 px-3"
+		>
+			<h3>Send a message</h3>
 			<Form noValidate onSubmit={handleSubmit(onSubmit)}>
 				{/* Success or error message after submission */}
 				<Row className="justify-content-md-left">
@@ -72,7 +103,7 @@ const ContactForm = () => {
 							<Alert variant="danger">
 								<p className="mb-0">
 									Error occurred while sending message. Please
-									try again later.
+									try again.
 								</p>
 							</Alert>
 						)}
@@ -80,10 +111,10 @@ const ContactForm = () => {
 				</Row>
 
 				{/* Full Name - use full name for better usability as opposed to seperate fields
-						xs=9 md=7 makes fields appropriately sized for different screens
+					xs=9 md=7 makes fields appropriately sized for different screens
 					*/}
 				<Row className="justify-content-md-left">
-					<Col xs={9} md={7} className="mb-3">
+					<Col xs={12} md={8} className="mb-3">
 						<Form.Label>Name</Form.Label>
 						<Form.Control
 							type="text"
@@ -99,7 +130,7 @@ const ContactForm = () => {
 
 				{/* Email */}
 				<Row className="justify-content-md-left">
-					<Col xs={9} md={7} className="mb-3">
+					<Col xs={12} md={8} className="mb-3">
 						<Form.Label>Email</Form.Label>
 						<Form.Control
 							type="email"
@@ -115,7 +146,7 @@ const ContactForm = () => {
 
 				{/* Phone Number*/}
 				<Row className="justify-content-md-left">
-					<Col xs={9} md={7} className="mb-3">
+					<Col xs={12} md={8} className="mb-3">
 						<Form.Label>Phone Number (optional)</Form.Label>
 						<Form.Control
 							type="tel"
@@ -135,7 +166,7 @@ const ContactForm = () => {
 						<Form.Label>Message</Form.Label>
 						<Form.Control
 							as="textarea"
-							rows={3}
+							rows={4}
 							{...register("message")}
 							isInvalid={!!errors.message}
 						/>
@@ -145,10 +176,39 @@ const ContactForm = () => {
 					</Col>
 				</Row>
 
+				{/* reCAPTCHA v2 button aligned to the right
+					Resizes if using a mobile screen to make somewhat responsive*/}
+				<Row className="justify-content-md-center">
+					<Col md={12} className="mb-3 d-flex justify-content-end">
+						{isMobile ? (
+							<ReCAPTCHA
+								sitekey={process.env.RECAPTCHA_SITE_KEY!}
+								ref={recaptchaRef}
+								onChange={onChange}
+								size="compact"
+							/>
+						) : (
+							<ReCAPTCHA
+								sitekey={
+									"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+								}
+								ref={recaptchaRef}
+								onChange={onChange}
+								size="normal"
+							/>
+						)}
+					</Col>
+				</Row>
+
 				{/* Submit button aligned to the right*/}
 				<Row className="justify-content-md-center">
 					<Col md={12} className="mb-3 d-flex justify-content-end">
-						<Button type="submit" disabled={formState.isSubmitting}>
+						<Button
+							type="submit"
+							disabled={
+								formState.isSubmitting || !isRecaptchaSubmitted
+							}
+						>
 							Send Message
 						</Button>
 					</Col>
@@ -158,4 +218,4 @@ const ContactForm = () => {
 	);
 };
 
-export default ContactForm;
+export default ContactFormRecaptcha;

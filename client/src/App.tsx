@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { lazy, Suspense, useEffect } from "react";
 import { useAppDispatch } from "./store";
 import { setIsOpen } from "./components/ShoppingCart/shoppingCartReducer";
+import LoadingSpinner from "./components/LoadingSpinner/spinner";
 
 const Home = lazy(() => import("./components/Home/home"));
 const ContactPage = lazy(() => import("./components/ContactInfo/contactInfo"));
@@ -38,7 +39,7 @@ const App = () => {
 		<Container fluid className="px-1 py-3 body-container">
 			<NavBar />
 			<Container className="px-1 site-container">
-				<Suspense fallback={<div>Loading</div>}>
+				<Suspense fallback={<LoadingSpinner />}>
 					<Routes>
 						<Route path="/contact" element={<ContactPage />} />
 						<Route path="/shop" element={<Shop />} />
@@ -47,7 +48,7 @@ const App = () => {
 				</Suspense>
 			</Container>
 			{/* Shopping Cart that shows selected products in sidebar */}
-			<Suspense fallback={<div>Loading</div>}>
+			<Suspense fallback={<LoadingSpinner />}>
 				<ShoppingCart></ShoppingCart>
 			</Suspense>
 		</Container>
