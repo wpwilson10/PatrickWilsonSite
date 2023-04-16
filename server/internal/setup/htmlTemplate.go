@@ -2,7 +2,6 @@ package setup
 
 import (
 	"bytes"
-	"fmt"
 	"html/template"
 	"path/filepath"
 )
@@ -18,7 +17,6 @@ func ToHTML(file string, i any) string {
 	}
 	// point to the given template file
 	templatePath := absPath + "/" + file
-	fmt.Println(templatePath, " ", absPath, " ", file)
 
 	// setup html template
 	tpl, err := template.ParseFiles(templatePath)

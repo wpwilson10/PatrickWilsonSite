@@ -1,11 +1,8 @@
 import { Badge, Container, Nav, Navbar } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store";
-import {
-	selectCartTotalQuantity,
-	setIsOpen,
-} from "../ShoppingCart/shoppingCartReducer";
+import { useAppDispatch } from "../../store/store";
+import { selectCartTotalQuantity, setIsOpen } from "../../store/shoppingCart";
 
 /**
  * NavRight displays a shopping cart icon with the number of items in the cart

@@ -39,7 +39,7 @@ func LogCommon(err error) *log.Entry {
 }
 
 // LogFile returns a file to use for logging with name like 2006-01-02.txt.
-// Caller must clost file.
+// Caller must close file.
 func LogFile() *os.File {
 	// file path
 	prefix := os.Getenv("LOG_FILE_PATH")

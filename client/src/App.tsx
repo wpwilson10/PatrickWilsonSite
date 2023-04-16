@@ -3,9 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar/navbar";
 import { Container } from "react-bootstrap";
 import { lazy, Suspense, useEffect } from "react";
-import { useAppDispatch } from "./store";
-import { setIsOpen } from "./components/ShoppingCart/shoppingCartReducer";
+import { useAppDispatch } from "./store/store";
+import { setIsOpen } from "./store/shoppingCart";
 import LoadingSpinner from "./components/LoadingSpinner/spinner";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback, logError } from "./utils/Error/error";
 
 const Home = lazy(() => import("./components/Home/home"));
 const ContactPage = lazy(() => import("./components/ContactInfo/contactInfo"));
@@ -36,22 +38,31 @@ const App = () => {
 	}, [dispatch]);
 
 	return (
-		<Container fluid className="px-1 py-3 body-container">
-			<NavBar />
-			<Container className="px-1 site-container">
+		<ErrorBoundary
+			FallbackComponent={ErrorFallback}
+			onError={logError}
+			onReset={() => {
+				// super dumb reload
+				// window.location.reload();
+			}}
+		>
+			<Container fluid className="px-1 py-3 body-container">
+				<NavBar />
+				<Container className="px-1 site-container">
+					<Suspense fallback={<LoadingSpinner />}>
+						<Routes>
+							<Route path="/contact" element={<ContactPage />} />
+							<Route path="/shop" element={<Shop />} />
+							<Route path="/" element={<Home />} />
+						</Routes>
+					</Suspense>
+				</Container>
+				{/* Shopping Cart that shows selected products in sidebar */}
 				<Suspense fallback={<LoadingSpinner />}>
-					<Routes>
-						<Route path="/contact" element={<ContactPage />} />
-						<Route path="/shop" element={<Shop />} />
-						<Route path="/" element={<Home />} />
-					</Routes>
+					<ShoppingCart></ShoppingCart>
 				</Suspense>
 			</Container>
-			{/* Shopping Cart that shows selected products in sidebar */}
-			<Suspense fallback={<LoadingSpinner />}>
-				<ShoppingCart></ShoppingCart>
-			</Suspense>
-		</Container>
+		</ErrorBoundary>
 	);
 };
 

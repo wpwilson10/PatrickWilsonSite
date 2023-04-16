@@ -1,23 +1,57 @@
-time="2023-01-15T21:46:43-06:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
-time="2023-01-15T21:46:45-06:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
-time="2023-01-21T13:06:25-06:00" level=error msg="New Session" application= error="{\"status\":401,\"message\":\"You did not provide an API key. You need to provide your API key in the Authorization header, using Bearer auth (e.g. 'Authorization: Bearer YOUR_SECRET_KEY'). See https://stripe.com/docs/api#authentication for details, or we can help at https://support.stripe.com/.\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-01-21T13:11:31-06:00" level=error msg="New Session" application= error="{\"code\":\"url_invalid\",\"doc_url\":\"https://stripe.com/docs/error-codes/url-invalid\",\"status\":400,\"message\":\"Not a valid URL\",\"param\":\"success_url\",\"request_id\":\"req_LWSBIlvZmQJTXU\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_LWSBIlvZmQJTXU?t=1674328291\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-01-22T11:37:23-06:00" level=error msg="New Session" application= error="{\"code\":\"parameter_invalid_empty\",\"doc_url\":\"https://stripe.com/docs/error-codes/parameter-invalid-empty\",\"status\":400,\"message\":\"You passed an empty string for 'line_items[0][price]'. We assume empty values are an attempt to unset a parameter; however 'line_items[0][price]' cannot be unset. You should remove 'line_items[0][price]' from your request or supply a non-empty value.\",\"param\":\"line_items[0][price]\",\"request_id\":\"req_TMyN7FlVIqLjKW\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_TMyN7FlVIqLjKW?t=1674409045\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T14:49:54-06:00" level=error msg="Checkout form bind to JSON" application= error="json: cannot unmarshal array into Go value of type checkout.CheckoutForm" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:15:33-06:00" level=error msg="New Session" application= error="{\"status\":400,\"message\":\"The `line_items` parameter is required in payment mode.\",\"request_id\":\"req_1Y610MHdSzczJB\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_1Y610MHdSzczJB?t=1676254534\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:21:44-06:00" level=error msg="New Session" application= error="{\"code\":\"url_invalid\",\"doc_url\":\"https://stripe.com/docs/error-codes/url-invalid\",\"status\":400,\"message\":\"Not a valid URL\",\"param\":\"success_url\",\"request_id\":\"req_ZaXx6WrcoXBh65\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_ZaXx6WrcoXBh65?t=1676254905\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:22:15-06:00" level=error msg="New Session" application= error="{\"code\":\"url_invalid\",\"doc_url\":\"https://stripe.com/docs/error-codes/url-invalid\",\"status\":400,\"message\":\"Not a valid URL\",\"param\":\"success_url\",\"request_id\":\"req_l8c5je1CNz96w3\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_l8c5je1CNz96w3?t=1676254936\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:22:36-06:00" level=error msg="New Session" application= error="{\"status\":400,\"message\":\"The `line_items` parameter is required in payment mode.\",\"request_id\":\"req_0h1JAk6u4esDxM\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_0h1JAk6u4esDxM?t=1676254958\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:31:12-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:48:08-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-02-12T20:49:47-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-02-13T21:28:59-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-02-13T21:31:12-06:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-02-18T14:32:16-06:00" level=error msg="New Session" application= error="{\"code\":\"parameter_invalid_integer\",\"doc_url\":\"https://stripe.com/docs/error-codes/parameter-invalid-integer\",\"status\":400,\"message\":\"This value must be greater than or equal to 1.\",\"param\":\"line_items[1][quantity]\",\"request_id\":\"req_2tj7WMXuWX4E2b\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_2tj7WMXuWX4E2b?t=1676752336\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-18T14:32:17-06:00" level=error msg="New Session" application= error="{\"code\":\"parameter_invalid_integer\",\"doc_url\":\"https://stripe.com/docs/error-codes/parameter-invalid-integer\",\"status\":400,\"message\":\"This value must be greater than or equal to 1.\",\"param\":\"line_items[1][quantity]\",\"request_id\":\"req_zTx7wvir4kS1HW\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_zTx7wvir4kS1HW?t=1676752338\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-02-18T14:32:23-06:00" level=error msg="New Session" application= error="{\"code\":\"parameter_invalid_integer\",\"doc_url\":\"https://stripe.com/docs/error-codes/parameter-invalid-integer\",\"status\":400,\"message\":\"This value must be greater than or equal to 1.\",\"param\":\"line_items[1][quantity]\",\"request_id\":\"req_MlL8vFdW8dQbA8\",\"request_log_url\":\"https://dashboard.stripe.com/test/logs/req_MlL8vFdW8dQbA8?t=1676752344\",\"type\":\"invalid_request_error\"}" function=checkout.HandleCreateCheckoutSession
-time="2023-03-21T21:03:13-05:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-03-21T21:04:19-05:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
-time="2023-03-28T22:02:05-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
-time="2023-03-28T22:02:07-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
-time="2023-04-02T20:35:49-05:00" level=warning msg="Attempted send empty cart to Stipe" application= function=checkout.HandleCreateCheckoutSession
+time="2023-04-16T12:08:07-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:08:16-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:08:16-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:08:16-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:08:18-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:08:43-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:08:53-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:08:53-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:08:53-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:08:55-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:16:14-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:16:33-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:16:33-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:16:33-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:16:35-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:16:57-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:16:57-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:16:57-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:16:59-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:21:02-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:21:11-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:21:11-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:21:11-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:21:13-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:24:13-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:24:22-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:24:22-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:24:22-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:24:23-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:31:50-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:31:50-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:31:50-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:31:52-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:35:37-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:35:49-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:35:49-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:35:49-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:35:50-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:37:56-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:38:08-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:38:08-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:38:08-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:38:09-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T12:46:22-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T12:46:38-05:00" level=error msg="Read File" application= error="read C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/contactForm.json: Access is denied." function=contactForm.loadContacts
+time="2023-04-16T12:46:38-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=contactForm.loadContacts
+time="2023-04-16T12:46:38-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T12:46:39-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T13:13:34-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T13:13:48-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
+time="2023-04-16T13:13:49-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-04-16T13:18:13-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T13:53:21-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
+time="2023-04-16T13:53:33-05:00" level=error msg="Open client error file" application= error="open C:/Users/wpwil/Documents/Projects/Web Dev/PatrickWilsonSite/server/logs/clientError.json: The system cannot find the file specified." function=clientError.saveError
+time="2023-04-16T13:53:33-05:00" level=error msg=Unmarshall application= error="unexpected end of JSON input" function=clientError.saveError
+time="2023-04-16T13:53:33-05:00" level=warning msg="Saved client error" application= function=clientError.saveError
+time="2023-04-16T13:54:43-05:00" level=warning msg="Saved client error" application= function=clientError.saveError

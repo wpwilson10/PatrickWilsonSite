@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IProductList } from "../Product/productService";
+import { IProductList } from "./product.js";
 
 /**
  * The server URL for the product API. This URL is set using the PRODUCT_API environment variable.

@@ -4,9 +4,9 @@ import {
 	PayloadAction,
 	ThunkAction,
 } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
-import { formatPrice, IProduct, IProductList } from "../Product/productService";
-import { getAll } from "../Shop/shopService";
+import { RootState } from "./store";
+import { formatPrice, IProduct, IProductList } from "../services/product";
+import { getAll } from "../services/shop";
 
 /**
  * Represents the shopping cart state in Redux. The cart with its array of products should
@@ -284,7 +284,6 @@ export const initializeStore = (): ThunkAction<
 			);
 		} catch (error) {
 			dispatch(setIsSetupError(true));
-			console.log(error);
 		}
 	};
 };

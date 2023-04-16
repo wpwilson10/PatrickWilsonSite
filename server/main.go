@@ -1,9 +1,7 @@
 package main
 
 import (
-	"log"
 	"net/http"
-	"note"
 	"os"
 	"path/filepath"
 	"strings"
@@ -15,6 +13,7 @@ import (
 	"github.com/stripe/stripe-go/v74"
 
 	"checkout"
+	"clientError"
 	"contactForm"
 	"setup"
 )
@@ -67,13 +66,18 @@ func server() {
 	// Api group
 	api := router.Group("/api")
 	{
-		api.GET("/notes", note.GetNotes)
 		api.POST("/contact", contactForm.SaveContact)
 		api.POST("/checkout", checkout.HandleCreateCheckoutSession)
 		api.GET("/checkout_config", checkout.HandleCheckoutConfig)
 		api.GET("/products", checkout.HandleProducts)
+		api.POST("/error", clientError.SaveClientError)
 	}
 
+	setup.LogCommon(nil).Info("PatrickWilsonSite server starting")
 	// listen and serve on 0.0.0.0:3030
-	log.Fatal(router.Run(os.Getenv("LOCAL_DOMAIN")))
+	err := router.Run(os.Getenv("LOCAL_DOMAIN"))
+	if err != nil {
+		setup.LogCommon(err).Fatal("Router failed to run")
+	}
+
 }

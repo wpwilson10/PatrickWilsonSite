@@ -11,6 +11,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^18.1.0",
+    "react-error-boundary": "^4.0.3",
     "react-google-recaptcha": "^2.1.0",
     "react-hook-form": "^7.39.4",
     "react-icons": "^4.7.1",

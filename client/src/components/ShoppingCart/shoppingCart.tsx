@@ -1,8 +1,7 @@
 import { Button, Col, Offcanvas, Row, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../store/store";
 import CartProduct from "../Product/cartProduct";
-import { IProduct } from "../Product/productService";
 import {
 	selectCartProducts,
 	selectCartTotalAmount,
@@ -11,8 +10,9 @@ import {
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
 	setIsOpen,
-} from "./shoppingCartReducer";
-import postCartCheckout from "./shoppingCartService";
+} from "../../store/shoppingCart";
+import postCartCheckout from "../../services/shoppingCart";
+import { IProduct } from "../../services/product";
 
 const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);

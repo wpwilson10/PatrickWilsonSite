@@ -5,7 +5,10 @@ import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 
-import postContactForm, { IContactForm, schema } from "./contactFormService";
+import postContactForm, {
+	IContactForm,
+	schema,
+} from "../../services/contactForm";
 
 /**
  * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
@@ -54,7 +57,6 @@ const ContactFormRecaptcha = () => {
 			setIsSubmissionError(true);
 			setIsSuccessfullySubmitted(false);
 			setIsRecapthcaSubmitted(false);
-			console.log(error);
 		}
 	};
 

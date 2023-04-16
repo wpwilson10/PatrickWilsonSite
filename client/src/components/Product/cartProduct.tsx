@@ -1,11 +1,11 @@
 import { Button, Col, Container, Row, Image, Stack } from "react-bootstrap";
-import { useAppDispatch } from "../../store";
+import { useAppDispatch } from "../../store/store";
 import {
 	decrementQuantity,
 	incrementQuantity,
 	removeItem,
-} from "../ShoppingCart/shoppingCartReducer";
-import { formatPrice, IProduct } from "./productService";
+} from "../../store/shoppingCart";
+import { IProduct, formatPrice } from "../../services/product";
 
 export const CartProduct = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks

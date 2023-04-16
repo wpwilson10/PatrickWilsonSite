@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IProduct } from "../Product/productService";
+import { IProduct } from "./product.js";
 
 /**
  * The server URL for the checkout API. This URL is set using the CHECKOUT_API environment variable.

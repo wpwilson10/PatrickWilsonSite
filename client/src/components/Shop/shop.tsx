@@ -1,8 +1,8 @@
 import { Suspense, lazy, useEffect } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useAppDispatch } from "../../store";
-import { IProduct } from "../Product/productService";
+import { useAppDispatch } from "../../store/store";
+import { IProduct } from "../../services/product";
 import {
 	initializeStore,
 	selectCartProducts,
@@ -12,7 +12,7 @@ import {
 	setIsCheckoutError,
 	setIsCheckoutSuccess,
 	setIsSetupError,
-} from "../ShoppingCart/shoppingCartReducer";
+} from "../../store/shoppingCart";
 import LoadingSpinner from "../LoadingSpinner/spinner";
 
 const Product = lazy(() => import("../Product/product"));
@@ -99,11 +99,11 @@ const Shop = () => {
 				{/* List each product in its own component container */}
 				{cart.map((each: IProduct) => {
 					return (
-						<Suspense fallback={<LoadingSpinner />}>
-							<Product
-								key={each.stripeProductID}
-								product={each}
-							></Product>
+						<Suspense
+							key={each.stripeProductID}
+							fallback={<LoadingSpinner />}
+						>
+							<Product product={each}></Product>
 						</Suspense>
 					);
 				})}
