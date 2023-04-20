@@ -11,9 +11,9 @@ import {
 	setIsCheckoutSuccess,
 	setIsOpen,
 } from "../../store/shoppingCart";
-import { IProduct } from "../../services/product";
 import axios from "axios";
 import { handleAxiosError } from "../../utils/Error/error";
+import { IProduct } from "../Product/product";
 
 const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);

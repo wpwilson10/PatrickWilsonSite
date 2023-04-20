@@ -1,7 +1,43 @@
 import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { useAppDispatch } from "../../store/store";
 import { incrementQuantity, setIsOpen } from "../../store/shoppingCart";
-import { formatPrice, IProduct } from "../../services/product";
+import { formatPrice } from "../../utils/price";
+
+/**
+ * Represents a product object from the server based on the Stripe API.
+ *
+ * @see {@link https://stripe.com/docs/api/products/object|Stripe API documentation}.
+ *
+ * @interface IProduct
+ * @property {string} stripeProductID - The unique identifier for the product.
+ * @property {string} name - The name of the product.
+ * @property {string} description - A description of the product.
+ * @property {string[]} images - An array of image URLs for the product.
+ * @property {string} stripePriceID - The unique identifier for the price associated with the product.
+ * @property {number} unitAmount - The the price associated with the a single unit of the product.
+ * @property {string} currency - The currency of the product.
+ * @property {number} quantity - The number of units of the product selected.
+ */
+export interface IProduct {
+	stripeProductID: string;
+	name: string;
+	description: string;
+	images: string[];
+	stripePriceID: string;
+	unitAmount: number;
+	currency: string;
+	quantity: number;
+}
+
+/**
+ * Interface for a list of IProducts
+ *
+ * @interface IProductList
+ * @property {Array<IProduct>} products - an array of product objects
+ */
+export interface IProductList {
+	products: IProduct[];
+}
 
 export const Product = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks

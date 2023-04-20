@@ -2,7 +2,6 @@ import { Suspense, lazy, useEffect } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
-import { IProduct } from "../../services/product";
 import {
 	initializeStore,
 	selectCartProducts,
@@ -14,6 +13,7 @@ import {
 	setIsSetupError,
 } from "../../store/shoppingCart";
 import LoadingSpinner from "../LoadingSpinner/spinner";
+import { IProduct } from "../Product/product";
 
 const Product = lazy(() => import("../Product/product"));
 

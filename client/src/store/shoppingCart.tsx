@@ -5,9 +5,10 @@ import {
 	ThunkAction,
 } from "@reduxjs/toolkit";
 import { RootState } from "./store";
-import { formatPrice, IProduct, IProductList } from "../services/product";
 import axios from "axios";
 import { handleAxiosError } from "../utils/Error/error";
+import { IProduct, IProductList } from "../components/Product/product";
+import { formatPrice } from "../utils/price";
 
 /**
  * Represents the shopping cart state in Redux. The cart with its array of products should

@@ -5,7 +5,8 @@ import {
 	incrementQuantity,
 	removeItem,
 } from "../../store/shoppingCart";
-import { IProduct, formatPrice } from "../../services/product";
+import { IProduct } from "./product";
+import { formatPrice } from "../../utils/price";
 
 export const CartProduct = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks
