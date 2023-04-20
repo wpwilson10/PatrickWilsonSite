@@ -6,7 +6,8 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import { formatPrice, IProduct, IProductList } from "../services/product";
-import { getAll } from "../services/shop";
+import axios from "axios";
+import { handleAxiosError } from "../utils/Error/error";
 
 /**
  * Represents the shopping cart state in Redux. The cart with its array of products should
@@ -117,7 +118,7 @@ const shoppingCartSlice = createSlice({
 				state.timeStamp = Date.now();
 			} else {
 				// shouldn't happend
-				console.log("Tried to add product that doesn't exist");
+				console.error("Tried to add product that doesn't exist");
 			}
 		},
 		removeItem: (state, action: PayloadAction<cartProduct>) => {
@@ -276,13 +277,22 @@ export const initializeStore = (): ThunkAction<
 		try {
 			// reset before doing async
 			dispatch(resetShop);
-			const products = await getAll();
-			dispatch(
-				setCart({
-					products: products.products,
-				})
-			);
+			// The server URL for the product API. This URL is set using the PRODUCT_API environment variable.
+			const baseUrl: string = process.env.PRODUCT_API!;
+			const response = await axios.get(baseUrl);
+			// validate that we got some kind of products
+			if (
+				response &&
+				response.data &&
+				response.data.products &&
+				response.data.products[0].stripeProductID
+			) {
+				// good data so put in cart
+				dispatch(setCart(response.data));
+			}
 		} catch (error) {
+			handleAxiosError(error);
+			dispatch(resetShop);
 			dispatch(setIsSetupError(true));
 		}
 	};

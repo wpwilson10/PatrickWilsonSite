@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { store } from "./store/store";
-import { logError } from "./utils/Error/error";
+import { logErrorToServer } from "./utils/Error/error";
 
 // React 18
 const container = document.getElementById("root") as HTMLElement;
@@ -22,9 +22,9 @@ try {
 			</Provider>
 		</React.StrictMode>
 	);
-} catch (e: unknown) {
+} catch (e) {
+	logErrorToServer(e, "Index rendering root");
 	if (e instanceof Error) {
-		logError(e, { componentStack: "root" });
 		root.render(
 			<div role="alert">
 				<p>Something went wrong:</p>

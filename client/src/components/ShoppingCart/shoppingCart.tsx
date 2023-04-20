@@ -11,8 +11,9 @@ import {
 	setIsCheckoutSuccess,
 	setIsOpen,
 } from "../../store/shoppingCart";
-import postCartCheckout from "../../services/shoppingCart";
 import { IProduct } from "../../services/product";
+import axios from "axios";
+import { handleAxiosError } from "../../utils/Error/error";
 
 const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);
@@ -36,11 +37,20 @@ const ShoppingCart = () => {
 		dispatch(setIsCheckoutSuccess(false));
 
 		try {
-			const response = await postCartCheckout(cart);
-			// redirect to checkout url
-			window.location.href = response.url;
+			// filter out products with quantity zero
+			const nonZeroProducts = cart.filter((value) => value.quantity > 0);
+			// The server URL for the checkout API. This URL is set using the CHECKOUT_API environment variable.
+			const baseUrl: string = process.env.CHECKOUT_API!;
+			// send to server
+			const response = await axios.post(baseUrl, nonZeroProducts);
+			// redirect to stripe
+			if (response && response.data && response.data.url) {
+				// redirect to checkout url
+				window.location.href = response.data.url;
+			}
 		} catch (error) {
 			dispatch(setIsCheckoutError(true));
+			handleAxiosError(error);
 		}
 	};
 

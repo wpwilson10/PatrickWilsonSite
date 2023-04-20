@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./shoppingCart";
+import { logErrorToServer } from "../utils/Error/error";
 
 // The only thing you should need to do in this file is add reducers
 // See - https://redux-toolkit.js.org/tutorials/typescript
@@ -34,18 +35,27 @@ function loadFromLocalStorage() {
 
 		let state = JSON.parse(serialisedState);
 
-		// if its been more than 24 hours since last update, reinitialize
+		// basic type guard
 		if (
-			state.shoppingCart.timeStamp &&
-			Date.now() - state.shoppingCart.timeStamp > 24 * 60 * 60 * 1000
+			state &&
+			state.shoppingCart &&
+			state.shoppingCart.cart &&
+			state.shoppingCart.timeStamp
 		) {
-			return undefined;
+			// check if cart is less than 24 hours old
+			if (
+				Date.now() - state.shoppingCart.timeStamp <
+				24 * 60 * 60 * 1000
+			) {
+				// got good current data, so return state
+				return state;
+			}
 		}
 
-		// otherwise return last state
-		return state;
+		// otherwise reinitialize
+		return undefined;
 	} catch (e) {
-		console.warn(e);
+		logErrorToServer(e, "loadFromLocalStorage");
 		return undefined;
 	}
 }

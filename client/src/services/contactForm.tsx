@@ -1,11 +1,4 @@
-import axios from "axios";
 import { object, string } from "yup";
-
-/**
- * The server URL for the contact form API. This URL is set using the CONTACT_FORM_API environment variable.
- * @type {string}
- */
-const baseUrl: string = process.env.CONTACT_FORM_API!;
 
 /**
  * The interface for storing information from a contact form.
@@ -24,22 +17,6 @@ export interface IContactForm {
 	message: string;
 	recaptcha: string;
 }
-
-/**
- * postContactForm is an asynchronous function that sends a POST request to the specified URL with the data from a contact form.
- *
- * @async
- * @function
- * @param {IContactForm} newContact - The contact form data object containing a name, email, phone number, message, and recaptcha token.
- * @returns {Promise<IContactForm>} Returns a Promise that resolves to an IContactForm object representing the response data from the server.
- */
-const postContactForm = async (
-	newContact: IContactForm
-): Promise<IContactForm> => {
-	const response = await axios.post(baseUrl, newContact);
-
-	return response.data;
-};
 
 /**
  * Regular expression for phone number validation
@@ -71,5 +48,3 @@ export const schema = object({
 	}),
 	recaptcha: string(),
 });
-
-export default postContactForm;

@@ -4,11 +4,9 @@ import { useMediaQuery } from "react-responsive";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-
-import postContactForm, {
-	IContactForm,
-	schema,
-} from "../../services/contactForm";
+import axios from "axios";
+import { IContactForm, schema } from "../../services/contactForm";
+import { handleAxiosError } from "../../utils/Error/error";
 
 /**
  * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
@@ -48,12 +46,13 @@ const ContactFormRecaptcha = () => {
 
 	const onSubmit = async (data: IContactForm) => {
 		try {
-			await postContactForm(data);
+			// The server URL for the contact form API. This URL is set using the CONTACT_FORM_API environment variable.
+			const baseUrl: string = process.env.CONTACT_FORM_API!;
+			await axios.post(baseUrl, data);
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
-
-			console.log(data);
 		} catch (error) {
+			handleAxiosError(error);
 			setIsSubmissionError(true);
 			setIsSuccessfullySubmitted(false);
 			setIsRecapthcaSubmitted(false);
@@ -77,6 +76,7 @@ const ContactFormRecaptcha = () => {
 		if (formState.isSubmitSuccessful && !isSubmissionError) {
 			// isSubmitSuccessful gets wiped on reset, so remember it so we can display a success banner on reload
 			setIsSuccessfullySubmitted(true);
+			recaptchaRef.current?.reset();
 			reset();
 		}
 	}, [formState, reset, isSubmissionError]);

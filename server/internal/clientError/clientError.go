@@ -13,7 +13,7 @@ import (
 type ClientError struct {
 	Name           string `json:"name"`
 	Message        string `json:"message"`
-	ErrorStack     string `json:"errorStack"`
+	ErrorStack     string `json:"stack"`
 	ComponentStack string `json:"componentStack"`
 	Time           time.Time
 }
@@ -39,7 +39,9 @@ func SaveClientError(c *gin.Context) {
 	saveError(cliErr)
 
 	// Successful submission
-	c.Status(http.StatusOK)
+	// Successful submission for POST is 201 - Created
+	// https://www.rfc-editor.org/rfc/rfc9110.html#name-post
+	c.Status(http.StatusCreated)
 }
 
 // saveErrors writes the a client Error to a json file of client errors

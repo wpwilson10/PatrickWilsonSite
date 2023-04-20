@@ -64,8 +64,9 @@ func SaveContact(c *gin.Context) {
 	// send email response
 	html := setup.ToHTML(os.Getenv("CONTACT_FORM_TEMPLATE"), contact)
 	setup.SendEmail("WPW Contact Form Test", html)
-	// Successful submission
-	c.Status(http.StatusOK)
+	// Successful submission for POST is 201 - Created
+	// https://www.rfc-editor.org/rfc/rfc9110.html#name-post
+	c.Status(http.StatusCreated)
 }
 
 // saveContact writes the a ContactForm to a json file of ContactForms

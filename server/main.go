@@ -22,16 +22,20 @@ func main() {
 	// setup environment configuration
 	setup.EnvironmentConfig()
 
-	// get a file for logging
-	file := setup.LogFile()
-	defer file.Close()
-	// setup logger
-	setup.Logger(file)
-	// This is your test secret API key.
-	stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
+	// Check if app is not already running
+	// Don't use RunOnce because then it fight Gin for a port
+	if !setup.CheckOnce(3030) {
+		// get a file for logging
+		file := setup.LogFile()
+		defer file.Close()
+		// setup logger
+		setup.Logger(file)
+		// This is your test secret API key.
+		stripe.Key = os.Getenv("STRIPE_SECRET_KEY")
 
-	// run web server
-	server()
+		// run web server
+		server()
+	}
 }
 
 func server() {
