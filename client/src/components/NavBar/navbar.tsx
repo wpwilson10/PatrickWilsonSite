@@ -3,6 +3,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
 import { selectCartTotalQuantity, setIsOpen } from "../../store/shoppingCart";
+import { Link } from "react-router-dom";
 
 /**
  * NavRight displays a shopping cart icon with the number of items in the cart
@@ -43,22 +44,24 @@ const NavRight = () => {
 /**
  * NavLeft contains links that will render on the left side a navigation bar.
  * eventKey="#" makes collapseOnSelect work - https://stackoverflow.com/a/56485081
+ * How to get react-router-dom and bootstrap links to play nice
+ * - https://stackoverflow.com/questions/54843302/reactjs-bootstrap-navbar-and-routing-not-working-together
  *
  * @returns {JSX.Element} a react component for the left side of the NavBar
  */
 const NavLeft = () => {
 	return (
 		<Nav className="me-auto">
-			<Nav.Link eventKey="home" href="/#home">
+			<Nav.Link eventKey="home" as={Link} to="/#home">
 				Home
 			</Nav.Link>
-			<Nav.Link eventKey="about" href="/#about">
+			<Nav.Link eventKey="about" as={Link} to="/#about">
 				About
 			</Nav.Link>
-			<Nav.Link eventKey="contact" href="/contact">
+			<Nav.Link eventKey="contact" as={Link} to="/contact">
 				Contact
 			</Nav.Link>
-			<Nav.Link eventKey="shop" href="/shop">
+			<Nav.Link eventKey="shop" as={Link} to="/shop">
 				Shop
 			</Nav.Link>
 		</Nav>

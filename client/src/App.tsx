@@ -51,9 +51,9 @@ const App = () => {
 				<Container className="px-1 site-container">
 					<Suspense fallback={<LoadingSpinner />}>
 						<Routes>
+							<Route path="/" element={<Home />} />
 							<Route path="/contact" element={<ContactPage />} />
 							<Route path="/shop" element={<Shop />} />
-							<Route path="/" element={<Home />} />
 						</Routes>
 					</Suspense>
 				</Container>
