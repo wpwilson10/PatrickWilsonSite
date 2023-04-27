@@ -2,8 +2,8 @@
 
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
 	entry: "./src/index.tsx",
@@ -19,6 +19,14 @@ module.exports = {
 		}),
 		new MiniCssExtractPlugin({
 			filename: "[name].[contenthash].css",
+		}),
+		// Copy favicons and other files to dist (the default)
+		new CopyPlugin({
+			patterns: [
+				{ from: "./public/favicons" },
+				{ from: "./public/robots.txt" },
+				{ from: "./public/site.webmanifest" },
+			],
 		}),
 	],
 	resolve: {
