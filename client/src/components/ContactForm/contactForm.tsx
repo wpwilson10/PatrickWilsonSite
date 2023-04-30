@@ -8,6 +8,10 @@ import axios from "axios";
 import { handleAxiosError } from "../../utils/error";
 import { object, string } from "yup";
 
+// The server URL for the contact form API.
+const contactURL: string =
+	process.env.DOMAIN_NAME! + process.env.CONTACT_FORM_API!;
+
 /**
  * The interface for storing information from a contact form.
  *
@@ -64,9 +68,7 @@ const ContactFormRecaptcha = () => {
 
 	const onSubmit = async (data: IContactForm) => {
 		try {
-			// The server URL for the contact form API. This URL is set using the CONTACT_FORM_API environment variable.
-			const baseUrl: string = process.env.CONTACT_FORM_API!;
-			await axios.post(baseUrl, data);
+			await axios.post(contactURL, data);
 			setIsSubmissionError(false);
 			setIsSuccessfullySubmitted(false);
 		} catch (error) {

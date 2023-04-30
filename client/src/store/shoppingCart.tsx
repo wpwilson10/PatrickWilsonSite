@@ -6,9 +6,12 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import axios from "axios";
-import { handleAxiosError } from "../utils/error";
 import { IProduct, IProductList } from "../components/Product/product";
 import { formatPrice } from "../utils/price";
+import { handleAxiosError } from "../utils/error";
+
+// The server URL for the product API. This URL is set using the PRODUCT_API environment variable.
+const productURL: string = process.env.DOMAIN_NAME! + process.env.PRODUCT_API!;
 
 /**
  * Represents the shopping cart state in Redux. The cart with its array of products should
@@ -278,9 +281,8 @@ export const initializeStore = (): ThunkAction<
 		try {
 			// reset before doing async
 			dispatch(resetShop);
-			// The server URL for the product API. This URL is set using the PRODUCT_API environment variable.
-			const baseUrl: string = process.env.PRODUCT_API!;
-			const response = await axios.get(baseUrl);
+
+			const response = await axios.get(productURL);
 			// validate that we got some kind of products
 			if (
 				response &&

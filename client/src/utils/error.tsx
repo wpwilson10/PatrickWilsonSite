@@ -1,11 +1,7 @@
 import { FallbackProps } from "react-error-boundary";
 import axios from "axios";
 
-/**
- *
- * @type {string}
- */
-const baseUrl: string = process.env.ERROR_API!;
+const errorURL: string = process.env.DOMAIN_NAME! + process.env.ERROR_API!;
 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
 export interface IError {
@@ -27,7 +23,7 @@ export const logErrorBoundary = (
 	};
 
 	console.error("Error logger:" + err.message);
-	axios.post(baseUrl, err);
+	axios.post(errorURL, err);
 };
 
 export const logErrorToServer = (error: any, info: string) => {
@@ -45,7 +41,7 @@ export const logErrorToServer = (error: any, info: string) => {
 	}
 
 	try {
-		axios.post(baseUrl, err);
+		axios.post(errorURL, err);
 	} catch (error) {
 		handleAxiosError(error);
 	}

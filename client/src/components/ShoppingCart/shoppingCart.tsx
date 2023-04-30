@@ -15,6 +15,10 @@ import axios from "axios";
 import { handleAxiosError } from "../../utils/error";
 import { IProduct } from "../Product/product";
 
+// The server URL for the checkout API. This URL is set using the CHECKOUT_API environment variable.
+const checkoutURL: string =
+	process.env.DOMAIN_NAME! + process.env.CHECKOUT_API!;
+
 const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);
 	const amount = useSelector(selectCartTotalAmount);
@@ -39,10 +43,8 @@ const ShoppingCart = () => {
 		try {
 			// filter out products with quantity zero
 			const nonZeroProducts = cart.filter((value) => value.quantity > 0);
-			// The server URL for the checkout API. This URL is set using the CHECKOUT_API environment variable.
-			const baseUrl: string = process.env.CHECKOUT_API!;
 			// send to server
-			const response = await axios.post(baseUrl, nonZeroProducts);
+			const response = await axios.post(checkoutURL, nonZeroProducts);
 			// redirect to stripe
 			if (response && response.data && response.data.url) {
 				// redirect to checkout url
