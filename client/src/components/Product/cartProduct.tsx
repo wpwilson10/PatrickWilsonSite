@@ -47,6 +47,9 @@ export const CartProduct = ({ product }: { product: IProduct }) => {
 						rounded
 						className="profile-img"
 						src={product.images[0]}
+						height={64}
+						width={100}
+						alt="The product's default image"
 					></Image>
 				</Col>
 				<Col xs={9} className="d-flex justify-content-end">

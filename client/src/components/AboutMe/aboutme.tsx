@@ -25,6 +25,9 @@ const AboutMe = () => {
 						roundedCircle
 						className="profile-img"
 						src={profileImgSrc}
+						alt="Profile image of the site's creator"
+						height={360}
+						width={360}
 					></Image>
 				</Col>
 				<Col xs={12} md={9}>

@@ -61,6 +61,9 @@ export const Product = ({ product }: { product: IProduct }) => {
 						rounded
 						className="profile-img"
 						src={product.images[0]}
+						height={144}
+						width={256}
+						alt="The product's default image"
 					></Image>
 				</Col>
 				<Col xs={12} md={9}>
