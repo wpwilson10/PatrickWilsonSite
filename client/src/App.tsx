@@ -7,7 +7,7 @@ import { useAppDispatch } from "./store/store";
 import { setIsOpen } from "./store/shoppingCart";
 import LoadingSpinner from "./components/LoadingSpinner/spinner";
 import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallback, logErrorBoundary } from "./utils/Error/error";
+import { ErrorFallback, logErrorBoundary } from "./utils/error";
 
 const Home = lazy(() => import("./components/Home/home"));
 const ContactPage = lazy(() => import("./components/ContactInfo/contactInfo"));

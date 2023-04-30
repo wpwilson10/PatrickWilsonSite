@@ -5,7 +5,7 @@ import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import axios from "axios";
-import { handleAxiosError } from "../../utils/Error/error";
+import { handleAxiosError } from "../../utils/error";
 import { object, string } from "yup";
 
 /**

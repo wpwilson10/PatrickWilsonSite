@@ -6,7 +6,7 @@ import {
 } from "@reduxjs/toolkit";
 import { RootState } from "./store";
 import axios from "axios";
-import { handleAxiosError } from "../utils/Error/error";
+import { handleAxiosError } from "../utils/error";
 import { IProduct, IProductList } from "../components/Product/product";
 import { formatPrice } from "../utils/price";
 

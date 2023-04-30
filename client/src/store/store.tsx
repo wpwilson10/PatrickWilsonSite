@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./shoppingCart";
-import { logErrorToServer } from "../utils/Error/error";
+import { logErrorToServer } from "../utils/error";
 
 // The only thing you should need to do in this file is add reducers
 // See - https://redux-toolkit.js.org/tutorials/typescript

@@ -12,7 +12,7 @@ import {
 	setIsOpen,
 } from "../../store/shoppingCart";
 import axios from "axios";
-import { handleAxiosError } from "../../utils/Error/error";
+import { handleAxiosError } from "../../utils/error";
 import { IProduct } from "../Product/product";
 
 const ShoppingCart = () => {

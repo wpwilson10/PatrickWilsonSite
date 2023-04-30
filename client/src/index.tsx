@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import { store } from "./store/store";
-import { logErrorToServer } from "./utils/Error/error";
+import { logErrorToServer } from "./utils/error";
 
 // React 18
 const container = document.getElementById("root") as HTMLElement;
