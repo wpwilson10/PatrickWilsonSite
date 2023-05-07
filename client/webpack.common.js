@@ -39,6 +39,8 @@ module.exports = {
 				use: "ts-loader",
 				exclude: /node_modules/,
 			},
+			// Allow loading images
+			// https://webpack.js.org/guides/asset-management/#loading-images and https://stackoverflow.com/a/66251201
 			{
 				test: /\.(png|svg|jpg|jpeg|gif)$/i,
 				type: "asset/resource",

@@ -24,7 +24,7 @@
   },
   "scripts": {
     "dev": "webpack --config webpack.dev.js",
-    "prd": "webpack --config webpack.prd.js"
+    "prd": "webpack --config webpack.prod.js"
   },
   "eslintConfig": {
     "extends": [
