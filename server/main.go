@@ -1,9 +1,7 @@
 package main
 
 import (
-	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/gin-contrib/cors"
@@ -60,9 +58,11 @@ func server() {
 	router.Use(static.Serve("/", static.LocalFile(os.Getenv("CLIENT_FILE_DIRECTORY"), true)))
 	// Default route when accessing site. Serves index.html and javascript file
 	router.NoRoute(func(c *gin.Context) {
-		if !strings.HasPrefix(c.Request.RequestURI, "/api") {
-			c.File(filepath.Join(os.Getenv("CLIENT_FILE_DIRECTORY"), "index.html"))
-			c.Status(http.StatusOK)
+		println(c.Request.URL.Path)
+		if !strings.HasPrefix(c.Request.URL.Path, "/api") {
+			// better handling, just redirect to home
+			c.Request.URL.Path = "/"
+			router.HandleContext(c)
 		}
 		//default 404 page not found
 	})

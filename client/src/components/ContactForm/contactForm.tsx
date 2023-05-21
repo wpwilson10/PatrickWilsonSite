@@ -214,9 +214,7 @@ const ContactFormRecaptcha = () => {
 							/>
 						) : (
 							<ReCAPTCHA
-								sitekey={
-									"6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-								}
+								sitekey={process.env.RECAPTCHA_SITE_KEY!}
 								ref={recaptchaRef}
 								onChange={onChange}
 								size="normal"
