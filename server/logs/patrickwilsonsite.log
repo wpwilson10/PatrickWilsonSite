@@ -87,3 +87,4 @@ time="2023-04-26T20:42:28-05:00" level=info msg="PatrickWilsonSite server starti
 time="2023-04-26T21:46:13-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server
 time="2023-04-30T12:29:29-05:00" level=info msg="Saved contact form" application= function=contactForm.saveContact
 time="2023-04-30T12:29:30-05:00" level=info msg="Email sent with subject: WPW Contact Form Test" application= function=setup.SendEmail
+time="2023-05-13T12:20:39-05:00" level=info msg="PatrickWilsonSite server starting" application= function=main.server

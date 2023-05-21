@@ -1,3 +1,16 @@
+/**
+ * The Product component that displays a product item in the shop page.
+ *
+ * This component displays a product item with its image, name, price, and description.
+ * The component also allows the user to add the product to the shopping cart. The component
+ * uses redux actions to update the state of the shopping cart accordingly.
+ *
+ * @component
+ * @param {Object} props The props passed to the component.
+ * @param {IProduct} props.product The product object to display in the shop page.
+ * @returns {ReactElement} The Product component.
+ */
+
 import { Button, Col, Container, Row, Image } from "react-bootstrap";
 import { useAppDispatch } from "../../store/store";
 import { incrementQuantity, setIsOpen } from "../../store/shoppingCart";
@@ -39,6 +52,7 @@ export interface IProductList {
 	products: IProduct[];
 }
 
+// Define the Product component
 export const Product = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type

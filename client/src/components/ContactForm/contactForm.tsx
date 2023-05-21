@@ -1,3 +1,17 @@
+/**
+ * The ContactFormRecaptcha component displays a form that allows users to send a message to the website owner.
+ *
+ * This component displays a form with fields for the user's name, email, phone number, and a message.
+ * The form also includes reCAPTCHA for added security against bots. Once the user submits the form,
+ * the message is sent to the website owner's email address using a specified email server.
+ * After submitting the form, the component will display a success or error message depending on
+ * the result of the submission.
+ *
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} The ContactFormRecaptcha component.
+ */
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useMediaQuery } from "react-responsive";
@@ -15,7 +29,7 @@ const contactURL: string =
 /**
  * The interface for storing information from a contact form.
  *
- * @typedef {Object} IContactForm
+ * @type {Object}
  * @property {string} name - The name of the person submitting the contact form.
  * @property {string} email - The email address of the person submitting the contact form.
  * @property {string} phoneNumber - The phone number of the person submitting the contact form.
@@ -30,17 +44,6 @@ export interface IContactForm {
 	recaptcha: string;
 }
 
-/**
- * The `ContactFormRecaptcha` component displays a form that allows users to send a message to the website owner.
- *
- * This component displays a form with fields for the user's name, email, phone number, and a message.
- * The form also includes reCAPTCHA for added security against bots. Once the user submits the form,
- * the message is sent to the website owner's email address using a specified email server.
- * After submitting the form, the component will display a success or error message depending on
- * the result of the submission.
- *
- * @returns {JSX.Element} The ContactFormRecaptcha component.
- */
 const ContactFormRecaptcha = () => {
 	// track form submission success or error
 	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =

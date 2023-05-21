@@ -1,3 +1,17 @@
+/**
+ * The ShoppingCart component that displays an off-canvas sidebar with the shopping cart items and checkout button.
+ *
+ * This component displays an off-canvas sidebar that can be toggled by clicking on the shopping cart icon in the navigation bar.
+ * The sidebar shows the products that have been added to the cart, their quantities, and their prices. The sidebar also shows
+ * the total number of items and the total amount of the cart. The component allows the user to checkout by sending a POST request
+ * to the server with the cart items and redirecting to the Stripe checkout URL. The component uses redux actions to update the state
+ * of the shopping cart and handle checkout events.
+ *
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} The ShoppingCart component.
+ */
+
 import { Button, Col, Offcanvas, Row, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../../store/store";
@@ -19,6 +33,7 @@ import { IProduct } from "../Product/product";
 const checkoutURL: string =
 	process.env.DOMAIN_NAME! + process.env.CHECKOUT_API!;
 
+// Define the ShoppingCart component
 const ShoppingCart = () => {
 	const cart = useSelector(selectCartProducts);
 	const amount = useSelector(selectCartTotalAmount);

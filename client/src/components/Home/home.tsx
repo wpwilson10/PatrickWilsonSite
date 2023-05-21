@@ -1,3 +1,15 @@
+/**
+ * The Home component that renders the main content of the home page.
+ *
+ * This component displays the main content of the home page, including a title,
+ * a brief description, and some additional sections with information about the
+ * developer (AboutMe) and contact information (ContactInfo).
+ *
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} The rendered home page content.
+ */
+
 import { useEffect } from "react";
 import { Container } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
@@ -5,22 +17,12 @@ import { scroller } from "react-scroll";
 import AboutMe from "../AboutMe/aboutme";
 import { ContactInfo } from "../ContactInfo/contactInfo";
 
-/**
- * The Home component that renders the main content of the home page.
- * @function
- * @returns {JSX.Element} The rendered home page content.
- *
- * @description
- * This component displays the main content of the home page, including a title,
- * a brief description, and some additional sections with information about the
- * developer (AboutMe) and contact information (ContactInfo). The component also
- * includes code to enable smooth scrolling to a specific section of the page based
- * on the URL hash value. The smooth scrolling code is based on the solution provided
- * in this Stack Overflow post: https://stackoverflow.com/questions/61779236/how-to-navigate-to-another-page-with-a-smooth-scroll-on-a-specific-id-with-react.
- */
+// Define the Home component
 const Home = () => {
 	const location = useLocation();
 
+	// The smooth scrolling code based on
+	// https://stackoverflow.com/questions/61779236/how-to-navigate-to-another-page-with-a-smooth-scroll-on-a-specific-id-with-react.
 	useEffect(() => {
 		if (location.hash) {
 			scroller.scrollTo(location.hash.slice(1), {

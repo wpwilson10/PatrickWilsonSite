@@ -1,10 +1,23 @@
+/**
+ * The store module that configures and exports the Redux store for the application.
+ *
+ * This module creates a Redux store using the configureStore function from Redux Toolkit.
+ * The store holds the state of the shopping cart slice, which is currently the only slice in this application.
+ * The module also defines and exports some utility types and hooks for accessing the store state and dispatching actions.
+ * The module also implements some functions for saving and loading the store state to and from localStorage,
+ * so that the shopping cart state can be persisted across browser sessions. The localStorage state is only valid
+ * for 24 hours, after which it is reinitialized.
+ *
+ * The only thing you should need to do in this file is add reducers.
+ * See - https://redux-toolkit.js.org/tutorials/typescript
+ *
+ * @module store
+ */
+
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./shoppingCart";
 import { logErrorToServer } from "../utils/error";
-
-// The only thing you should need to do in this file is add reducers
-// See - https://redux-toolkit.js.org/tutorials/typescript
 
 /**
  * The centralized redux store object that holds the entire state tree of the application.
@@ -14,8 +27,22 @@ export const store = configureStore({
 	preloadedState: loadFromLocalStorage(),
 });
 
-// convert object to string and store in localStorage
+// Have the store update the browser's local storage when it is changed.
 // https://stackoverflow.com/questions/68421040/local-storage-using-redux-toolkit
+store.subscribe(() => saveToLocalStorage(store.getState()));
+
+/**
+ * A function that converts an object to a string and stores it in localStorage.
+ *
+ * This function serializes the given state object using JSON.stringify and stores it in localStorage
+ * under the key "store". This function is used to persist the Redux store state across browser sessions.
+ * If an error occurs during serialization or storage, the function logs a warning to the console.
+ *
+ * https://stackoverflow.com/questions/68421040/local-storage-using-redux-toolkit
+ *
+ * @function
+ * @param {RootState} state - The state object to be stored in localStorage.
+ */
 function saveToLocalStorage(state: RootState) {
 	try {
 		const serialisedState = JSON.stringify(state);
@@ -25,9 +52,20 @@ function saveToLocalStorage(state: RootState) {
 	}
 }
 
-// load string from localStarage and convert into an Object
-// invalid output must be undefined
-// https://stackoverflow.com/questions/68421040/local-storage-using-redux-toolkit
+/**
+ * A function that loads a string from localStorage and converts it into an object.
+ *
+ * This function retrieves the string stored in localStorage under the key "store" and parses it
+ * using JSON.parse. The function returns the parsed object as the initial state for the Redux store.
+ * If the string is null, invalid, or expired (older than 24 hours), the function returns undefined,
+ * which causes the store to be reinitialized. If an error occurs during parsing or retrieval, the
+ * function logs the error to the server and returns undefined.
+ *
+ * // https://stackoverflow.com/questions/68421040/local-storage-using-redux-toolkit
+ *
+ * @function
+ * @returns {RootState | undefined} The initial state object for the Redux store, or undefined if none is found or valid.
+ */
 function loadFromLocalStorage() {
 	try {
 		const serialisedState = localStorage.getItem("store");
@@ -59,9 +97,6 @@ function loadFromLocalStorage() {
 		return undefined;
 	}
 }
-
-// https://stackoverflow.com/questions/68421040/local-storage-using-redux-toolkit
-store.subscribe(() => saveToLocalStorage(store.getState()));
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 // https://redux-toolkit.js.org/tutorials/typescript#define-root-state-and-dispatch-types

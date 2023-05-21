@@ -1,3 +1,16 @@
+/**
+ * The Shop component that displays the shop page with all products and the shopping cart.
+ *
+ * This component displays a list of products that can be added to the shopping cart. The component
+ * also displays feedback notifications for successful or unsuccessful checkout or setup. The component
+ * uses redux actions to initialize the store, update the cart state, and handle checkout events. The component
+ * also uses lazy loading and suspense to load the product components only when needed.
+ *
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} The Shop component.
+ */
+
 import { Suspense, lazy, useEffect } from "react";
 import { Alert, Container } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -15,13 +28,10 @@ import {
 import LoadingSpinner from "../LoadingSpinner/spinner";
 import { IProduct } from "../Product/product";
 
+// Lazy load the Product component
 const Product = lazy(() => import("../Product/product"));
 
-/**
- * Renders the Shop page which displays all products and the shopping cart.
- *
- * @returns {JSX.Element} The Shop page component.
- */
+// Define the Shop component
 const Shop = () => {
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type

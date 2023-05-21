@@ -1,3 +1,14 @@
+/**
+ * NavBar is the main navigation bar component for the website and
+ * contains two components for the left and right side of the navigation bar.
+ * It also has properties for collapsing on select, expanding to large viewports,
+ * using a dark variant, and being fixed to the top of the viewport.
+ *
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} a react component for the NavBar
+ */
+
 import { Badge, Container, Nav, Navbar } from "react-bootstrap";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
@@ -5,11 +16,34 @@ import { useAppDispatch } from "../../store/store";
 import { selectCartTotalQuantity, setIsOpen } from "../../store/shoppingCart";
 import { Link } from "react-router-dom";
 
+// Define the NavBar component
+const NavBar = () => {
+	return (
+		<Navbar
+			collapseOnSelect={true}
+			expand="lg"
+			className="navbar"
+			variant="dark"
+			fixed="top"
+		>
+			<Container fluid>
+				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+				<Navbar.Collapse id="responsive-navbar-nav">
+					<NavLeft />
+				</Navbar.Collapse>
+				<NavRight />
+			</Container>
+		</Navbar>
+	);
+};
+
 /**
  * NavRight displays a shopping cart icon with the number of items in the cart
  * which will render on the right side a navigation bar
  *
- * @returns {JSX.Element} a react component for the right side of the NavBar
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} a react component for the right side of the NavBar
  */
 const NavRight = () => {
 	const quantity = useSelector(selectCartTotalQuantity);
@@ -47,7 +81,9 @@ const NavRight = () => {
  * How to get react-router-dom and bootstrap links to play nice
  * - https://stackoverflow.com/questions/54843302/reactjs-bootstrap-navbar-and-routing-not-working-together
  *
- * @returns {JSX.Element} a react component for the left side of the NavBar
+ * @component
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {ReactElement} a react component for the left side of the NavBar
  */
 const NavLeft = () => {
 	return (
@@ -65,34 +101,6 @@ const NavLeft = () => {
 				Shop
 			</Nav.Link>
 		</Nav>
-	);
-};
-
-/**
- * NavBar is the main navigation bar component for the website and
- * contains two components for the left and right side of the navigation bar.
- * It also has properties for collapsing on select, expanding to large viewports,
- * using a dark variant, and being fixed to the top of the viewport.
- *
- * @returns {JSX.Element} a react component for the NavBar
- */
-const NavBar = () => {
-	return (
-		<Navbar
-			collapseOnSelect={true}
-			expand="lg"
-			className="navbar"
-			variant="dark"
-			fixed="top"
-		>
-			<Container fluid>
-				<Navbar.Toggle aria-controls="responsive-navbar-nav" />
-				<Navbar.Collapse id="responsive-navbar-nav">
-					<NavLeft />
-				</Navbar.Collapse>
-				<NavRight />
-			</Container>
-		</Navbar>
 	);
 };
 

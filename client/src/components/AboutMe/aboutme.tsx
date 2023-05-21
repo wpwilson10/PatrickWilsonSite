@@ -1,21 +1,22 @@
-import { Col, Container, Image, Row } from "react-bootstrap";
-// Use import for images so webpack handles it
-import profileImgSrc from "../../images/profile.jpg";
-
 /**
  * The AboutMe component that renders information about the developer.
  *
- * @function
- * @returns {JSX.Element} The rendered section with the developer's profile image and description.
- *
- * @description
  * This component displays a section with the developer's profile image and a brief
  * description of their background or experience. The component uses the `react-bootstrap`
  * library to display the content in a responsive layout. The profile image is displayed
  * as a circular image using the `Image` component.
  * The component also includes an `id` attribute for the section, which can
  * be used to link to this section from other parts of the page.
+ *
+ * @function
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @return {ReactElement} The rendered section with the developer's profile image and description.
  */
+
+import { Col, Container, Image, Row } from "react-bootstrap";
+// Use import for images so webpack handles it
+import profileImgSrc from "../../images/profile.jpg";
+
 const AboutMe = () => {
 	return (
 		<Container id="about" className="content-container mb-3 py-3 px-3">

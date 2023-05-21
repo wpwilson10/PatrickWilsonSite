@@ -32,6 +32,8 @@ The below items should be updated for your copies of the site.
 -   Contact Info
     -   Links to various social medias and communication options
     -   GITHUB_LINK, LINKEDIN_LINK, EMAIL_ADDRESS in .env files
+-   About Me and Home page text
+    -   Text shown in those components live in the aboutme.tsx and home.tsx files respectively
 -   reCAPTCHA site key - Spam protection. [Sign up here](https://developers.google.com/recaptcha) - RECAPTCHA_SITE_KEY in .env files
     The below items may be updated if desired.
 -   APIs
@@ -113,7 +115,7 @@ You can find more information about the `tsconfig.json` file and its options on 
 
 ## webpack.common.js
 
-> Webpack turns source code into final files that can be used by the client. This shared config file uses fairly simple and stardard options. You may need to update if you change up the names or locations of project files.
+> Webpack turns source code into final files that can be used by the client. This shared config file uses fairly simple and stardard options. It is referenced when running `npm run dev` or `npm run prod` commands. You may need to update if you change up the names or locations of project files.
 
 The `webpack.common.js` file is a shared configuration file that contains common options for Webpack, a module bundler for JavaScript and TypeScript applications. It is used by Webpack to bundle your `.js`, `.ts` and `.tsx` files into one or more output files that can run in the browser or Node.js. This file is setup based on [Webpack's Getting Started guide](https://webpack.js.org/guides/getting-started/) and [Webpack's Typescript documentation](https://webpack.js.org/guides/typescript/).
 
@@ -156,7 +158,7 @@ For all configuration options, please see the [plugin documentation](https://web
 
 ## webpack.dev.js
 
-> This webpack configuration file is used with running `npm run dev` as specified in `package.json`. It tells webpack to use the dev.env file with the testing configuration options.
+> Webpack turns source code into final files that can be used by the client. This webpack configuration file is used with running `npm run dev` as specified in `package.json`. It tells webpack to use the dev.env file with the testing configuration options.
 
 The `webpack.dev.js` file is a configuration file that contains development-specific options for Webpack, a module bundler for JavaScript and TypeScript applications. It is used by Webpack to bundle your `.js`, `.ts` and `.tsx` files into one or more output files that can run in the browser or Node.js in development mode.
 
@@ -193,7 +195,7 @@ You can find more information about the `dotenv-webpack` plugin and its options 
 
 ## webpack.prod.js
 
-> This webpack configuration file is used with running `npm run prod` as specified in `package.json`. It tells webpack to use the prod.env file with the live production configuration options.
+> Webpack turns source code into final files that can be used by the client. This webpack configuration file is used with running `npm run prod` as specified in `package.json`. It tells webpack to use the prod.env file with the live production configuration options.
 
 The `webpack.prod.js` file is a configuration file for Webpack that is used to build and optimize the production version of a React application. The `webpack.prod.js` file usually extends from a common webpack configuration file (`webpack.common.js`) that contains the shared settings for both development and production environments It contains settings and plugins that are specific to the production environment, such as:
 
@@ -212,8 +214,6 @@ You can find more information about the `webpack.prod.js` file and its options a
 The CompressionPlugin is a webpack plugin that prepares compressed versions of assets to serve them with Content-Encoding. It can compress files using various algorithms such as gzip, brotli, zopfli, etc. It can improve the performance and bandwidth of your application by reducing the size of the assets.
 
 For all configuration options, please see the [plugin documentation](https://webpack.js.org/plugins/compression-webpack-plugin/).
-
-A possible answer is:
 
 ### Terser Plugin
 

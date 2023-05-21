@@ -18,15 +18,30 @@ const ShoppingCart = lazy(
 
 /**
  * The main application component that renders the navigation bar and routes.
- * @function
- * @returns {JSX.Element} The rendered application component.
  *
- * @description
- * This component renders a container with a navigation bar (NavBar) and a set of routes.
+ * This component renders a container with a navigation bar (NavBar) and a set of routes using react-router-dom.
  * The NavBar component should be updated to include any new routes added to the application.
  * The NavBar component goes outside the container to make it full size, while the Routes
  * component goes inside the container to ensure that later calls to components are also
  * inside the container.
+ *
+ * The component also uses react-bootstrap to style the container elements.
+ *
+ * The component wraps the container with an ErrorBoundary component from react-error-boundary,
+ * which catches any errors that occur in the child component tree and renders a fallback UI
+ * using ErrorFallback component from utils/error. The ErrorBoundary component also logs the errors
+ * to the server using logErrorBoundary function from utils/error.
+ *
+ * The component uses lazy loading and Suspense from React to dynamically import and render the components
+ * for each route, such as Home, ContactPage, Shop, and ShoppingCart for performance improvements.
+ *
+ * The ShoppingCart component is rendered
+ * outside the Routes component as a sidebar that shows the selected products.
+ *
+ * @module app
+ * @component App
+ * @param {Object} props The props passed to the component. (Currently empty)
+ * @returns {JSX.Element} - The rendered App component.
  */
 const App = () => {
 	// useAppDispatch to make typescript happy with thunks
@@ -38,18 +53,24 @@ const App = () => {
 	}, [dispatch]);
 
 	return (
+		// wrapper that attempts to catch errors and render a fallback UI if something fails
 		<ErrorBoundary
 			FallbackComponent={ErrorFallback}
 			onError={logErrorBoundary}
 			onReset={() => {
-				// super dumb reload
-				// window.location.reload();
+				// currently do nothing
+				// basic recovery option - window.location.reload();
 			}}
 		>
+			{/* Basic container that contains the body of the website */}
 			<Container fluid className="px-1 py-3 body-container">
+				{/* Navigation tool bar */}
 				<NavBar />
+				{/* Container that will be populated by content */}
 				<Container className="px-1 site-container">
+					{/* While loading, display a spinner animation */}
 					<Suspense fallback={<LoadingSpinner />}>
+						{/* When a link is selected from NavBar, load into that page */}
 						<Routes>
 							<Route path="/" element={<Home />} />
 							<Route path="/contact" element={<ContactPage />} />

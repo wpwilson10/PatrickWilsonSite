@@ -19,7 +19,10 @@ const productURL: string = process.env.DOMAIN_NAME! + process.env.PRODUCT_API!;
  * the quantity to be greater than zero. The shop component then references this list of products
  * and shows everything despite the quantity listed.
  *
- * @typedef {Object} ShoppingCartState
+ * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
+ * https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
+ *
+ * @type {Object}
  * @property {IProduct[]} cart - The array of products in the shopping cart.
  * @property {number} totalAmount - The sum total price of products in the shopping cart.
  * @property {number} totalQuantity - The total quantity of products in the shopping cart.
@@ -28,9 +31,6 @@ const productURL: string = process.env.DOMAIN_NAME! + process.env.PRODUCT_API!;
  * @property {boolean} isCheckoutSuccess - True if checkout completed successfully, false otherwise.
  * @property {boolean} isSetupError - True if store setup encountered an errors, false otherwise.
  * @property {Date} timeStamp - Time of last update to the cart. Used to expire cart after some duration.
- *
- * Typescript + Redux wants an explicit state type and initialization for correct type inferrence
- *  https://redux-toolkit.js.org/usage/usage-with-typescript#defining-the-initial-state-type
  */
 type ShoppingCartState = {
 	cart: IProduct[];
@@ -74,7 +74,7 @@ export interface cartProduct {
 /**
  * A Redux slice for managing the shopping cart state
  *
- * @typedef {Object} ShoppingCartSlice
+ * @type {Object}
  * @property {string} name - The slice name, "shoppingCart"
  * @property {ShoppingCartState} initialState - The initial empty state of the shopping cart slice
  * @property {Object} reducers - An object containing the reducer functions for updating the shopping cart state
@@ -270,7 +270,14 @@ export const selectIsSetupError = (state: RootState): boolean => {
 	return state.shoppingCart.isSetupError;
 };
 
-// https://redux.js.org/usage/usage-with-typescript#type-checking-redux-thunks
+/**
+ * A thunk action creator that initializes the shopping cart state by fetching the products from the server and adding them to the cart.
+ *
+ * https://redux.js.org/usage/usage-with-typescript#type-checking-redux-thunks
+ *
+ * @function
+ * @returns {ThunkAction<void, RootState, unknown, AnyAction>} A redux thunk action that dispatches other actions to update the shopping cart state.
+ */
 export const initializeStore = (): ThunkAction<
 	void,
 	RootState,

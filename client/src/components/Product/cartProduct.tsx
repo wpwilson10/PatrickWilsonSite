@@ -1,3 +1,17 @@
+/**
+ * The CartProduct component that displays a product item in the shopping cart.
+ *
+ * This component displays a product item with its image, name, price, and quantity.
+ * The component also allows the user to increment or decrement the quantity of the product,
+ * or remove the product from the cart. The component uses redux actions to update the state
+ * of the shopping cart accordingly.
+ *
+ * @component
+ * @param {Object} props The props passed to the component.
+ * @param {IProduct} props.product The product object to display in the cart.
+ * @returns {ReactElement} The CartProduct component.
+ */
+
 import { Button, Col, Container, Row, Image, Stack } from "react-bootstrap";
 import { useAppDispatch } from "../../store/store";
 import {
@@ -8,6 +22,7 @@ import {
 import { IProduct } from "./product";
 import { formatPrice } from "../../utils/price";
 
+// Define the CartProduct component
 export const CartProduct = ({ product }: { product: IProduct }) => {
 	// useAppDispatch to make typescript happy with thunks
 	// https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-dispatch-type

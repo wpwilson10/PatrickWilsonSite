@@ -1,9 +1,35 @@
+/**
+ * The error module that provides utility functions and components for handling and logging errors in the application.
+ *
+ * This module exports several functions and components for dealing with errors that may occur during the execution of the application.
+ * The module uses axios to send error information to a server API, which is specified by the ERROR_API environment variable.
+ * The module also exports a React component that renders a fallback UI when an error boundary catches an error in a child component tree.
+ *
+ * @module error
+ */
+
 import { FallbackProps } from "react-error-boundary";
 import axios from "axios";
 
 const errorURL: string = process.env.DOMAIN_NAME! + process.env.ERROR_API!;
 
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+/**
+ * An interface that represents an error object with some additional properties.
+ *
+ * This interface extends the built-in Error interface with two optional properties: stack and componentStack.
+ * The stack property is a non-standard property that should be supported by most browsers, and it contains
+ * a stack trace of where the error occurred. The componentStack property is used by react error boundary,
+ * and it contains information about which component threw the error.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error
+ *
+ * @interface IError
+ * @property {string} name - The name of the error, such as "TypeError".
+ * @property {string} message - The message associated with the error, such as "Cannot read property 'foo' of undefined".
+ * @property {string} [stack] - The stack trace of where the error occurred, if available.
+ * @property {string} [componentStack] - The component stack of where the error occurred, if available.
+ */
+
 export interface IError {
 	name: string;
 	message: string;
@@ -11,6 +37,18 @@ export interface IError {
 	componentStack: string | undefined; // Used by react error boundary
 }
 
+/**
+ * A function that logs an error and its component stack to the server using axios.
+ *
+ * This function takes an error object and an info object that contains a componentStack property,
+ * and creates an IError object with these properties. The function then sends a POST request to
+ * the error API with the IError object as the data. The function also logs the error message to
+ * the console using console.error.
+ *
+ * @function
+ * @param {Error} error - The error object to be logged.
+ * @param {{componentStack: string}} info - An object that contains a componentStack property with information about which component threw the error.
+ */
 export const logErrorBoundary = (
 	error: Error,
 	info: { componentStack: string }
@@ -26,6 +64,17 @@ export const logErrorBoundary = (
 	axios.post(errorURL, err);
 };
 
+/**
+ * A function that logs any kind of error to the server using axios, and adds some additional information if it is an instance of Error.
+ *
+ * This function takes an error object and a string that provides some context or information about where or why the error occurred.
+ * The function then sends a POST request to the error API with the IError object as the data. If another error occurs during this request,
+ * the function calls handleAxiosError to handle it. The function also logs the IError message to the console using console.error.
+ *
+ * @function
+ * @param {any} error - The error object to be logged.
+ * @param {string} info - A string that provides some context or information about where or why the error occurred.
+ */
 export const logErrorToServer = (error: any, info: string) => {
 	let err: IError = {
 		name: "Unknown error",
@@ -49,7 +98,18 @@ export const logErrorToServer = (error: any, info: string) => {
 	console.error(err.message);
 };
 
-// Library recommended in official docs - https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
+/**
+ * A React component that renders a fallback UI when an error boundary catches an error in a child component tree.
+ *
+ * The component renders a div element with an alert role, a paragraph element with the error message,
+ * and a button element that calls resetErrorBoundary when clicked.
+ *
+ * Library recommended in official docs - https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary
+ *
+ * @component ErrorFallback
+ * @param {IError} error - An IError object that contains information about the error that occurred.
+ * @param {() => void} resetErrorBoundary - A function that can be called to reset the state of the error boundary and retry rendering its children.
+ */
 export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	return (
 		<div role="alert">
@@ -60,6 +120,19 @@ export function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
 	);
 }
 
+/**
+ * A function that handles any kind of axios errors and logs them to the console and server for later debugging.
+ *
+ * This function takes an error object and checks if it is an instance of AxiosError using axios.isAxiosError method.
+ * If it is an AxiosError, it means that there was a problem with making or receiving an axios request, and it may contain
+ * information about the request, response, or config. The function logs these information using console.warn method.
+ * If it is not an AxiosError, it means that there was another kind of problem with setting up or executing an axios request,
+ * such as network errors or invalid parameters. The function logs these errors using console.error method, and also calls
+ * logErrorToServer function to send them to the server API.
+ *
+ * @function handleAxiosError
+ * @param {any} error - The error object to be handled.
+ */
 export function handleAxiosError(error: any) {
 	// https://axios-http.com/docs/handling_errors
 	if (axios.isAxiosError(error)) {
