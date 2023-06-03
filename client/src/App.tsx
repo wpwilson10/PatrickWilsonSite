@@ -8,6 +8,7 @@ import { setIsOpen } from "./store/shoppingCart";
 import LoadingSpinner from "./components/LoadingSpinner/spinner";
 import { ErrorBoundary } from "react-error-boundary";
 import { ErrorFallback, logErrorBoundary } from "./utils/error";
+import Map from "./components/Map/map";
 
 const Home = lazy(() => import("./components/Home/home"));
 const ContactPage = lazy(() => import("./components/ContactInfo/contactInfo"));
@@ -75,6 +76,7 @@ const App = () => {
 							<Route path="/" element={<Home />} />
 							<Route path="/contact" element={<ContactPage />} />
 							<Route path="/shop" element={<Shop />} />
+							<Route path="/map" element={<Map />} />
 						</Routes>
 					</Suspense>
 				</Container>
