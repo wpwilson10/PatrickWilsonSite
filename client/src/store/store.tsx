@@ -17,13 +17,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./shoppingCart";
+import mapReducer from "./map";
 import { logErrorToServer } from "../utils/error";
 
 /**
  * The centralized redux store object that holds the entire state tree of the application.
  */
 export const store = configureStore({
-	reducer: { shoppingCart: shoppingCartReducer },
+	reducer: { shoppingCart: shoppingCartReducer, map: mapReducer },
 	preloadedState: loadFromLocalStorage(),
 });
 

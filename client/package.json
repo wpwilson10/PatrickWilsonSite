@@ -5,6 +5,7 @@
 	"private": true,
 	"dependencies": {
 		"@hookform/resolvers": "^2.9.10",
+		"@react-google-maps/api": "^2.18.1",
 		"@reduxjs/toolkit": "^1.8.1",
 		"@types/react": "^17.0.44",
 		"axios": "^0.26.1",
