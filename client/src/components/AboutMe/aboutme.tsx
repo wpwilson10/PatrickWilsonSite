@@ -15,7 +15,7 @@
 
 import { Col, Container, Image, Row } from "react-bootstrap";
 // Use import for images so webpack handles it
-import profileImgSrc from "../../images/profile.jpg";
+import profileImgSrc from "../../../public/images/profile_square_small.jpg";
 
 const AboutMe = () => {
 	return (
@@ -26,7 +26,7 @@ const AboutMe = () => {
 						roundedCircle
 						className="profile-img"
 						src={profileImgSrc}
-						alt="Profile image of the site's creator"
+						alt="Profile image of the site's owner"
 						height={360}
 						width={360}
 					></Image>

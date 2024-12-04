@@ -28,7 +28,7 @@ The below items should be updated for your copies of the site.
     -   Files live in /public
     -   Examples created using [favicon.io](https://favicon.io/favicon-converter/)
 -   Profile image
-    -   Hard coded to /src/images/profile.jpg
+    -   Hard coded to /public/images/profile_square_small.jpg
 -   Contact Info
     -   Links to various social medias and communication options
     -   GITHUB_LINK, LINKEDIN_LINK, EMAIL_ADDRESS in .env files

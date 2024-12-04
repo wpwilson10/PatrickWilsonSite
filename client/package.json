@@ -6,7 +6,6 @@
 	"dependencies": {
 		"@hookform/resolvers": "^2.9.10",
 		"@reduxjs/toolkit": "^1.8.1",
-		"@types/react": "^17.0.44",
 		"axios": "^0.26.1",
 		"react": "^18.2.0",
 		"react-bootstrap": "^2.4.0",
@@ -45,6 +44,7 @@
 		]
 	},
 	"devDependencies": {
+		"@types/react": "^17.0.44",
 		"@types/react-dom": "^18.0.0",
 		"@types/react-google-recaptcha": "^2.1.5",
 		"@types/react-scroll": "^1.8.6",
