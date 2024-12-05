@@ -100,6 +100,9 @@ const NavLeft = () => {
 			<Nav.Link eventKey="shop" as={Link} to="/shop">
 				Shop
 			</Nav.Link>
+			<Nav.Link eventKey="lights" as={Link} to="/lights">
+				Lights
+			</Nav.Link>
 		</Nav>
 	);
 };
