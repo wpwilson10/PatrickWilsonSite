@@ -8,22 +8,28 @@
  * so that the shopping cart state can be persisted across browser sessions. The localStorage state is only valid
  * for 24 hours, after which it is reinitialized.
  *
- * The only thing you should need to do in this file is add reducers.
+ * The only thing you should need to do in this file is add reducers to the rootReducer.
  * See - https://redux-toolkit.js.org/tutorials/typescript
  *
  * @module store
  */
 
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import shoppingCartReducer from "./shoppingCart";
 import { logErrorToServer } from "../utils/error";
 
 /**
+ * The reducer object that defines how to update data in the store.
+ * https://redux-toolkit.js.org/usage/usage-with-typescript#getting-the-state-type
+ */
+const rootReducer = combineReducers({ shoppingCart: shoppingCartReducer });
+
+/**
  * The centralized redux store object that holds the entire state tree of the application.
  */
 export const store = configureStore({
-	reducer: { shoppingCart: shoppingCartReducer },
+	reducer: rootReducer,
 	preloadedState: loadFromLocalStorage(),
 });
 
@@ -100,7 +106,7 @@ function loadFromLocalStorage() {
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 // https://redux-toolkit.js.org/tutorials/typescript#define-root-state-and-dispatch-types
-export type RootState = ReturnType<typeof store.getState>;
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
 
 // Export a hook that can be reused to resolve types

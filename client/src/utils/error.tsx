@@ -9,6 +9,7 @@
  */
 
 import { FallbackProps } from "react-error-boundary";
+import { ErrorInfo } from "react";
 import axios from "axios";
 
 const errorURL: string = process.env.DOMAIN_NAME! + process.env.ERROR_API!;
@@ -47,17 +48,14 @@ export interface IError {
  *
  * @function
  * @param {Error} error - The error object to be logged.
- * @param {{componentStack: string}} info - An object that contains a componentStack property with information about which component threw the error.
+ * @param {ErrorInfo} info - A React object that contains a componentStack property with information about which component threw the error.
  */
-export const logErrorBoundary = (
-	error: Error,
-	info: { componentStack: string }
-) => {
+export const logErrorBoundary = (error: Error, info: ErrorInfo) => {
 	const err: IError = {
 		name: error.name,
 		message: error.message,
 		stack: error?.stack,
-		componentStack: info.componentStack,
+		componentStack: info.componentStack ?? undefined,
 	};
 
 	console.error("Error logger:" + err.message);

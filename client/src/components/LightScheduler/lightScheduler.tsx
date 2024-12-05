@@ -1,38 +1,108 @@
-import { useState } from "react";
-import { Table, Form, Container, Button, InputGroup } from "react-bootstrap";
+"use client";
+
+import { useEffect, useState } from "react";
+import {
+	Table,
+	Form,
+	Container,
+	Button,
+	InputGroup,
+	Row,
+	Col,
+	Alert,
+} from "react-bootstrap";
+import axios from "axios";
+import { handleAxiosError } from "../../utils/error";
+
+// The server URL for the contact form API.
+const lightScheduleURL: string =
+	process.env.DOMAIN_NAME! + process.env.LIGHT_SCHEDULE_API!;
+
+// Define an interface for the schedule entries
+interface ScheduleEntry {
+	id: number;
+	time: string;
+	warmBrightness: number;
+	coolBrightness: number;
+}
+
+// Define an interface for the server data structure
+interface ScheduleData {
+	mode: "dayNight" | "scheduled" | "demo";
+	schedule: ScheduleEntry[];
+}
 
 export const LightScheduler = () => {
-	const [schedule, setSchedule] = useState([
-		{ id: 1, time: "00:00", warmBrightness: 20, coolBrightness: 15 },
-		{ id: 2, time: "06:00", warmBrightness: 60, coolBrightness: 50 },
-		{ id: 3, time: "12:00", warmBrightness: 100, coolBrightness: 90 },
-		{ id: 4, time: "18:00", warmBrightness: 40, coolBrightness: 30 },
-		{ id: 5, time: "24:00", warmBrightness: 20, coolBrightness: 10 },
-	]);
-
+	const [data, setData] = useState<ScheduleData>({
+		mode: "scheduled",
+		schedule: [],
+	});
 	const [newTime, setNewTime] = useState("");
 	const [newWarmBrightness, setNewWarmBrightness] = useState("");
 	const [newCoolBrightness, setNewCoolBrightness] = useState("");
+	const [unsavedChanges, setUnsavedChanges] = useState(false);
+	// track form submission success or error
+	const [isSuccessfullySubmitted, setIsSuccessfullySubmitted] =
+		useState(false);
+	const [isSubmissionError, setIsSubmissionError] = useState(false);
 
-	const handleInputChange = (id: number, type: string, value: string) => {
-		const updatedSchedule = schedule.map((entry) =>
+	// Load schedule from server
+	useEffect(() => {
+		const fetchSchedule = async () => {
+			try {
+				const response =
+					await axios.get<ScheduleData>(lightScheduleURL);
+				setData(response.data);
+			} catch (error) {
+				handleAxiosError(error);
+			}
+		};
+		fetchSchedule();
+	}, []);
+
+	// Save schedule to server
+	const saveSchedule = async () => {
+		try {
+			console.log(data);
+			await axios.post(lightScheduleURL, data);
+			setIsSubmissionError(false);
+			setIsSuccessfullySubmitted(false);
+			setUnsavedChanges(false);
+		} catch (error) {
+			handleAxiosError(error);
+			setIsSubmissionError(true);
+			setIsSuccessfullySubmitted(false);
+		}
+	};
+
+	const handleInputChange = (
+		id: number,
+		type: "warmBrightness" | "coolBrightness",
+		value: string
+	) => {
+		const updatedSchedule = data.schedule.map((entry) =>
 			entry.id === id
 				? {
 						...entry,
 						[type]: Math.min(100, Math.max(0, Number(value))), // Clamp values to 0-100
-				  }
+					}
 				: entry
 		);
-		setSchedule(updatedSchedule);
+		setData({ ...data, schedule: updatedSchedule });
+		setUnsavedChanges(true);
 	};
 
 	const handleRemoveRow = (id: number) => {
-		setSchedule(schedule.filter((entry) => entry.id !== id));
+		const updatedSchedule = data.schedule.filter(
+			(entry) => entry.id !== id
+		);
+		setData({ ...data, schedule: updatedSchedule });
+		setUnsavedChanges(true);
 	};
 
 	const handleAddRow = () => {
 		if (newTime && newWarmBrightness !== "" && newCoolBrightness !== "") {
-			const newRow = {
+			const newRow: ScheduleEntry = {
 				id: Date.now(),
 				time: newTime,
 				warmBrightness: Math.min(
@@ -45,14 +115,20 @@ export const LightScheduler = () => {
 				),
 			};
 
-			const updatedSchedule = [...schedule, newRow].sort((a, b) =>
+			const updatedSchedule = [...data.schedule, newRow].sort((a, b) =>
 				a.time.localeCompare(b.time)
 			);
-			setSchedule(updatedSchedule);
+			setData({ ...data, schedule: updatedSchedule });
+			setUnsavedChanges(true);
 			setNewTime("");
 			setNewWarmBrightness("");
 			setNewCoolBrightness("");
 		}
+	};
+
+	const handleModeChange = (newMode: "dayNight" | "scheduled" | "demo") => {
+		setData({ ...data, mode: newMode });
+		setUnsavedChanges(true);
 	};
 
 	return (
@@ -60,90 +136,163 @@ export const LightScheduler = () => {
 			id="light_scheduler"
 			className="content-container mb-3 py-3 px-3"
 		>
-			<Table striped bordered hover>
-				<thead>
-					<tr>
-						<th>Time</th>
-						<th>Warm Brightness</th>
-						<th>Cool Brightness</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{schedule.map((entry) => (
-						<tr key={entry.id}>
-							<td>{entry.time}</td>
-							<td>
-								<Form.Control
-									type="number"
-									value={entry.warmBrightness}
-									min="0"
-									max="100"
-									onChange={(e) =>
-										handleInputChange(
-											entry.id,
-											"warmBrightness",
-											e.target.value
-										)
-									}
-								/>
-							</td>
-							<td>
-								<Form.Control
-									type="number"
-									value={entry.coolBrightness}
-									min="0"
-									max="100"
-									onChange={(e) =>
-										handleInputChange(
-											entry.id,
-											"coolBrightness",
-											e.target.value
-										)
-									}
-								/>
-							</td>
-							<td>
-								<Button
-									variant="danger"
-									size="sm"
-									onClick={() => handleRemoveRow(entry.id)}
-								>
-									X
-								</Button>
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</Table>
+			{/* Success or error message after submission */}
+			<Row className="justify-content-md-left">
+				<Col md={12} className="mb-3">
+					{/* Feedback for successful form submission */}
+					{isSuccessfullySubmitted && (
+						<Alert variant="success">
+							<p className="mb-0">
+								Success - Light Settings Updated
+							</p>
+						</Alert>
+					)}
+					{/* Feedback for unsuccessful form submission */}
+					{isSubmissionError && (
+						<Alert variant="danger">
+							<p className="mb-0">
+								Error occurred while sending updated settings.
+								Please try again.
+							</p>
+						</Alert>
+					)}
+				</Col>
+			</Row>
 
-			<h5>Add a New Row</h5>
-			<InputGroup className="mb-3">
-				<Form.Control
-					type="time"
-					value={newTime}
-					onChange={(e) => setNewTime(e.target.value)}
-				/>
-				<Form.Control
-					type="number"
-					placeholder="Warm Brightness"
-					value={newWarmBrightness}
-					min="0"
-					max="100"
-					onChange={(e) => setNewWarmBrightness(e.target.value)}
-				/>
-				<Form.Control
-					type="number"
-					placeholder="Cool Brightness"
-					value={newCoolBrightness}
-					min="0"
-					max="100"
-					onChange={(e) => setNewCoolBrightness(e.target.value)}
-				/>
-				<Button variant="primary" onClick={handleAddRow}>
-					Add
+			<h5>Select Mode</h5>
+			<div className="mb-3">
+				<Button
+					variant={
+						data.mode === "dayNight" ? "primary" : "outline-primary"
+					}
+					onClick={() => handleModeChange("dayNight")}
+				>
+					Day/Night Cycle
+				</Button>{" "}
+				<Button
+					variant={
+						data.mode === "scheduled"
+							? "primary"
+							: "outline-primary"
+					}
+					onClick={() => handleModeChange("scheduled")}
+				>
+					Scheduled
+				</Button>{" "}
+				<Button
+					variant={
+						data.mode === "demo" ? "primary" : "outline-primary"
+					}
+					onClick={() => handleModeChange("demo")}
+				>
+					Demo
 				</Button>
-			</InputGroup>
+			</div>
+
+			{data.mode !== "demo" && (
+				<>
+					<Table striped bordered hover>
+						<thead>
+							<tr>
+								<th>Time</th>
+								<th>Warm Brightness</th>
+								<th>Cool Brightness</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							{data.schedule.map((entry) => (
+								<tr key={entry.id}>
+									<td>{entry.time}</td>
+									<td>
+										<Form.Control
+											type="number"
+											value={entry.warmBrightness}
+											min="0"
+											max="100"
+											onChange={(e) =>
+												handleInputChange(
+													entry.id,
+													"warmBrightness",
+													e.target.value
+												)
+											}
+										/>
+									</td>
+									<td>
+										<Form.Control
+											type="number"
+											value={entry.coolBrightness}
+											min="0"
+											max="100"
+											onChange={(e) =>
+												handleInputChange(
+													entry.id,
+													"coolBrightness",
+													e.target.value
+												)
+											}
+										/>
+									</td>
+									<td>
+										<Button
+											variant="danger"
+											size="sm"
+											onClick={() =>
+												handleRemoveRow(entry.id)
+											}
+										>
+											X
+										</Button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</Table>
+
+					<h5>Add a New Row</h5>
+					<InputGroup className="mb-3">
+						<Form.Control
+							type="time"
+							value={newTime}
+							onChange={(e) => setNewTime(e.target.value)}
+						/>
+						<Form.Control
+							type="number"
+							placeholder="Warm Brightness"
+							value={newWarmBrightness}
+							min="0"
+							max="100"
+							onChange={(e) =>
+								setNewWarmBrightness(e.target.value)
+							}
+						/>
+						<Form.Control
+							type="number"
+							placeholder="Cool Brightness"
+							value={newCoolBrightness}
+							min="0"
+							max="100"
+							onChange={(e) =>
+								setNewCoolBrightness(e.target.value)
+							}
+						/>
+						<Button variant="primary" onClick={handleAddRow}>
+							Add
+						</Button>
+					</InputGroup>
+				</>
+			)}
+
+			<div className="mt-3">
+				<Button
+					variant="success"
+					onClick={() => saveSchedule()} // Proper wrapping for the async function
+					disabled={!unsavedChanges}
+				>
+					Save Changes
+				</Button>
+			</div>
 		</Container>
 	);
 };

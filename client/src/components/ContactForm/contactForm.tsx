@@ -27,21 +27,21 @@ const contactURL: string =
 	process.env.DOMAIN_NAME! + process.env.CONTACT_FORM_API!;
 
 /**
- * The interface for storing information from a contact form.
+ * Represents the structure of a contact form submission.
  *
  * @type {Object}
  * @property {string} name - The name of the person submitting the contact form.
  * @property {string} email - The email address of the person submitting the contact form.
- * @property {string} phoneNumber - The phone number of the person submitting the contact form.
+ * @property {string} [phoneNumber] - (Optional) The phone number of the person submitting the contact form.
  * @property {string} message - The message submitted in the contact form.
- * @property {string} recaptcha - The recaptcha token submitted in the contact form.
+ * @property {string} [recaptcha] - (Optional) The recaptcha token for validating the form submission.
  */
 export interface IContactForm {
 	name: string;
 	email: string;
-	phoneNumber: string;
+	phoneNumber?: string;
 	message: string;
-	recaptcha: string;
+	recaptcha?: string;
 }
 
 const ContactFormRecaptcha = () => {
@@ -54,7 +54,7 @@ const ContactFormRecaptcha = () => {
 	// track if mobile screen size to resize reCAPTHCA
 	const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
-	// setup react form hook library
+	// setup react-hook-form library
 	const {
 		register,
 		handleSubmit,
